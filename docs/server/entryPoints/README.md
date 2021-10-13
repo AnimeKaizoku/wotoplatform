@@ -1,0 +1,2 @@
+## entryPoints package details
+

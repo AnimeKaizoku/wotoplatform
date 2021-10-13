@@ -1,0 +1,17 @@
+.env
+.docker_build/
+bin/
+#vendor/
+wp-server
+*.old.go
+woto_files/
+labs/
+*.old.go
+*.db
+
+# ignore debug binary file
+__debug_bin
+
+# ignore config files
+config.json
+connect.sh

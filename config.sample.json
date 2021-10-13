@@ -1,0 +1,20 @@
+{
+    "network": "tcp",
+    "bind": "0.0.0.0",
+    "port": "50100",
+    "name": "wotoplatform",
+    "description": "online music platform",
+    "admin_passwords": [
+        "123456789_something_sample"
+    ],
+    "admin_users": [
+        "aliwoto"
+    ],
+    "client_ids": [
+        "cli-12345678910"
+    ],
+    "db_url": "postgresql://something01:something02@something03.com:5432/something04",
+    "db_name": "wp-database",
+    "use_sql_lite": true
+
+}
