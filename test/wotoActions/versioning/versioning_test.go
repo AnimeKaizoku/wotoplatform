@@ -28,13 +28,10 @@ import (
 	"time"
 	"wp-server/wotoPacks/database"
 	"wp-server/wotoPacks/entryPoints"
-	"wp-server/wotoPacks/utils/logging"
 	wv "wp-server/wotoPacks/utils/wotoValues"
 	"wp-server/wotoPacks/wotoActions"
 	"wp-server/wotoPacks/wotoActions/versioning"
 	"wp-server/wotoPacks/wotoConfig"
-
-	"go.uber.org/zap"
 )
 
 //---------------------------------------------------------
@@ -181,16 +178,12 @@ func TestCorrectVersioning(t *testing.T) {
 //---------------------------------------------------------
 
 func listen(config *wotoConfig.Config, t *testing.T) {
-	f := loadLogger()
 	l := entryPoints.MainListener
 	if l != nil && !l.IsListenerClosed() {
 		return
 	} else {
 		t.Cleanup(func() {
 			closeListener(t)
-			if f != nil {
-				f()
-			}
 		})
 	}
 
@@ -269,10 +262,10 @@ func closeListener(t *testing.T) {
 
 func writeVersionAction(conn net.Conn) (int, error) {
 	vMap := map[string]string{
-		"user_agent":              "madoka-client",
-		"madokaplay_version":      "2.1.1.5014",
-		"madokaplay_version_hash": "f302bd7ffacbd295194f86620002b8250e8e9be0233a8055bcebc82c8612843ff9e0f09e42015d5e75581cc93d4c29a91388ed411641b543c8fb7b5a26a2a8b8",
-		"client_id":               "cli-12345678910",
+		"u_a":  "wp-client",
+		"wp_v": "2.1.1.5014",
+		"v_h":  "f302bd7ffacbd295194f86620002b8250e8e9be0233a8055bcebc82c8612843ff9e0f09e42015d5e75581cc93d4c29a91388ed411641b543c8fb7b5a26a2a8b8",
+		"c_i":  "cli-12345678910",
 	}
 	data, err := json.Marshal(vMap)
 	if err != nil {
@@ -280,9 +273,10 @@ func writeVersionAction(conn net.Conn) (int, error) {
 	}
 
 	e := entryPoints.RequestEntery{
-		Action:       wotoActions.ACTION_VERSION,
-		BatchExecute: wotoActions.BatchStr + versioning.BATCH_CHECK_VERSION,
-		Data:         string(data),
+		Action: wotoActions.ACTION_VERSION,
+		BatchExecute: wotoActions.BatchStr +
+			versioning.BATCH_CHECK_VERSION,
+		Data: string(data),
 	}
 
 	b, err := json.Marshal(&e)
@@ -332,15 +326,3 @@ func readMe(conn net.Conn, t *testing.T) ([]byte, error) {
 }
 
 //---------------------------------------------------------
-
-func loadLogger() func() {
-	loggerMgr := logging.InitZapLog()
-	zap.ReplaceGlobals(loggerMgr)
-	logging.SUGARED = loggerMgr.Sugar()
-	return func() {
-		err := loggerMgr.Sync()
-		if err != nil {
-			log.Fatal(err.Error())
-		}
-	}
-}

@@ -40,10 +40,10 @@ func GetConfig() (*Config, error) {
 		// not found the proper config file?
 		// continue your work with default configuration
 		// (WARNIGN: usage: GitHub workflows ONLY).
-		logging.SUGARED.Warn("got an error while tried to open config.json file: ")
-		logging.SUGARED.Warn("got an error while tried to open config.json file: ")
-		logging.SUGARED.Warn(err)
-		logging.SUGARED.Warn("continuing with a default config variable.")
+		logging.Warn("got an error while tried to open config.json file: ")
+		logging.Warn("got an error while tried to open config.json file: ")
+		logging.Warn(err)
+		logging.Warn("continuing with a default config variable.")
 
 		return getDefaultConfig(), nil
 	}
@@ -73,9 +73,9 @@ func GetConfigByPath(path string) (*Config, error) {
 		// not found the proper config file?
 		// continue your work with default configuration
 		// (WARNIGN: usage: GitHub workflows ONLY).
-		logging.SUGARED.Warn("got an error while tried to open config.json file: ")
-		logging.SUGARED.Warn(err)
-		logging.SUGARED.Warn("continuing with a default config variable.")
+		logging.Warn("got an error while tried to open config.json file: ")
+		logging.Warn(err)
+		logging.Warn("continuing with a default config variable.")
 
 		return getDefaultConfig(), nil
 	}

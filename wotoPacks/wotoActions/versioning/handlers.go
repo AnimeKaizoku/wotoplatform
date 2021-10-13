@@ -27,7 +27,7 @@ import (
 )
 
 func HandleVersionAction(req interfaces.ReqBase) error {
-	logging.SUGARED.Debug("received versioning action")
+	logging.Debug("received versioning action")
 	//log.Println("received versioning action")
 	b := req.GetBatchValues()
 	var err error
@@ -36,14 +36,14 @@ func HandleVersionAction(req interfaces.ReqBase) error {
 		case BATCH_CHECK_VERSION:
 			err = batchCheckVersion(req)
 			if err != nil {
-				logging.SUGARED.Debug("an error while executing batch execution: ", err)
+				logging.Debug("an error while executing batch execution: ", err)
 				//log.Println("an error while executing batch execution: ", err)
 				return err
 			}
 
 			continue
 		default:
-			logging.SUGARED.Warn("invalid batch:", ex)
+			logging.Warn("invalid batch:", ex)
 			//log.Println("invalid batch")
 			return wotoActions.ErrInvalidBatch
 		}
@@ -58,21 +58,21 @@ func batchCheckVersion(req interfaces.ReqBase) error {
 	var entryData checkVersionEntry
 	err := req.ParseJsonData(&entryData)
 	if err != nil {
-		logging.SUGARED.Error(err)
+		logging.Error(err)
 		return err
 	}
 
 	if !strings.EqualFold(entryData.UserAgent, userAgentValue) {
-		logging.SUGARED.Error("user-agent wasn't correct")
+		logging.Error("user-agent wasn't correct")
 		return wotoActions.ErrInvalidBatch
 	}
 
 	if !wotoConfig.IsClientIDValid(entryData.ClientID) {
-		logging.SUGARED.Error("client id wasn't correct")
+		logging.Error("client id wasn't correct")
 		return wotoActions.ErrInvalidBatch
 	}
 
-	logging.SUGARED.Debug("trying to send the json")
+	logging.Debug("trying to send the json")
 	//log.Println("trying to send the json")
 
 	a := VersionAcceptable(entryData.VersionKey, entryData.VersionHashKey)
@@ -89,7 +89,7 @@ func batchCheckVersion(req interfaces.ReqBase) error {
 	})
 
 	if err != nil {
-		logging.SUGARED.Error(err)
+		logging.Error(err)
 	}
 
 	return err

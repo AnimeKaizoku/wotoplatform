@@ -46,21 +46,21 @@ func StartDatabase() (err error) {
 	}
 
 	if err != nil {
-		logging.SUGARED.Error("failed to connect database", err)
+		logging.Error("failed to connect database", err)
 		return
 	}
 
-	logging.SUGARED.Debug("Database connected")
+	logging.Debug("Database connected")
 	//log.Println("Database connected")
 
 	// Create tables if they don't exist
 	err = SESSION.AutoMigrate(&UserInfo{}, &SongInfo{})
 	if err != nil {
-		logging.SUGARED.Error(err)
+		logging.Error(err)
 		return
 	}
 
-	logging.SUGARED.Debug("Auto-migrated database schema")
+	logging.Debug("Auto-migrated database schema")
 	//log.Println("Auto-migrated database schema")
 
 	return nil

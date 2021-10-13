@@ -35,8 +35,8 @@ type VersionResults struct {
 }
 
 type checkVersionEntry struct {
-	UserAgent      string `json:"u_a"` // user_agent
-	VersionKey     string `json:"m_v"` // madokaplay_version
-	VersionHashKey string `json:"v_h"` // madokaplay_version_hash
-	ClientID       string `json:"c_i"` // client_id
+	UserAgent      string `json:"u_a"`  // user_agent
+	VersionKey     string `json:"wp_v"` // wotoplatform_version
+	VersionHashKey string `json:"v_h"`  // wotoplatform_version_hash
+	ClientID       string `json:"c_i"`  // client_id
 }

@@ -31,7 +31,7 @@ import (
 // using the specified listener argument.
 func Listen(ln net.Listener) {
 	if ln == nil {
-		logging.SUGARED.Warn("listener cannot be nil")
+		logging.Warn("listener cannot be nil")
 		//log.Println("listener cannot be nil")
 		return
 	}
@@ -43,7 +43,7 @@ func Listen(ln net.Listener) {
 	var conn *wotoValues.WotoConnection
 	var err error
 
-	logging.SUGARED.Info("started to listening on: ",
+	logging.Info("started to listening on: ",
 		ln.Addr().String())
 
 	MainListener = wotoValues.GetWotoListener(ln)
@@ -60,12 +60,14 @@ func Listen(ln net.Listener) {
 		if err != nil {
 			opErr, ok := err.(*net.OpError)
 			if !ok {
-				go logging.SUGARED.Error(err)
+				go logging.Debug(
+					"got an error when tried to accept a connection: ",
+					err)
 				//go errorHandling.HandleError(err)
 				err = nil
 				continue
 			} else if opErr == nil {
-				logging.SUGARED.Error("an unexpected error happened during accpeting "+
+				logging.Debug("an unexpected error happened during accpeting "+
 					"a new incoming connectiong from client", err)
 				//log.Println("an unexpected error happened during accpeting "+
 				//	"a new incoming connectiong from client", err)
@@ -73,11 +75,11 @@ func Listen(ln net.Listener) {
 			}
 
 			if isListenerClosed(opErr) {
-				logging.SUGARED.Info("listener is closed, returning")
+				logging.Info("listener is closed, returning")
 				//log.Println("listener is closed, returning")
 				break
 			} else {
-				logging.SUGARED.Error(err)
+				logging.Error(err)
 				//go errorHandling.HandleError(err)
 				err = nil
 				continue
@@ -109,10 +111,10 @@ func checkEntry(conn *wotoValues.WotoConnection) error {
 		return err
 	}
 
-	logging.SUGARED.Debug("after reading json...")
+	logging.Debug("after reading json...")
 	//log.Println("after reading json...")
 	if len(req.BatchExecute) == 0 || !req.IsActionValid() {
-		logging.SUGARED.Error("req.IsActionValid() returned false")
+		logging.Error("req.IsActionValid() returned false")
 		return ErrActionOrBatchInvalid
 	}
 
@@ -128,20 +130,20 @@ func checkEntry(conn *wotoValues.WotoConnection) error {
 		return ErrConnectionNotRegistered
 	}
 
-	logging.SUGARED.Debug("switching on req.Action")
+	logging.Debug("switching on req.Action")
 	//log.Println("switching on req.Action")
 	switch req.Action {
 	case wotoActions.ACTION_VERSION:
 		handler = versioning.HandleVersionAction
 		parser = versioning.ParseBatchExecute
 	default: // isn't it impossible? most probably yeah
-		logging.SUGARED.Debug("invalid action:", req.Action)
+		logging.Debug("invalid action:", req.Action)
 		return ErrActionOrBatchInvalid
 	}
 
 	err = parser(&req)
 	if err != nil {
-		logging.SUGARED.Error(err)
+		logging.Error(err)
 		return err
 	}
 
@@ -171,7 +173,7 @@ func safeCheckEntry(conn *wotoValues.WotoConnection) {
 			// and after that, handle the error somehow.
 			// and break from the loop.
 			conn.Close()
-			go logging.SUGARED.Error(err)
+			go logging.Error(err)
 			//errorHandling.HandleError(err)
 			break
 		}

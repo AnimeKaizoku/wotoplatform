@@ -8,7 +8,7 @@ import (
 )
 
 func HandleUserAction(req interfaces.ReqBase) error {
-	logging.SUGARED.Debug("received user action")
+	logging.Debug("received user action")
 
 	b := req.GetBatchValues()
 	var err error
@@ -22,13 +22,13 @@ func HandleUserAction(req interfaces.ReqBase) error {
 		case BATCH_LOGIN_USER:
 			handler = BatchLoginUser
 		default:
-			logging.SUGARED.Warn("invalid batch:", ex)
+			logging.Warn("invalid batch:", ex)
 			return wotoActions.ErrInvalidBatch
 		}
 
 		err = handler(req)
 		if err != nil {
-			logging.SUGARED.Debug("an error while executing batch execution: ", err)
+			logging.Debug("an error while executing batch execution: ", err)
 			return err
 		}
 	}
@@ -42,14 +42,14 @@ func BatchRegisterUser(req interfaces.ReqBase) error {
 	var entryData RegisterUserData
 	err := req.ParseJsonData(&entryData)
 	if err != nil {
-		logging.SUGARED.Error(err)
+		logging.Error(err)
 		return err
 	}
 
 	if len(entryData.Password) < 8 || len(entryData.Username) < 4 {
 		_, err = req.WriteError(ErrTypeUserPassInvalid, ErrMsgUserPassInvalid)
 		if err != nil {
-			logging.SUGARED.Debug(err)
+			logging.Debug(err)
 			return err
 		}
 	}
@@ -57,7 +57,7 @@ func BatchRegisterUser(req interfaces.ReqBase) error {
 	if database.UsernameExists(entryData.Username) {
 		_, err = req.WriteError(ErrTypeUsernameExists, ErrMsgUsernameExists)
 		if err != nil {
-			logging.SUGARED.Debug(err)
+			logging.Debug(err)
 			return err
 		}
 	}

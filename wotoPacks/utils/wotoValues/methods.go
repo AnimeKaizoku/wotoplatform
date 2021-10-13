@@ -194,7 +194,7 @@ func (c *WotoConnection) WriteJson(v interface{}) (int, error) {
 		return BaseIndex, err
 	}
 
-	logging.SUGARED.Debug("what we are writing is ", string(b))
+	logging.Debug("what we are writing is ", string(b))
 	//log.Println("what we are writing is ", string(b))
 
 	return c.WriteBytes(b)
