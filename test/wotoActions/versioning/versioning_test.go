@@ -28,10 +28,13 @@ import (
 	"time"
 	"wp-server/wotoPacks/database"
 	"wp-server/wotoPacks/entryPoints"
+	"wp-server/wotoPacks/utils/logging"
 	wv "wp-server/wotoPacks/utils/wotoValues"
 	"wp-server/wotoPacks/wotoActions"
 	"wp-server/wotoPacks/wotoActions/versioning"
 	"wp-server/wotoPacks/wotoConfig"
+
+	"go.uber.org/zap"
 )
 
 //---------------------------------------------------------
@@ -53,8 +56,8 @@ func TestWrongVersioning(t *testing.T) {
 	// goroutine
 	//time.Sleep(250 * time.Millisecond)
 
-	addr, err := net.ResolveTCPAddr("tcp", config.Bind+":"+config.Port)
-	//addr, err := net.ResolveTCPAddr("tcp", "vps.amanoteam.com"+":"+config.Port)
+	addr, err := net.ResolveTCPAddr(config.Network, config.Bind+":"+config.Port)
+	//addr, err := net.ResolveTCPAddr("tcp", ""+":"+config.Port)
 	if err != nil {
 		t.Errorf("couldn't resolve tcp address: %v", err)
 		return
@@ -104,6 +107,7 @@ func TestWrongVersioning(t *testing.T) {
 		return
 	}
 
+	t.Log("done") // <-- don't remove it; break-point purposes
 }
 
 func TestCorrectVersioning(t *testing.T) {
@@ -126,9 +130,9 @@ func TestCorrectVersioning(t *testing.T) {
 	// connect to the tcp listener which is listening in another
 	// goroutine
 	//time.Sleep(250 * time.Millisecond)
-	//"vps.amanoteam.com"
-	addr, err := net.ResolveTCPAddr("tcp", config.Bind+":"+config.Port)
-	//addr, err := net.ResolveTCPAddr("tcp", "vps.amanoteam.com"+":"+config.Port)
+	addr, err := net.ResolveTCPAddr(config.Network,
+		config.Bind+":"+config.Port)
+	//addr, err := net.ResolveTCPAddr("tcp", ""+":"+config.Port)
 	if err != nil {
 		t.Errorf("couldn't resolve tcp address: %v", err)
 		return
@@ -170,22 +174,29 @@ func TestCorrectVersioning(t *testing.T) {
 		t.Errorf("got an error when tried to unmarshal the data: %v", err)
 		return
 	}
+
+	t.Log("done") // <-- don't remove it; break-point purposes
 }
 
 //---------------------------------------------------------
 
 func listen(config *wotoConfig.Config, t *testing.T) {
+	f := loadLogger()
 	l := entryPoints.MainListener
 	if l != nil && !l.IsListenerClosed() {
 		return
 	} else {
 		t.Cleanup(func() {
 			closeListener(t)
+			if f != nil {
+				f()
+			}
 		})
 	}
 
 	const maxTry = 1000
-	ln, err := net.Listen("tcp", config.Bind+":"+config.Port)
+	ln, err := net.Listen(config.Network,
+		config.Bind+":"+config.Port)
 	if err != nil {
 		if strings.Contains(err.Error(), "address already in use") {
 			for i := 0; i < maxTry; i++ {
@@ -197,7 +208,8 @@ func listen(config *wotoConfig.Config, t *testing.T) {
 				}
 				myInt++
 
-				ln, err = net.Listen("tcp", config.Bind+":"+strconv.Itoa(myInt))
+				ln, err = net.Listen(config.Network,
+					config.Bind+":"+strconv.Itoa(myInt))
 				if err != nil {
 					if strings.Contains(err.Error(), "address already in use") {
 						continue
@@ -240,6 +252,10 @@ func writeMe(conn net.Conn, b []byte) (int, error) {
 }
 
 func closeListener(t *testing.T) {
+	if entryPoints.MainListener == nil {
+		return
+	}
+
 	// now close the connection so we can end our testing.
 	// even if you try to close the listener for more than two times,
 	// there should be no errors.
@@ -316,3 +332,15 @@ func readMe(conn net.Conn, t *testing.T) ([]byte, error) {
 }
 
 //---------------------------------------------------------
+
+func loadLogger() func() {
+	loggerMgr := logging.InitZapLog()
+	zap.ReplaceGlobals(loggerMgr)
+	logging.SUGARED = loggerMgr.Sugar()
+	return func() {
+		err := loggerMgr.Sync()
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+	}
+}

@@ -27,8 +27,11 @@ import (
 	"time"
 	"wp-server/wotoPacks/database"
 	"wp-server/wotoPacks/entryPoints"
+	"wp-server/wotoPacks/utils/logging"
 	wv "wp-server/wotoPacks/utils/wotoValues"
 	"wp-server/wotoPacks/wotoConfig"
+
+	"go.uber.org/zap"
 )
 
 var listener net.Listener
@@ -92,12 +95,16 @@ func TestWrongEntryPoint(t *testing.T) {
 //---------------------------------------------------------
 
 func listen(config *wotoConfig.Config, t *testing.T) {
+	f := loadLogger()
 	l := entryPoints.MainListener
 	if l != nil && !l.IsListenerClosed() {
 		return
 	} else {
 		t.Cleanup(func() {
 			closeListener(t)
+			if f != nil {
+				f()
+			}
 		})
 	}
 
@@ -158,13 +165,17 @@ func writeMe(conn net.Conn, b []byte) (int, error) {
 	bb := []byte(wv.MakeSureNum(len(b), 8))
 	bb = wv.MakeSureByte(bb, 8)
 
-	//n, err := conn.Write(bb)
-	//if err != nil || n == 0 {
-	//	return n, err
-	//}
-
-	//bb = append(bb, b...)
-	//b = append(b, bb...)
-
 	return conn.Write(append(bb, b...))
+}
+
+func loadLogger() func() {
+	loggerMgr := logging.InitZapLog()
+	zap.ReplaceGlobals(loggerMgr)
+	logging.SUGARED = loggerMgr.Sugar()
+	return func() {
+		err := loggerMgr.Sync()
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+	}
 }

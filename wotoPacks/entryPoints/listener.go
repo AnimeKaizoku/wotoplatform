@@ -43,8 +43,8 @@ func Listen(ln net.Listener) {
 	var conn *wotoValues.WotoConnection
 	var err error
 
-	logging.SUGARED.Info("started to listening on: ", ln.Addr().String())
-	//log.Println("started to listening on: " + ln.Addr().String())
+	logging.SUGARED.Info("started to listening on: ",
+		ln.Addr().String())
 
 	MainListener = wotoValues.GetWotoListener(ln)
 
