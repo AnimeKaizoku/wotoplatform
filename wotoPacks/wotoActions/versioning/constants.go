@@ -52,5 +52,5 @@ const (
 
 // batch execution values
 const (
-	BATCH_CHECK_VERSION = "check_version"
+	BatchCheckVersion = "check_version"
 )

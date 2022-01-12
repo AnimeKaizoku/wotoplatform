@@ -112,7 +112,6 @@ func checkEntry(conn *wotoValues.WotoConnection) error {
 	}
 
 	logging.Debug("after reading json...")
-	//log.Println("after reading json...")
 	if len(req.BatchExecute) == 0 || !req.IsActionValid() {
 		logging.Error("req.IsActionValid() returned false")
 		return ErrActionOrBatchInvalid
@@ -131,7 +130,6 @@ func checkEntry(conn *wotoValues.WotoConnection) error {
 	}
 
 	logging.Debug("switching on req.Action")
-	//log.Println("switching on req.Action")
 	switch req.Action {
 	case wotoActions.ActionVersion:
 		handler = versioning.HandleVersionAction

@@ -17,7 +17,33 @@
 
 package interfaces
 
-import "wp-server/wotoPacks/wotoActions"
+import (
+	"time"
+	"wp-server/wotoPacks/wotoActions"
+)
+
+type RawUser interface {
+	GetName() string
+	GetSvUsername() string
+	GetAvatar() string
+	GetPublicID() string
+	GetPassword() string
+	GetUserLever() uint16
+	GetLastSeen() string
+	GetUserIntro() string
+	GetPrivateID() string
+	GetAvatarFrame() string
+	GetUserVIPLevel() uint8
+	GetCurrentExp() string
+	GetCurrentVIPExp() string
+	GetMaxExp() string
+	GetMaxVIPExp() string
+	GetTotalExp() string
+	GetCity() string
+	GetTotalVIPExp() string
+	GetSocialvoidUsername() string
+	GetCreatedAt() time.Time
+}
 
 type ReqBase interface {
 	GetAction() wotoActions.RequestAction

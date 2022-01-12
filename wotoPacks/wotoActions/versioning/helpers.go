@@ -47,10 +47,7 @@ func ParseBatchExecute(b interfaces.ReqBase) error {
 
 func batchValuesValid(e []wotoActions.BatchExecution) bool {
 	for _, b := range e {
-		switch b {
-		case BATCH_CHECK_VERSION:
-			continue
-		default:
+		if !_batchValuesMap[b] {
 			return false
 		}
 	}

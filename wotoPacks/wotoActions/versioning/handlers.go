@@ -33,18 +33,16 @@ func HandleVersionAction(req interfaces.ReqBase) error {
 	var err error
 	for _, ex := range b {
 		switch ex {
-		case BATCH_CHECK_VERSION:
+		case BatchCheckVersion:
 			err = batchCheckVersion(req)
 			if err != nil {
 				logging.Debug("an error while executing batch execution: ", err)
-				//log.Println("an error while executing batch execution: ", err)
 				return err
 			}
 
 			continue
 		default:
 			logging.Warn("invalid batch:", ex)
-			//log.Println("invalid batch")
 			return wotoActions.ErrInvalidBatch
 		}
 	}

@@ -25,18 +25,13 @@ type Version struct {
 }
 
 type VersionResults struct {
-	IsAcceptable bool `json:"is_acceptable"`
-
-	DataDownloadLink *string `json:"data_download_link"`
-
-	AppDownloadLink *string `json:"app_download_link"`
-
-	ServerTime string `json:"server_time"`
+	IsAcceptable bool   `json:"is_acceptable"`
+	ServerTime   string `json:"server_time"`
 }
 
 type checkVersionEntry struct {
-	UserAgent      string `json:"u_a"`  // user_agent
-	VersionKey     string `json:"wp_v"` // wotoplatform_version
-	VersionHashKey string `json:"v_h"`  // wotoplatform_version_hash
-	ClientID       string `json:"c_i"`  // client_id
+	UserAgent      string `json:"user_agent"`
+	VersionKey     string `json:"version_key"`
+	VersionHashKey string `json:"version_hash"`
+	ClientID       string `json:"client_id"`
 }

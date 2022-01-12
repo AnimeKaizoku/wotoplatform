@@ -262,10 +262,10 @@ func closeListener(t *testing.T) {
 
 func writeVersionAction(conn net.Conn) (int, error) {
 	vMap := map[string]string{
-		"u_a":  "wp-client",
-		"wp_v": "2.1.1.5014",
-		"v_h":  "f302bd7ffacbd295194f86620002b8250e8e9be0233a8055bcebc82c8612843ff9e0f09e42015d5e75581cc93d4c29a91388ed411641b543c8fb7b5a26a2a8b8",
-		"c_i":  "cli-12345678910",
+		"user_agent":   "wp-client",
+		"version_key":  "2.1.1.5014",
+		"version_hash": "f302bd7ffacbd295194f86620002b8250e8e9be0233a8055bcebc82c8612843ff9e0f09e42015d5e75581cc93d4c29a91388ed411641b543c8fb7b5a26a2a8b8",
+		"client_id":    "cli-12345678910",
 	}
 	data, err := json.Marshal(vMap)
 	if err != nil {
@@ -275,7 +275,7 @@ func writeVersionAction(conn net.Conn) (int, error) {
 	e := entryPoints.RequestEntry{
 		Action: wotoActions.ActionVersion,
 		BatchExecute: wotoActions.BatchStr +
-			versioning.BATCH_CHECK_VERSION,
+			versioning.BatchCheckVersion,
 		Data: string(data),
 	}
 
