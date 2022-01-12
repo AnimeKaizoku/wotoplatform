@@ -22,28 +22,25 @@ import (
 	"wp-server/wotoPacks/core/utils/logging"
 	"wp-server/wotoPacks/core/utils/wotoTime"
 	"wp-server/wotoPacks/core/wotoConfig"
+	"wp-server/wotoPacks/core/wotoValues"
 	"wp-server/wotoPacks/interfaces"
 	"wp-server/wotoPacks/wotoActions"
 )
 
 func HandleVersionAction(req interfaces.ReqBase) error {
-	logging.Debug("received versioning action")
-	//log.Println("received versioning action")
-	b := req.GetBatchValues()
+	batchValues := req.GetBatchValues()
 	var err error
-	for _, ex := range b {
-		switch ex {
-		case BatchCheckVersion:
-			err = batchCheckVersion(req)
-			if err != nil {
-				logging.Debug("an error while executing batch execution: ", err)
-				return err
-			}
+	var handler wotoValues.ReqHandler
 
-			continue
-		default:
-			logging.Warn("invalid batch:", ex)
+	for _, currentBatch := range batchValues {
+		handler = _batchHandlers[currentBatch]
+		if handler == nil {
 			return wotoActions.ErrInvalidBatch
+		}
+
+		err = handler(req)
+		if err != nil {
+			return err
 		}
 	}
 

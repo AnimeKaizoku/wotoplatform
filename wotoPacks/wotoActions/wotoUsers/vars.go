@@ -1,4 +1,4 @@
-package versioning
+package wotoUsers
 
 import (
 	wv "wp-server/wotoPacks/core/wotoValues"
@@ -7,9 +7,11 @@ import (
 
 var (
 	_batchValuesMap = map[wa.BatchExecution]bool{
-		Batch_CHECK_VERSION: true,
+		BATCH_LOGIN_USER:    true,
+		BATCH_REGISTER_USER: true,
 	}
 	_batchHandlers = map[wa.BatchExecution]wv.ReqHandler{
-		Batch_CHECK_VERSION: batchCheckVersion,
+		BATCH_LOGIN_USER:    batchLoginUser,
+		BATCH_REGISTER_USER: batchRegisterUser,
 	}
 )

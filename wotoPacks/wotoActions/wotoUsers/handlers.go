@@ -2,33 +2,25 @@ package wotoUsers
 
 import (
 	"wp-server/wotoPacks/core/utils/logging"
+	"wp-server/wotoPacks/core/wotoValues"
 	"wp-server/wotoPacks/database"
 	"wp-server/wotoPacks/interfaces"
-	"wp-server/wotoPacks/wotoActions"
+	wa "wp-server/wotoPacks/wotoActions"
 )
 
 func HandleUserAction(req interfaces.ReqBase) error {
-	logging.Debug("received user action")
-
-	b := req.GetBatchValues()
+	batchValues := req.GetBatchValues()
 	var err error
-	for _, ex := range b {
-		var handler func(req interfaces.ReqBase) error
+	var handler wotoValues.ReqHandler
 
-		switch ex {
-		case BATCH_REGISTER_USER:
-			handler = BatchRegisterUser
-			continue
-		case BATCH_LOGIN_USER:
-			handler = BatchLoginUser
-		default:
-			logging.Warn("invalid batch:", ex)
-			return wotoActions.ErrInvalidBatch
+	for _, currentBatch := range batchValues {
+		handler = _batchHandlers[currentBatch]
+		if handler == nil {
+			return wa.ErrInvalidBatch
 		}
 
 		err = handler(req)
 		if err != nil {
-			logging.Debug("an error while executing batch execution: ", err)
 			return err
 		}
 	}
@@ -38,9 +30,9 @@ func HandleUserAction(req interfaces.ReqBase) error {
 	return nil
 }
 
-func BatchRegisterUser(req interfaces.ReqBase) error {
-	var entryData RegisterUserData
-	err := req.ParseJsonData(&entryData)
+func batchRegisterUser(req interfaces.ReqBase) error {
+	var entryData = new(RegisterUserData)
+	err := req.ParseJsonData(entryData)
 	if err != nil {
 		logging.Error(err)
 		return err
@@ -65,7 +57,6 @@ func BatchRegisterUser(req interfaces.ReqBase) error {
 	return nil
 }
 
-func BatchLoginUser(req interfaces.ReqBase) error {
-
+func batchLoginUser(req interfaces.ReqBase) error {
 	return nil
 }

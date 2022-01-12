@@ -13,3 +13,5 @@ var ErrValueNil = errors.New("woto connection: interface value cannot be nil")
 var ErrValueEmpty = errors.New("woto connection: received value was empty")
 
 //---------------------------------------------------------
+
+var DebugMode bool
