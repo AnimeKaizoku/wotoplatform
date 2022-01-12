@@ -1,6 +1,6 @@
 /*
  * This file is part of wp-server project (https://github.com/RudoRonuma/WotoPlatformBackend).
- * Copyright (c) 2021 AmanoTeam.
+ * Copyright (c) 2021 ALiwoto.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ import (
 //---------------------------------------------------------
 
 // GetAction returns the action associated with the current request.
-func (e *RequestEntery) GetAction() wotoActions.RequestAction {
+func (e *RequestEntry) GetAction() wotoActions.RequestAction {
 	return e.Action
 }
 
@@ -41,14 +41,8 @@ func (e *RequestEntery) GetAction() wotoActions.RequestAction {
 // although there is the possibility that the client is official,
 // but it has encounter a bug, or maybe it's an old version of the client.
 // in anyway, you should close the connection.
-func (e *RequestEntery) IsActionValid() bool {
-	switch e.Action {
-	case wotoActions.ACTION_VERSION,
-		wotoActions.ACTION_USER:
-		return true
-	default:
-		return false
-	}
+func (e *RequestEntry) IsActionValid() bool {
+	return wotoActions.IsActionValid(e.Action)
 }
 
 // IsRegistered function will check if the current connection
@@ -59,7 +53,7 @@ func (e *RequestEntery) IsActionValid() bool {
 // but if a client is not registered and wants to execute
 // a batch execute besides `check_version` of versioning
 // package, its connection should be closed at once.
-func (e *RequestEntery) IsRegistered() bool {
+func (e *RequestEntry) IsRegistered() bool {
 	if e.Connection == nil {
 		return false
 	}
@@ -74,7 +68,7 @@ func (e *RequestEntery) IsRegistered() bool {
 // WARNING: this package should only be used in versioning
 // package when we are checking for information of the
 // client, such as client id, etc...
-func (e *RequestEntery) RegisterConnection() {
+func (e *RequestEntry) RegisterConnection() {
 	if e.Connection != nil {
 		e.Connection.Register()
 	}
@@ -87,7 +81,7 @@ func (e *RequestEntery) RegisterConnection() {
 // itself should check and see if it's valid or not.
 // but please do notice, that if the batch execute is not
 // valid, you should close the connection.
-func (e *RequestEntery) GetBatchExecute() string {
+func (e *RequestEntry) GetBatchExecute() string {
 	return e.BatchExecute
 }
 
@@ -98,11 +92,11 @@ func (e *RequestEntery) GetBatchExecute() string {
 // please do notice, that if the data is not in a valid format,
 // you should just close the connection.
 // return an error from the handler, so we can close the connection.
-func (e *RequestEntery) GetData() string {
+func (e *RequestEntry) GetData() string {
 	return e.Data
 }
 
-func (e *RequestEntery) WriteData(b []byte) (int, error) {
+func (e *RequestEntry) WriteData(b []byte) (int, error) {
 	if e.Connection == nil {
 		return 0, ErrConnectionUnavailable
 	}
@@ -110,7 +104,7 @@ func (e *RequestEntery) WriteData(b []byte) (int, error) {
 	return e.Connection.WriteBytes(b)
 }
 
-func (e *RequestEntery) WriteJson(i interface{}) (int, error) {
+func (e *RequestEntry) WriteJson(i interface{}) (int, error) {
 	if e.Connection == nil {
 		return 0, ErrConnectionUnavailable
 	}
@@ -118,7 +112,7 @@ func (e *RequestEntery) WriteJson(i interface{}) (int, error) {
 	return e.Connection.WriteJson(i)
 }
 
-func (e *RequestEntery) WriteError(t int, msg string) (int, error) {
+func (e *RequestEntry) WriteError(t int, msg string) (int, error) {
 	return e.WriteJson(&wotoActions.ActionResp{
 		Success: false,
 		Error: &serverErrors.EndPointError{
@@ -128,18 +122,18 @@ func (e *RequestEntery) WriteError(t int, msg string) (int, error) {
 	})
 }
 
-func (e *RequestEntery) WriteResult(result interface{}) (int, error) {
+func (e *RequestEntry) WriteResult(result interface{}) (int, error) {
 	return e.WriteJson(&wotoActions.ActionResp{
 		Success: true,
 		Result:  result,
 	})
 }
 
-func (e *RequestEntery) WriteResp(resp *wotoActions.ActionResp) (int, error) {
+func (e *RequestEntry) WriteResp(resp *wotoActions.ActionResp) (int, error) {
 	return e.WriteJson(resp)
 }
 
-func (e *RequestEntery) WriteString(str string) (int, error) {
+func (e *RequestEntry) WriteString(str string) (int, error) {
 	if len(str) == wv.BaseIndex {
 		return wv.BaseIndex, nil
 	}
@@ -147,7 +141,7 @@ func (e *RequestEntery) WriteString(str string) (int, error) {
 	return e.WriteData([]byte(str))
 }
 
-func (e *RequestEntery) ReadData() ([]byte, error) {
+func (e *RequestEntry) ReadData() ([]byte, error) {
 	if e.Connection == nil {
 		return nil, ErrConnectionUnavailable
 	}
@@ -155,7 +149,7 @@ func (e *RequestEntery) ReadData() ([]byte, error) {
 	return e.Connection.ReadBytes()
 }
 
-func (e *RequestEntery) ReadJson(i interface{}) error {
+func (e *RequestEntry) ReadJson(i interface{}) error {
 	if e.Connection == nil {
 		return ErrConnectionUnavailable
 	}
@@ -163,7 +157,7 @@ func (e *RequestEntery) ReadJson(i interface{}) error {
 	return e.Connection.ReadJson(i)
 }
 
-func (e *RequestEntery) ReadString() (string, error) {
+func (e *RequestEntry) ReadString() (string, error) {
 	if e.Connection == nil {
 		return wv.EMPTY, nil
 	}
@@ -171,15 +165,15 @@ func (e *RequestEntery) ReadString() (string, error) {
 	return e.Connection.ReadString()
 }
 
-func (e *RequestEntery) GetBatchValues() []wotoActions.BatchExecution {
+func (e *RequestEntry) GetBatchValues() []wotoActions.BatchExecution {
 	return e.batchValues
 }
 
-func (e *RequestEntery) SetBatchValues(v []wotoActions.BatchExecution) {
+func (e *RequestEntry) SetBatchValues(v []wotoActions.BatchExecution) {
 	e.batchValues = v
 }
 
-func (e *RequestEntery) ParseJsonData(v interface{}) error {
+func (e *RequestEntry) ParseJsonData(v interface{}) error {
 	if v == nil {
 		return nil
 	}
@@ -187,18 +181,18 @@ func (e *RequestEntery) ParseJsonData(v interface{}) error {
 	return json.Unmarshal([]byte(e.Data), v)
 }
 
-func (e *RequestEntery) CanWrite() bool {
+func (e *RequestEntry) CanWrite() bool {
 	return e.Connection != nil && e.Connection.CanReadAndWrite()
 }
 
-func (e *RequestEntery) ShouldExit() bool {
+func (e *RequestEntry) ShouldExit() bool {
 	return e.exit
 }
 
 // LetExit method will mark the current batch execution request
 // as exited; it will set the connection field to nil, so you
 // won't be able to read and write through it anymore.
-func (e *RequestEntery) LetExit() {
+func (e *RequestEntry) LetExit() {
 	if !e.exit {
 		e.exit = true
 		e.batchValues = nil

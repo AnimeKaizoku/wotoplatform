@@ -1,6 +1,6 @@
 /*
  * This file is part of wp-server project (https://github.com/RudoRonuma/WotoPlatformBackend).
- * Copyright (c) 2021 AmanoTeam.
+ * Copyright (c) 2021 ALiwoto.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,8 +37,8 @@ var ErrConnectionNotRegistered = errors.New("entryPoints: the connection is not 
 
 //---------------------------------------------------------
 
-var registerationMap map[*wotoValues.WotoConnection]bool
-var registerationMutex *sync.Mutex
+var registrationMap map[*wotoValues.WotoConnection]bool
+var registrationMutex *sync.Mutex
 var isCheckingRegistration bool
 
 //---------------------------------------------------------

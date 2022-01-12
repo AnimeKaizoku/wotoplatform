@@ -7,53 +7,47 @@ import (
 )
 
 func checkRegistration() {
-	if registerationMap == nil {
-		registerationMap = make(map[*wotoValues.WotoConnection]bool)
-		registerationMutex = new(sync.Mutex)
+	if registrationMap == nil {
+		registrationMap = make(map[*wotoValues.WotoConnection]bool)
+		registrationMutex = new(sync.Mutex)
 	}
 
 	for {
 		// sleep for 3 minutes
 		// each loop should be done in intervals of 3 mins.
 		// it will take a very short time iterating through
-		// the registeration map, so there will be no problem.
+		// the registration map, so there will be no problem.
 		time.Sleep(3 * time.Minute)
 
 		// check if our listener is active or not,
 		// if it's not active, return the function and free the current
 		// goroutine.
 		if !MainListener.CanAccept() {
-			registerationMap = nil
-			registerationMutex = nil
+			registrationMap = nil
+			registrationMutex = nil
 			return
 		}
 
-		// lock the mutix, so iterating through the map
+		// lock the mutex, so iterating through the map
 		// doesn't cause any problem.
-		registerationMutex.Lock()
+		registrationMutex.Lock()
 
-		for key := range registerationMap {
+		for key := range registrationMap {
 			if !key.CanReadAndWrite() {
-				delete(registerationMap, key)
+				delete(registrationMap, key)
 			}
 		}
 
-		// unlock the mutix so another goroutines can use the registeration
+		// unlock the mutex so another goroutines can use the registration
 		// map as well.
-		registerationMutex.Unlock()
+		registrationMutex.Unlock()
 	}
 }
 
 func registerConnection(c *wotoValues.WotoConnection) {
-	// commented out because it seems it's most likely impossible...
-	//if registerationMap == nil {
-	//	registerationMap = make(map[*wotoValues.WotoConnection]bool)
-	//	registerationMutex = new(sync.Mutex)
-	//}
-
-	registerationMutex.Lock()
-	if !registerationMap[c] {
-		registerationMap[c] = true
+	registrationMutex.Lock()
+	if !registrationMap[c] {
+		registrationMap[c] = true
 	}
-	registerationMutex.Unlock()
+	registrationMutex.Unlock()
 }

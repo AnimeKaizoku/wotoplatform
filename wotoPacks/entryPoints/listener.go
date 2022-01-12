@@ -1,6 +1,6 @@
 /*
  * This file is part of wp-server project (https://github.com/RudoRonuma/WotoPlatformBackend).
- * Copyright (c) 2021 AmanoTeam.
+ * Copyright (c) 2021 ALiwoto.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,9 +68,9 @@ func Listen(ln net.Listener) {
 				continue
 			} else if opErr == nil {
 				logging.Debug("an unexpected error happened during accpeting "+
-					"a new incoming connectiong from client", err)
+					"a new incoming connection from client", err)
 				//log.Println("an unexpected error happened during accpeting "+
-				//	"a new incoming connectiong from client", err)
+				//	"a new incoming connection from client", err)
 				return
 			}
 
@@ -88,7 +88,7 @@ func Listen(ln net.Listener) {
 
 		// it's not duty of this loop,
 		// you need to check if this connection is comming
-		// from a valid cleint or not (in a separated goroutine)
+		// from a valid client or not (in a separated goroutine)
 		// if yes, do your duties in that goroutine
 		// (please notice that you shouldn't create another goroutine
 		// again and again.
@@ -104,9 +104,9 @@ func Listen(ln net.Listener) {
 // checkEntry checks the incoming connection and will do read and
 // write operations on them.
 func checkEntry(conn *wotoValues.WotoConnection) error {
-	var req RequestEntery
+	var req = new(RequestEntry)
 
-	err := conn.ReadJson(&req)
+	err := conn.ReadJson(req)
 	if err != nil {
 		return err
 	}
@@ -123,17 +123,17 @@ func checkEntry(conn *wotoValues.WotoConnection) error {
 	var parser func(interfaces.ReqBase) error
 
 	// check if the current connection is registered or not, if not,
-	// check if it wants to register itself using action versiong or not,
+	// check if it wants to register itself using action version or not,
 	// if not return unregistered error so the connection can be closed
 	// kindly; otherwise, go forward.
-	if !conn.IsRegistered() && req.Action != wotoActions.ACTION_VERSION {
+	if !conn.IsRegistered() && req.Action != wotoActions.ActionVersion {
 		return ErrConnectionNotRegistered
 	}
 
 	logging.Debug("switching on req.Action")
 	//log.Println("switching on req.Action")
 	switch req.Action {
-	case wotoActions.ACTION_VERSION:
+	case wotoActions.ActionVersion:
 		handler = versioning.HandleVersionAction
 		parser = versioning.ParseBatchExecute
 	default: // isn't it impossible? most probably yeah
@@ -141,13 +141,13 @@ func checkEntry(conn *wotoValues.WotoConnection) error {
 		return ErrActionOrBatchInvalid
 	}
 
-	err = parser(&req)
+	err = parser(req)
 	if err != nil {
 		logging.Error(err)
 		return err
 	}
 
-	return handler(&req)
+	return handler(req)
 }
 
 // safeCheckEntry will start a loop for reading the data incoming
@@ -169,7 +169,7 @@ func safeCheckEntry(conn *wotoValues.WotoConnection) {
 			// since error handling may take some time,
 			// (like saving the error in db, etc...)
 			// so you need to close the connection to ensure
-			// the safity.
+			// the safety.
 			// and after that, handle the error somehow.
 			// and break from the loop.
 			conn.Close()

@@ -1,6 +1,6 @@
 /*
  * This file is part of wp-server project (https://github.com/RudoRonuma/WotoPlatformBackend).
- * Copyright (c) 2021 AmanoTeam.
+ * Copyright (c) 2021 ALiwoto.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ func TestWrongVersioning(t *testing.T) {
 		listen(config, t)
 	}
 
-	// now, at the very least sleep 250 milisecond, and then try to
+	// now, at the very least sleep 250 millisecond, and then try to
 	// connect to the tcp listener which is listening in another
 	// goroutine
 	//time.Sleep(250 * time.Millisecond)
@@ -84,7 +84,7 @@ func TestWrongVersioning(t *testing.T) {
 	//writeMe(conn, []byte("how"))
 	//writeMe(conn, []byte("are"))
 	//writeMe(conn, []byte("are"))
-	//writeMe(conn, []byte("areeeeeeeeeeeeee"))
+	//writeMe(conn, []byte("you"))
 
 	time.Sleep(100 * time.Millisecond)
 
@@ -117,13 +117,13 @@ func TestCorrectVersioning(t *testing.T) {
 		return
 	} else {
 		//if entryPoints.MainListener != nil {
-		//log.Println("no nilllllllllll")
+		//log.Println("no nil")
 		//return
 		//}
 		listen(config, t)
 	}
 
-	// now, at the very least sleep 250 miliseconds, and then try to
+	// now, at the very least sleep 250 milliseconds, and then try to
 	// connect to the tcp listener which is listening in another
 	// goroutine
 	//time.Sleep(250 * time.Millisecond)
@@ -272,8 +272,8 @@ func writeVersionAction(conn net.Conn) (int, error) {
 		return 0, err
 	}
 
-	e := entryPoints.RequestEntery{
-		Action: wotoActions.ACTION_VERSION,
+	e := entryPoints.RequestEntry{
+		Action: wotoActions.ActionVersion,
 		BatchExecute: wotoActions.BatchStr +
 			versioning.BATCH_CHECK_VERSION,
 		Data: string(data),
