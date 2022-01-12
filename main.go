@@ -68,7 +68,7 @@ func runServer() error {
 }
 
 func loadLogger() func() {
-	loggerMgr := logging.InitZapLog()
+	loggerMgr := logging.InitZapLog(true)
 	zap.ReplaceGlobals(loggerMgr)
 	logging.SUGARED = loggerMgr.Sugar()
 	return func() {
