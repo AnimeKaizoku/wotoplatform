@@ -20,7 +20,7 @@ package entryPoints
 import (
 	"errors"
 	"sync"
-	"wp-server/wotoPacks/utils/wotoValues"
+	"wp-server/wotoPacks/core/wotoValues"
 )
 
 //---------------------------------------------------------

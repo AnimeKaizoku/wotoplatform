@@ -26,7 +26,7 @@ const (
 	ActionUser
 )
 
-// batch execution parsing special datas
+// batch execution parsing special data
 const (
 	BatchStr    = "batch?="
 	SepBatchStr = "&"

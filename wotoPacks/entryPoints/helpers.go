@@ -3,7 +3,7 @@ package entryPoints
 import (
 	"sync"
 	"time"
-	"wp-server/wotoPacks/utils/wotoValues"
+	"wp-server/wotoPacks/core/wotoValues"
 )
 
 func checkRegistration() {

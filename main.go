@@ -21,10 +21,10 @@ import (
 	"log"
 	"net"
 
+	"wp-server/wotoPacks/core/utils/logging"
+	"wp-server/wotoPacks/core/wotoConfig"
 	"wp-server/wotoPacks/database"
 	"wp-server/wotoPacks/entryPoints"
-	"wp-server/wotoPacks/utils/logging"
-	"wp-server/wotoPacks/wotoConfig"
 
 	"go.uber.org/zap"
 )

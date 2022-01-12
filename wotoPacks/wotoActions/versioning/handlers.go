@@ -19,11 +19,11 @@ package versioning
 
 import (
 	"strings"
+	"wp-server/wotoPacks/core/utils/logging"
+	"wp-server/wotoPacks/core/utils/wotoTime"
+	"wp-server/wotoPacks/core/wotoConfig"
 	"wp-server/wotoPacks/interfaces"
-	"wp-server/wotoPacks/utils/logging"
-	"wp-server/wotoPacks/utils/wotoTime"
 	"wp-server/wotoPacks/wotoActions"
-	"wp-server/wotoPacks/wotoConfig"
 )
 
 func HandleVersionAction(req interfaces.ReqBase) error {

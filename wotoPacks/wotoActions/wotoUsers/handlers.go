@@ -1,9 +1,9 @@
 package wotoUsers
 
 import (
+	"wp-server/wotoPacks/core/utils/logging"
 	"wp-server/wotoPacks/database"
 	"wp-server/wotoPacks/interfaces"
-	"wp-server/wotoPacks/utils/logging"
 	"wp-server/wotoPacks/wotoActions"
 )
 

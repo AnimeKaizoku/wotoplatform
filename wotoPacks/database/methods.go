@@ -53,11 +53,11 @@ func (u *UserInfo) GetCreatedAt() time.Time {
 }
 
 func (u *UserInfo) GetSocialvoidUsername() string {
-	return u.SoacialvoidUsername
+	return u.SocialvoidUsername
 }
 
 func (u *UserInfo) GetSvUsername() string {
-	return u.SoacialvoidUsername
+	return u.SocialvoidUsername
 }
 
 func (u *UserInfo) GetUserLever() uint16 {

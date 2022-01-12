@@ -20,9 +20,9 @@ package entryPoints
 import (
 	"net"
 	"time"
+	"wp-server/wotoPacks/core/utils/logging"
+	"wp-server/wotoPacks/core/wotoValues"
 	"wp-server/wotoPacks/interfaces"
-	"wp-server/wotoPacks/utils/logging"
-	"wp-server/wotoPacks/utils/wotoValues"
 	"wp-server/wotoPacks/wotoActions"
 	"wp-server/wotoPacks/wotoActions/versioning"
 )
@@ -173,8 +173,7 @@ func safeCheckEntry(conn *wotoValues.WotoConnection) {
 			// and after that, handle the error somehow.
 			// and break from the loop.
 			conn.Close()
-			go logging.Error(err)
-			//errorHandling.HandleError(err)
+			logging.Error(err)
 			break
 		}
 	}

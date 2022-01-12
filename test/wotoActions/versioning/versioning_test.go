@@ -26,12 +26,12 @@ import (
 	"strings"
 	"testing"
 	"time"
+	"wp-server/wotoPacks/core/wotoConfig"
+	wv "wp-server/wotoPacks/core/wotoValues"
 	"wp-server/wotoPacks/database"
 	"wp-server/wotoPacks/entryPoints"
-	wv "wp-server/wotoPacks/utils/wotoValues"
 	"wp-server/wotoPacks/wotoActions"
 	"wp-server/wotoPacks/wotoActions/versioning"
-	"wp-server/wotoPacks/wotoConfig"
 )
 
 //---------------------------------------------------------

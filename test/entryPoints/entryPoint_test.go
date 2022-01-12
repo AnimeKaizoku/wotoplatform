@@ -25,10 +25,10 @@ import (
 	"strings"
 	"testing"
 	"time"
+	"wp-server/wotoPacks/core/wotoConfig"
+	wv "wp-server/wotoPacks/core/wotoValues"
 	"wp-server/wotoPacks/database"
 	"wp-server/wotoPacks/entryPoints"
-	wv "wp-server/wotoPacks/utils/wotoValues"
-	"wp-server/wotoPacks/wotoConfig"
 )
 
 var listener net.Listener
@@ -45,7 +45,7 @@ func TestWrongEntryPoint(t *testing.T) {
 		listen(config, t)
 	}
 
-	// now, at the very least sleep 250 milisecond, and then try to
+	// now, at the very least sleep 250 millisecond, and then try to
 	// connect to the tcp listener which is listening in another
 	// goroutine
 	time.Sleep(250 * time.Millisecond)
@@ -76,7 +76,7 @@ func TestWrongEntryPoint(t *testing.T) {
 	//writeMe(conn, []byte("how"))
 	//writeMe(conn, []byte("are"))
 	//writeMe(conn, []byte("are"))
-	//writeMe(conn, []byte("areeeeeeeeeeeeee"))
+	//writeMe(conn, []byte("you"))
 
 	time.Sleep(250 * time.Millisecond)
 

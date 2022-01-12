@@ -21,9 +21,9 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"wp-server/wotoPacks/core/utils/logging"
+	"wp-server/wotoPacks/core/wotoConfig"
 	"wp-server/wotoPacks/interfaces"
-	"wp-server/wotoPacks/utils/logging"
-	"wp-server/wotoPacks/wotoConfig"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
@@ -170,23 +170,23 @@ func toUserInfo(raw interfaces.RawUser) *UserInfo {
 	}
 
 	return &UserInfo{
-		SoacialvoidUsername: raw.GetSocialvoidUsername(),
-		PublicID:            raw.GetPublicID(),
-		PrivateID:           raw.GetPrivateID(),
-		UserName:            raw.GetName(),
-		Password:            raw.GetPassword(),
-		UserLevel:           raw.GetUserLever(),
-		LastSeen:            raw.GetLastSeen(),
-		UserIntro:           raw.GetUserIntro(),
-		UserAvatar:          raw.GetAvatar(),
-		UserAvatarFrame:     raw.GetAvatarFrame(),
-		UserVIPLevel:        raw.GetUserVIPLevel(),
-		UserCurrentExp:      raw.GetCurrentExp(),
-		UserCurrentVIPExp:   raw.GetCurrentVIPExp(),
-		UserTotalExp:        raw.GetTotalExp(),
-		UserTotalVIPExp:     raw.GetTotalVIPExp(),
-		UserMaxExp:          raw.GetMaxExp(),
-		UserMaxVIPExp:       raw.GetMaxVIPExp(),
-		UserCity:            raw.GetCity(),
+		SocialvoidUsername: raw.GetSocialvoidUsername(),
+		PublicID:           raw.GetPublicID(),
+		PrivateID:          raw.GetPrivateID(),
+		UserName:           raw.GetName(),
+		Password:           raw.GetPassword(),
+		UserLevel:          raw.GetUserLever(),
+		LastSeen:           raw.GetLastSeen(),
+		UserIntro:          raw.GetUserIntro(),
+		UserAvatar:         raw.GetAvatar(),
+		UserAvatarFrame:    raw.GetAvatarFrame(),
+		UserVIPLevel:       raw.GetUserVIPLevel(),
+		UserCurrentExp:     raw.GetCurrentExp(),
+		UserCurrentVIPExp:  raw.GetCurrentVIPExp(),
+		UserTotalExp:       raw.GetTotalExp(),
+		UserTotalVIPExp:    raw.GetTotalVIPExp(),
+		UserMaxExp:         raw.GetMaxExp(),
+		UserMaxVIPExp:      raw.GetMaxVIPExp(),
+		UserCity:           raw.GetCity(),
 	}
 }
