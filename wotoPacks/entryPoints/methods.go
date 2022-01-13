@@ -1,5 +1,5 @@
 /*
- * This file is part of wp-server project (https://github.com/RudoRonuma/WotoPlatformBackend).
+ * This file is part of wp-server project (https://github.com/AnimeKaizoku/wotoplatform).
  * Copyright (c) 2021 ALiwoto.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -112,11 +112,11 @@ func (e *RequestEntry) WriteJson(i interface{}) (int, error) {
 	return e.Connection.WriteJson(i)
 }
 
-func (e *RequestEntry) WriteError(t int, msg string) (int, error) {
+func (e *RequestEntry) WriteError(errType int, msg string) (int, error) {
 	return e.WriteJson(&wotoActions.ActionResp{
 		Success: false,
 		Error: &serverErrors.EndPointError{
-			Type:    t,
+			Type:    serverErrors.ErrorType(errType),
 			Message: msg,
 		},
 	})

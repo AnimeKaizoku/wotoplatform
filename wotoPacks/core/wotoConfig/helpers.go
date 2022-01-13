@@ -1,5 +1,5 @@
 /*
- * This file is part of wp-server project (https://github.com/RudoRonuma/WotoPlatformBackend).
+ * This file is part of wp-server project (https://github.com/AnimeKaizoku/wotoplatform).
  * Copyright (c) 2021 ALiwoto.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -138,7 +138,7 @@ func getDefaultConfig() *Config {
 	WConfig.Port = "50100"
 
 	// use a default db name for config value
-	WConfig.DB_Name = "wp-database"
+	WConfig.DatabaseName = DefaultDatabaseName
 
 	// use SQL-Lite by default, so we don't need any sql url and
 	// password.
@@ -148,4 +148,22 @@ func getDefaultConfig() *Config {
 	WConfig.IsDefault = true
 
 	return WConfig
+}
+
+func UseSqlite() bool {
+	if WConfig != nil {
+		return WConfig.UseSQLLite
+	}
+	return false
+}
+
+func GetDbPath() string {
+	if WConfig != nil {
+		return WConfig.DatabaseName + ".db"
+	}
+	return DefaultDatabaseName + ".db"
+}
+
+func GetDatabaseURL() string {
+	return WConfig.DatabaseUrl
 }

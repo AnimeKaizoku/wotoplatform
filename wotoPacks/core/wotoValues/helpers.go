@@ -3,6 +3,8 @@ package wotoValues
 import (
 	"net"
 	"strconv"
+
+	_ "github.com/ALiwoto/StrongStringGo/strongStringGo"
 )
 
 // MakeSureNum will make sure that when you convert `i`

@@ -1,5 +1,5 @@
 /*
- * This file is part of wp-server project (https://github.com/RudoRonuma/WotoPlatformBackend).
+ * This file is part of wp-server project (https://github.com/AnimeKaizoku/wotoplatform).
  * Copyright (c) 2021 ALiwoto.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -59,7 +59,7 @@ type ReqBase interface {
 	WriteString(str string) (n int, err error)
 	ParseJsonData(v interface{}) error
 	ReadData() (n []byte, err error)
-	ReadJson(i interface{}) error
+	ReadJson(value interface{}) error
 	ReadString() (string, error)
 	LetExit()
 	ShouldExit() bool
