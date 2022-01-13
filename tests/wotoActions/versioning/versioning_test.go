@@ -164,8 +164,8 @@ func TestCorrectVersioning(t *testing.T) {
 		return
 	}
 
-	var resp wotoActions.ActionResp
-	err = json.Unmarshal(b, &resp)
+	var resp = new(wotoActions.ActionResp)
+	err = json.Unmarshal(b, resp)
 	if err != nil {
 		t.Errorf("got an error when tried to unmarshal the data: %v", err)
 		return

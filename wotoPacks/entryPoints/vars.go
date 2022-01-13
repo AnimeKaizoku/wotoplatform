@@ -21,6 +21,8 @@ import (
 	"errors"
 	"sync"
 	"wp-server/wotoPacks/core/wotoValues"
+	wa "wp-server/wotoPacks/wotoActions"
+	"wp-server/wotoPacks/wotoActions/versioning"
 )
 
 //---------------------------------------------------------
@@ -42,3 +44,13 @@ var registrationMutex *sync.Mutex
 var isCheckingRegistration bool
 
 //---------------------------------------------------------
+
+var (
+	_handlersMap = map[wa.RequestAction]wotoValues.ReqHandler{
+		wa.ActionVersion: versioning.HandleVersionAction,
+	}
+
+	_parsersMap = map[wa.RequestAction]wotoValues.ReqHandler{
+		wa.ActionVersion: versioning.ParseBatchExecute,
+	}
+)

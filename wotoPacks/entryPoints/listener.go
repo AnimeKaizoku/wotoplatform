@@ -22,9 +22,7 @@ import (
 	"time"
 	"wp-server/wotoPacks/core/utils/logging"
 	"wp-server/wotoPacks/core/wotoValues"
-	"wp-server/wotoPacks/interfaces"
 	"wp-server/wotoPacks/wotoActions"
-	"wp-server/wotoPacks/wotoActions/versioning"
 )
 
 // Listen function will listen for incoming connections
@@ -118,8 +116,6 @@ func checkEntry(conn *wotoValues.WotoConnection) error {
 	}
 
 	req.Connection = conn
-	var handler wotoValues.ReqHandler
-	var parser func(interfaces.ReqBase) error
 
 	// check if the current connection is registered or not, if not,
 	// check if it wants to register itself using action version or not,
@@ -130,11 +126,11 @@ func checkEntry(conn *wotoValues.WotoConnection) error {
 	}
 
 	logging.Debug("switching on req.Action")
-	switch req.Action {
-	case wotoActions.ActionVersion:
-		handler = versioning.HandleVersionAction
-		parser = versioning.ParseBatchExecute
-	default: // isn't it impossible? most probably yeah
+
+	handler := _handlersMap[req.Action]
+	parser := _parsersMap[req.Action]
+
+	if handler == nil || parser == nil {
 		logging.Debug("invalid action:", req.Action)
 		return ErrActionOrBatchInvalid
 	}
