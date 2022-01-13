@@ -7,7 +7,7 @@ import (
 
 func SendInvalidUsernameFormat(req inf.ReqBase, origin string) error {
 	_, err := req.SendError(&serverErrors.EndPointError{
-		Type:    serverErrors.ErrInvalidUsernameFormat,
+		Code:    serverErrors.ErrInvalidUsernameFormat,
 		Message: MessageInvalidUsernameFormat,
 		Origin:  origin,
 	})
@@ -16,7 +16,7 @@ func SendInvalidUsernameFormat(req inf.ReqBase, origin string) error {
 
 func SendInvalidPasswordFormat(req inf.ReqBase, origin string) error {
 	_, err := req.SendError(&serverErrors.EndPointError{
-		Type:    serverErrors.ErrInvalidPasswordFormat,
+		Code:    serverErrors.ErrInvalidPasswordFormat,
 		Message: MessageInvalidPasswordFormat,
 		Origin:  origin,
 	})
@@ -25,7 +25,7 @@ func SendInvalidPasswordFormat(req inf.ReqBase, origin string) error {
 
 func SendUsernameExists(req inf.ReqBase, origin string) error {
 	_, err := req.SendError(&serverErrors.EndPointError{
-		Type:    serverErrors.ErrUsernameExists,
+		Code:    serverErrors.ErrUsernameExists,
 		Message: MessageUsernameExists,
 		Origin:  origin,
 	})
@@ -34,7 +34,7 @@ func SendUsernameExists(req inf.ReqBase, origin string) error {
 
 func SendWrongUsername(req inf.ReqBase, origin string) error {
 	_, err := req.SendError(&serverErrors.EndPointError{
-		Type:    serverErrors.ErrWrongUsername,
+		Code:    serverErrors.ErrWrongUsername,
 		Message: MessageWrongUsername,
 		Origin:  origin,
 	})

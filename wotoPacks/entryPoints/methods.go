@@ -116,7 +116,7 @@ func (e *RequestEntry) WriteError(errType int, message string) (int, error) {
 	return e.WriteJson(&wotoActions.ActionResp{
 		Success: false,
 		Error: &serverErrors.EndPointError{
-			Type:    serverErrors.ErrorType(errType),
+			Code:    serverErrors.ErrorCode(errType),
 			Message: message,
 		},
 	})

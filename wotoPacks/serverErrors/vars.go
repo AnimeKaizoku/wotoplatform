@@ -18,7 +18,7 @@
 package serverErrors
 
 var (
-	ErrTypeStrMap = map[ErrorType]string{
+	ErrTypeStrMap = map[ErrorCode]string{
 		ErrNoError:           StrNoError,
 		ErrUnknown:           StrUnknownError,
 		ErrServerUnavailable: StrServerUnavailableError,

@@ -26,10 +26,10 @@ func (e *EndPointError) ToString() string {
 }
 
 func (e *EndPointError) GetType() string {
-	str := ErrTypeStrMap[e.Type]
+	str := ErrTypeStrMap[e.Code]
 	if str != "" {
 		return str
 	}
 
-	return strconv.Itoa(int(e.Type))
+	return strconv.Itoa(int(e.Code))
 }

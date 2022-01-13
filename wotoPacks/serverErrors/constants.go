@@ -18,7 +18,7 @@
 package serverErrors
 
 const (
-	ErrNoError ErrorType = iota
+	ErrNoError ErrorCode = iota
 	ErrUnknown
 	ErrServerUnavailable
 	ErrInvalidUsernameFormat

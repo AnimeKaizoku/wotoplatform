@@ -17,11 +17,11 @@
 
 package serverErrors
 
-type ErrorType int
+type ErrorCode int
 
 type EndPointError struct {
 	// Type is type of the error.
-	Type ErrorType `json:"type"`
+	Code ErrorCode `json:"code"`
 
 	// Message field represents message of the error.
 	Message string `json:"message"`
