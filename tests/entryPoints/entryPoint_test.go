@@ -92,6 +92,11 @@ func TestWrongEntryPoint(t *testing.T) {
 
 //---------------------------------------------------------
 
+func isInUseError(errStr string) bool {
+	return strings.Contains(errStr, "address already in use") ||
+		strings.Contains(errStr, "Only one usage of each socket")
+}
+
 func listen(config *wotoConfig.Config, t *testing.T) {
 	l := entryPoints.MainListener
 	if l != nil && !l.IsListenerClosed() {
@@ -105,7 +110,7 @@ func listen(config *wotoConfig.Config, t *testing.T) {
 	const maxTry = 1000
 	ln, err := net.Listen("tcp", config.Bind+":"+config.Port)
 	if err != nil {
-		if strings.Contains(err.Error(), "address already in use") {
+		if isInUseError(err.Error()) {
 			for i := 0; i < maxTry; i++ {
 				var myInt int
 				myInt, err = strconv.Atoi(config.Port)
@@ -117,7 +122,7 @@ func listen(config *wotoConfig.Config, t *testing.T) {
 
 				ln, err = net.Listen("tcp", config.Bind+":"+strconv.Itoa(myInt))
 				if err != nil {
-					if strings.Contains(err.Error(), "address already in use") {
+					if isInUseError(err.Error()) {
 						continue
 					}
 

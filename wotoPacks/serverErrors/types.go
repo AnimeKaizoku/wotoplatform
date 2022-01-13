@@ -21,5 +21,7 @@ type ErrorType int
 
 type EndPointError struct {
 	Type    ErrorType `json:"type"`
+	Code    int       `json:"code"`
 	Message string    `json:"message"`
+	Origin  string    `json:"origin"`
 }

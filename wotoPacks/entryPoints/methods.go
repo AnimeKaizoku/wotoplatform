@@ -112,13 +112,20 @@ func (e *RequestEntry) WriteJson(i interface{}) (int, error) {
 	return e.Connection.WriteJson(i)
 }
 
-func (e *RequestEntry) WriteError(errType int, msg string) (int, error) {
+func (e *RequestEntry) WriteError(errType int, message string) (int, error) {
 	return e.WriteJson(&wotoActions.ActionResp{
 		Success: false,
 		Error: &serverErrors.EndPointError{
 			Type:    serverErrors.ErrorType(errType),
-			Message: msg,
+			Message: message,
 		},
+	})
+}
+
+func (e *RequestEntry) WriteErrorValue(err *serverErrors.EndPointError) (int, error) {
+	return e.WriteJson(&wotoActions.ActionResp{
+		Success: false,
+		Error:   err,
 	})
 }
 
