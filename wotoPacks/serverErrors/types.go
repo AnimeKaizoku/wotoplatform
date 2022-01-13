@@ -20,8 +20,13 @@ package serverErrors
 type ErrorType int
 
 type EndPointError struct {
-	Type    ErrorType `json:"type"`
-	Code    int       `json:"code"`
-	Message string    `json:"message"`
-	Origin  string    `json:"origin"`
+	// Type is type of the error.
+	Type ErrorType `json:"type"`
+
+	// Message field represents message of the error.
+	Message string `json:"message"`
+
+	// Origin field represents the method which has been caused the
+	// error to be raised. (the batch execute)
+	Origin string `json:"origin"`
 }
