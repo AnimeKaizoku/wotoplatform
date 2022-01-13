@@ -13,7 +13,7 @@
     "client_ids": [
         "cli-12345678910"
     ],
-    "db_url": "postgresql://something01:something02@something03.com:5432/something04",
+    "db_url": "postgresql://Username:Password@localhost:5432/DatabaseName",
     "db_name": "wp-database",
     "use_sql_lite": true
 }
