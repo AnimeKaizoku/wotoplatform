@@ -3,7 +3,7 @@ package wotoUsers
 import (
 	"wp-server/wotoPacks/core/utils/logging"
 	"wp-server/wotoPacks/core/wotoValues"
-	"wp-server/wotoPacks/database"
+	"wp-server/wotoPacks/database/usersDatabase"
 	"wp-server/wotoPacks/interfaces"
 	wa "wp-server/wotoPacks/wotoActions"
 )
@@ -46,7 +46,7 @@ func batchRegisterUser(req interfaces.ReqBase) error {
 		}
 	}
 
-	if database.UsernameExists(entryData.Username) {
+	if usersDatabase.UsernameExists(entryData.Username) {
 		_, err = req.WriteError(ErrTypeUsernameExists, ErrMsgUsernameExists)
 		if err != nil {
 			logging.Debug(err)

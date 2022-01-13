@@ -54,7 +54,7 @@ type ReqBase interface {
 	SetBatchValues([]wotoActions.BatchExecution)
 	WriteData(b []byte) (n int, err error)
 	WriteJson(i interface{}) (n int, err error)
-	WriteError(t int, msg string) (int, error)
+	WriteError(errCode int, errMessage string) (int, error)
 	WriteResult(result interface{}) (int, error)
 	WriteString(str string) (n int, err error)
 	ParseJsonData(v interface{}) error
