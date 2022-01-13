@@ -127,8 +127,7 @@ func TestCorrectVersioning(t *testing.T) {
 	// connect to the tcp listener which is listening in another
 	// goroutine
 	//time.Sleep(250 * time.Millisecond)
-	addr, err := net.ResolveTCPAddr(config.Network,
-		config.Bind+":"+config.Port)
+	addr, err := net.ResolveTCPAddr(config.Network, config.Bind+":"+config.Port)
 	//addr, err := net.ResolveTCPAddr("tcp", ""+":"+config.Port)
 	if err != nil {
 		t.Errorf("couldn't resolve tcp address: %v", err)
@@ -183,6 +182,10 @@ func isInUseError(errStr string) bool {
 }
 
 func listen(config *wotoConfig.Config, t *testing.T) {
+	if config.IsServerExternal() {
+		return
+	}
+
 	l := entryPoints.MainListener
 	if l != nil && !l.IsListenerClosed() {
 		return
@@ -193,8 +196,7 @@ func listen(config *wotoConfig.Config, t *testing.T) {
 	}
 
 	const maxTry = 1000
-	ln, err := net.Listen(config.Network,
-		config.Bind+":"+config.Port)
+	ln, err := net.Listen(config.Network, config.Bind+":"+config.Port)
 	if err != nil {
 		if isInUseError(err.Error()) {
 			for i := 0; i < maxTry; i++ {

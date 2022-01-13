@@ -98,6 +98,10 @@ func isInUseError(errStr string) bool {
 }
 
 func listen(config *wotoConfig.Config, t *testing.T) {
+	if config.IsServerExternal() {
+		return
+	}
+
 	l := entryPoints.MainListener
 	if l != nil && !l.IsListenerClosed() {
 		return
@@ -149,6 +153,9 @@ func listen(config *wotoConfig.Config, t *testing.T) {
 }
 
 func closeListener(t *testing.T) {
+	if entryPoints.MainListener == nil {
+		return
+	}
 	// now close the connection so we can end our testing.
 	// even if you try to close the listener for more than two times,
 	// there should be no errors.
