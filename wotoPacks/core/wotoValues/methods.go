@@ -113,8 +113,9 @@ func (c *WotoConnection) ReadBytes() ([]byte, error) {
 	return b, nil
 }
 
-// ReadBytes will read the incoming bytes from the tcp
-// connection. you should always use this method to read
+// ReadString will read the incoming bytes from the tcp
+// connection and will return it as a string value.
+// You should always use this method to read
 // all receiving data from the client.
 func (c *WotoConnection) ReadString() (string, error) {
 	b, err := c.ReadBytes()

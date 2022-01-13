@@ -19,7 +19,8 @@ package wotoUsers
 
 import (
 	"wp-server/wotoPacks/core/utils/logging"
-	"wp-server/wotoPacks/core/wotoValues"
+	we "wp-server/wotoPacks/core/wotoErrors"
+	wv "wp-server/wotoPacks/core/wotoValues"
 	"wp-server/wotoPacks/database/usersDatabase"
 	"wp-server/wotoPacks/interfaces"
 	wa "wp-server/wotoPacks/wotoActions"
@@ -28,7 +29,7 @@ import (
 func HandleUserAction(req interfaces.ReqBase) error {
 	batchValues := req.GetBatchValues()
 	var err error
-	var handler wotoValues.ReqHandler
+	var handler wv.ReqHandler
 
 	for _, currentBatch := range batchValues {
 		handler = _batchHandlers[currentBatch]
@@ -55,25 +56,50 @@ func batchRegisterUser(req interfaces.ReqBase) error {
 		return err
 	}
 
-	if len(entryData.Password) < 8 || len(entryData.Username) < 4 {
-		_, err = req.WriteError(ErrTypeUserPassInvalid, ErrMsgUserPassInvalid)
-		if err != nil {
-			logging.Debug(err)
-			return err
-		}
+	if !wv.IsCorrectUsernameFormat(entryData.Username) {
+		return we.SendInvalidUsernameFormat(req, OriginRegisterUser)
+	}
+
+	if !wv.IsCorrectPasswordFormat(entryData.Password) {
+		return we.SendInvalidUsernameFormat(req, OriginRegisterUser)
 	}
 
 	if usersDatabase.UsernameExists(entryData.Username) {
-		_, err = req.WriteError(ErrTypeUsernameExists, ErrMsgUsernameExists)
-		if err != nil {
-			logging.Debug(err)
-			return err
-		}
+		return we.SendUsernameExists(req, OriginRegisterUser)
 	}
+
+	/*
+		TODO:
+		register the user with the specified username and password.
+	*/
 
 	return nil
 }
 
 func batchLoginUser(req interfaces.ReqBase) error {
+	var entryData = new(RegisterUserData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		logging.Error(err)
+		return err
+	}
+
+	if !wv.IsCorrectUsernameFormat(entryData.Username) {
+		return we.SendInvalidUsernameFormat(req, OriginLoginUser)
+	}
+
+	if !wv.IsCorrectPasswordFormat(entryData.Password) {
+		return we.SendInvalidUsernameFormat(req, OriginLoginUser)
+	}
+
+	if !usersDatabase.UsernameExists(entryData.Username) {
+		return we.SendWrongUsername(req, OriginLoginUser)
+	}
+
+	/*
+		TODO:
+		register the user with the specified username and password.
+	*/
+
 	return nil
 }

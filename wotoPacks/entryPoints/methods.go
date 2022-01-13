@@ -122,7 +122,7 @@ func (e *RequestEntry) WriteError(errType int, message string) (int, error) {
 	})
 }
 
-func (e *RequestEntry) WriteErrorValue(err *serverErrors.EndPointError) (int, error) {
+func (e *RequestEntry) SendError(err *serverErrors.EndPointError) (int, error) {
 	return e.WriteJson(&wotoActions.ActionResp{
 		Success: false,
 		Error:   err,
@@ -192,6 +192,8 @@ func (e *RequestEntry) CanWrite() bool {
 	return e.Connection != nil && e.Connection.CanReadAndWrite()
 }
 
+// ShouldExit returns true if and only if current request entry should
+// exit.
 func (e *RequestEntry) ShouldExit() bool {
 	return e.exit
 }

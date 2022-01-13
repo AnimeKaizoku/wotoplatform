@@ -18,9 +18,13 @@
 package serverErrors
 
 const (
-	ErrNoError           ErrorType = iota
-	ErrUnknown           ErrorType = iota
-	ErrServerUnavailable ErrorType = iota + 1
+	ErrNoError ErrorType = iota
+	ErrUnknown
+	ErrServerUnavailable
+	ErrInvalidUsernameFormat
+	ErrInvalidPasswordFormat
+	ErrUsernameExists
+	ErrWrongUsername
 )
 
 const (

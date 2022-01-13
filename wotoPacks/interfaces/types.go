@@ -18,32 +18,9 @@
 package interfaces
 
 import (
-	"time"
+	"wp-server/wotoPacks/serverErrors"
 	"wp-server/wotoPacks/wotoActions"
 )
-
-type RawUser interface {
-	GetName() string
-	GetSvUsername() string
-	GetAvatar() string
-	GetPublicID() string
-	GetPassword() string
-	GetUserLever() uint16
-	GetLastSeen() string
-	GetUserIntro() string
-	GetPrivateID() string
-	GetAvatarFrame() string
-	GetUserVIPLevel() uint8
-	GetCurrentExp() string
-	GetCurrentVIPExp() string
-	GetMaxExp() string
-	GetMaxVIPExp() string
-	GetTotalExp() string
-	GetCity() string
-	GetTotalVIPExp() string
-	GetSocialvoidUsername() string
-	GetCreatedAt() time.Time
-}
 
 type ReqBase interface {
 	GetAction() wotoActions.RequestAction
@@ -55,14 +32,44 @@ type ReqBase interface {
 	WriteData(b []byte) (n int, err error)
 	WriteJson(i interface{}) (n int, err error)
 	WriteError(errCode int, errMessage string) (int, error)
+	SendError(err *serverErrors.EndPointError) (int, error)
 	WriteResult(result interface{}) (int, error)
 	WriteString(str string) (n int, err error)
 	ParseJsonData(v interface{}) error
 	ReadData() (n []byte, err error)
 	ReadJson(value interface{}) error
+
+	// ReadString will read the incoming bytes from the tcp
+	// connection and will return it as a string value.
+	// You should always use this method to read
+	// all receiving data from the client.
 	ReadString() (string, error)
+
+	// LetExit method will mark the current batch execution request
+	// as exited; it will set the connection field to nil, so you
+	// won't be able to read and write through it anymore.
 	LetExit()
+
+	// ShouldExit returns true if and only if current request entry should
+	// exit.
 	ShouldExit() bool
+
+	// IsRegistered function will check if the current connection
+	// is registered or not.
+	// if a connection is not registered, it needs to send its
+	// information to the server first, so it can be registered
+	// via batch execution of `versioning` package.
+	// but if a client is not registered and wants to execute
+	// a batch execute besides `check_version` of versioning
+	// package, its connection should be closed at once.
 	IsRegistered() bool
+
+	// RegisterConnection function will mark the current connection
+	// that this request belongs to as a registered connection, so
+	// the connection can execute another batch executions besides
+	// `check_version` in versioning package.
+	// WARNING: this package should only be used in versioning
+	// package when we are checking for information of the
+	// client, such as client id, etc...
 	RegisterConnection()
 }

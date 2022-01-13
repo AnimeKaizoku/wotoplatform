@@ -34,3 +34,8 @@ const (
 	ErrMsgUsernameExists  = "username is already registered in database"
 	ErrMsgUserPassInvalid = "username or password are entered in a wrong format"
 )
+
+const (
+	OriginRegisterUser = "RegisterUser"
+	OriginLoginUser    = "LoginUser"
+)

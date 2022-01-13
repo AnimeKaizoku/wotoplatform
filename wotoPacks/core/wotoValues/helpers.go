@@ -47,9 +47,7 @@ func MakeSureByte(b []byte, length int) []byte {
 	}
 }
 
-func getWotoConnection(conn net.Conn,
-	l *WotoListener,
-	r Registerer) *WotoConnection {
+func getWotoConnection(conn net.Conn, l *WotoListener, r Registerer) *WotoConnection {
 	return &WotoConnection{
 		conn:       conn,
 		origin:     l,
@@ -65,4 +63,12 @@ func GetWotoListener(l net.Listener) *WotoListener {
 	return &WotoListener{
 		listener: l,
 	}
+}
+
+func IsCorrectPasswordFormat(password string) bool {
+	return len(password) >= 8
+}
+
+func IsCorrectUsernameFormat(username string) bool {
+	return len(username) >= 5
 }
