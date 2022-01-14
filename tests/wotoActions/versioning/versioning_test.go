@@ -209,8 +209,8 @@ func listen(config *wotoConfig.Config, t *testing.T) {
 				}
 				myInt++
 
-				ln, err = net.Listen(config.Network,
-					config.Bind+":"+strconv.Itoa(myInt))
+				config.Port = strconv.Itoa(myInt)
+				ln, err = net.Listen(config.Network, config.Bind+":"+config.Port)
 				if err != nil {
 					if isInUseError(err.Error()) {
 						continue
