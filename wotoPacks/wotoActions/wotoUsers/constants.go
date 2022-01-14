@@ -21,15 +21,9 @@ package wotoUsers
 const (
 	BATCH_REGISTER_USER    = "register_user"
 	BATCH_LOGIN_USER       = "login_user"
-	BATCH_GET_ME           = "get_info"
+	BATCH_GET_ME           = "get_me"
 	BATCH_GET_USER_INFO    = "get_user_info"
 	BATCH_RESOLVE_USERNAME = "resolve_username"
-)
-
-// error types
-const (
-	ErrTypeUsernameExists = iota + 1
-	ErrTypeUserPassInvalid
 )
 
 // error messages
