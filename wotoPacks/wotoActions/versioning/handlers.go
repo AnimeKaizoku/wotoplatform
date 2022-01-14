@@ -44,9 +44,7 @@ func HandleVersionAction(req interfaces.ReqBase) error {
 		}
 	}
 
-	req.LetExit()
-
-	return nil
+	return req.LetExit()
 }
 
 func batchCheckVersion(req interfaces.ReqBase) error {
@@ -82,10 +80,6 @@ func batchCheckVersion(req interfaces.ReqBase) error {
 		IsAcceptable: a,
 		ServerTime:   wotoTime.GenerateCurrentDateTime(),
 	})
-
-	if err != nil {
-		logging.Error(err)
-	}
 
 	return err
 }

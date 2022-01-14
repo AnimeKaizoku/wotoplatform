@@ -48,7 +48,8 @@ type ReqBase interface {
 	// LetExit method will mark the current batch execution request
 	// as exited; it will set the connection field to nil, so you
 	// won't be able to read and write through it anymore.
-	LetExit()
+	// This method SHOULD always return nil.
+	LetExit() error
 
 	// ShouldExit returns true if and only if current request entry should
 	// exit.

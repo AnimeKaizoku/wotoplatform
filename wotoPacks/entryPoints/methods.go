@@ -201,12 +201,13 @@ func (e *RequestEntry) ShouldExit() bool {
 // LetExit method will mark the current batch execution request
 // as exited; it will set the connection field to nil, so you
 // won't be able to read and write through it anymore.
-func (e *RequestEntry) LetExit() {
+func (e *RequestEntry) LetExit() error {
 	if !e.exit {
 		e.exit = true
 		e.batchValues = nil
 		e.Connection = nil
 	}
+	return nil
 }
 
 //---------------------------------------------------------

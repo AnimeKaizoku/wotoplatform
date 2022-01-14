@@ -43,9 +43,7 @@ func HandleUserAction(req interfaces.ReqBase) error {
 		}
 	}
 
-	req.LetExit()
-
-	return nil
+	return req.LetExit()
 }
 
 func batchRegisterUser(req interfaces.ReqBase) error {
