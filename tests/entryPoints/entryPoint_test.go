@@ -45,13 +45,14 @@ func TestWrongEntryPoint(t *testing.T) {
 		listen(config, t)
 	}
 
-	// now, at the very least sleep 250 millisecond, and then try to
-	// connect to the tcp listener which is listening in another
-	// goroutine
-	time.Sleep(250 * time.Millisecond)
+	for entryPoints.MainListener == nil {
+		// now, at the very least sleep 250 millisecond, and then try to
+		// connect to the tcp listener which is listening in another
+		// goroutine
+		time.Sleep(250 * time.Millisecond)
+	}
 
-	addr, err := net.ResolveTCPAddr("tcp",
-		config.Bind+":"+config.Port)
+	addr, err := net.ResolveTCPAddr("tcp", config.Bind+":"+config.Port)
 	if err != nil {
 		t.Errorf("couldn't resolve tcp address: %v", err)
 		return

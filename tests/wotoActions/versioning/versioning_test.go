@@ -48,10 +48,12 @@ func TestWrongVersioning(t *testing.T) {
 		listen(config, t)
 	}
 
-	// now, at the very least sleep 250 millisecond, and then try to
-	// connect to the tcp listener which is listening in another
-	// goroutine
-	//time.Sleep(250 * time.Millisecond)
+	for entryPoints.MainListener == nil {
+		// now, at the very least sleep 250 millisecond, and then try to
+		// connect to the tcp listener which is listening in another
+		// goroutine
+		time.Sleep(250 * time.Millisecond)
+	}
 
 	addr, err := net.ResolveTCPAddr(config.Network, config.Bind+":"+config.Port)
 	//addr, err := net.ResolveTCPAddr("tcp", ""+":"+config.Port)
@@ -116,17 +118,16 @@ func TestCorrectVersioning(t *testing.T) {
 		t.Errorf("couldn't get config: %v", err)
 		return
 	} else {
-		//if entryPoints.MainListener != nil {
-		//log.Println("no nil")
-		//return
-		//}
 		listen(config, t)
 	}
 
-	// now, at the very least sleep 250 milliseconds, and then try to
-	// connect to the tcp listener which is listening in another
-	// goroutine
-	//time.Sleep(250 * time.Millisecond)
+	for entryPoints.MainListener == nil {
+		// now, at the very least sleep 250 millisecond, and then try to
+		// connect to the tcp listener which is listening in another
+		// goroutine
+		time.Sleep(250 * time.Millisecond)
+	}
+
 	addr, err := net.ResolveTCPAddr(config.Network, config.Bind+":"+config.Port)
 	//addr, err := net.ResolveTCPAddr("tcp", ""+":"+config.Port)
 	if err != nil {
