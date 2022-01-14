@@ -40,3 +40,75 @@ func SendWrongUsername(req inf.ReqBase, origin string) error {
 	})
 	return err
 }
+
+func SendWrongPassword(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrWrongPassword,
+		Message: MessageWrongPassword,
+		Origin:  origin,
+	})
+	return err
+}
+
+func SendInvalidAuthKeyFormat(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrInvalidAuthKeyFormat,
+		Message: MessageInvalidAuthKeyFormat,
+		Origin:  origin,
+	})
+	return err
+}
+
+func SendInvalidAccessHashFormat(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrInvalidAccessHashFormat,
+		Message: MessageInvalidAccessHashFormat,
+		Origin:  origin,
+	})
+	return err
+}
+
+func SendWrongAuthKey(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrWrongAuthKey,
+		Message: MessageWrongAuthKey,
+		Origin:  origin,
+	})
+	return err
+}
+
+func SendLoginAccessHashExpired(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrLoginAccessHashExpired,
+		Message: MessageLoginAccessHashExpired,
+		Origin:  origin,
+	})
+	return err
+}
+
+func SendInvalidFirstName(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrInvalidFirstName,
+		Message: MessageInvalidFirstName,
+		Origin:  origin,
+	})
+	return err
+}
+
+func SendInvalidLastName(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrInvalidLastName,
+		Message: MessageInvalidLastName,
+		Origin:  origin,
+	})
+	return err
+}
+
+func SendInvalidTitle(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrInvalidTitle,
+		Message: MessageInvalidTitle,
+		Origin:  origin,
+	})
+	return err
+}

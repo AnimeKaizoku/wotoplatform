@@ -25,6 +25,14 @@ const (
 	ErrInvalidPasswordFormat
 	ErrUsernameExists
 	ErrWrongUsername
+	ErrWrongPassword
+	ErrInvalidAuthKeyFormat
+	ErrInvalidAccessHashFormat
+	ErrWrongAuthKey
+	ErrLoginAccessHashExpired
+	ErrInvalidFirstName
+	ErrInvalidLastName
+	ErrInvalidTitle
 )
 
 const (
