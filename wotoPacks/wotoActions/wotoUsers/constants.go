@@ -19,19 +19,13 @@ package wotoUsers
 
 // batch execution values
 const (
-	BATCH_REGISTER_USER    = "register_user"
-	BATCH_LOGIN_USER       = "login_user"
-	BATCH_GET_ME           = "get_me"
-	BATCH_GET_USER_INFO    = "get_user_info"
-	BATCH_RESOLVE_USERNAME = "resolve_username"
+	BATCH_REGISTER_USER          = "register_user"
+	BATCH_LOGIN_USER             = "login_user"
+	BATCH_GET_ME                 = "get_me"
+	BATCH_GET_USER_INFO          = "get_user_info"
+	BATCH_RESOLVE_USERNAME       = "resolve_username"
+	BATCH_GET_USER_MEDIA_HISTORY = "get_user_media_history"
 )
-
-// error messages
-const (
-	ErrMsgUsernameExists  = "username is already registered in database"
-	ErrMsgUserPassInvalid = "username or password are entered in a wrong format"
-)
-
 const (
 	OriginRegisterUser = "RegisterUser"
 	OriginLoginUser    = "LoginUser"
