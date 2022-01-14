@@ -24,6 +24,12 @@ const (
 
 	// All actions related to the users.
 	ActionUser
+
+	// All actions related to medias.
+	ActionMedia
+
+	// All actions related to group calls.
+	ActionGroupCalls
 )
 
 // batch execution parsing special data

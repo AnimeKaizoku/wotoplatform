@@ -23,6 +23,9 @@ import (
 	"wp-server/wotoPacks/core/wotoValues"
 	wa "wp-server/wotoPacks/wotoActions"
 	"wp-server/wotoPacks/wotoActions/versioning"
+	"wp-server/wotoPacks/wotoActions/wotoGroups"
+	"wp-server/wotoPacks/wotoActions/wotoMedia"
+	"wp-server/wotoPacks/wotoActions/wotoUsers"
 )
 
 //---------------------------------------------------------
@@ -47,10 +50,16 @@ var isCheckingRegistration bool
 
 var (
 	_handlersMap = map[wa.RequestAction]wotoValues.ReqHandler{
-		wa.ActionVersion: versioning.HandleVersionAction,
+		wa.ActionVersion:    versioning.HandleVersionAction,
+		wa.ActionUser:       wotoUsers.HandleUserAction,
+		wa.ActionMedia:      wotoMedia.HandleMediaAction,
+		wa.ActionGroupCalls: wotoGroups.HandleGroupCallsAction,
 	}
 
 	_parsersMap = map[wa.RequestAction]wotoValues.ReqHandler{
-		wa.ActionVersion: versioning.ParseBatchExecute,
+		wa.ActionVersion:    versioning.ParseBatchExecute,
+		wa.ActionUser:       wotoUsers.ParseBatchExecute,
+		wa.ActionMedia:      wotoMedia.ParseBatchExecute,
+		wa.ActionGroupCalls: wotoGroups.ParseBatchExecute,
 	}
 )
