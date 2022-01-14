@@ -87,7 +87,7 @@ func batchLoginUser(req interfaces.ReqBase) error {
 	}
 
 	if !wv.IsCorrectPasswordFormat(entryData.Password) {
-		return we.SendInvalidUsernameFormat(req, OriginLoginUser)
+		return we.SendInvalidPasswordFormat(req, OriginLoginUser)
 	}
 
 	if !usersDatabase.UsernameExists(entryData.Username) {
