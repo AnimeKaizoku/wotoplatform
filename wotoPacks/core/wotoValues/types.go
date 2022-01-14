@@ -26,14 +26,15 @@ import (
 type PublicUserId int64
 type UserPermission int
 type PublicGroupCallId string
-type SongModelId string
+type MediaModelId string
 type ProfilePictureModelId string
 
 type ReqHandler func(interfaces.ReqBase) error
 type Registerer func(*WotoConnection)
 
-type SongModel struct {
-	ModelId     SongModelId   `json:"model_id" gorm:"primaryKey"`
+type MediaModel struct {
+	ModelId     MediaModelId  `json:"model_id" gorm:"primaryKey"`
+	MediaType   string        `json:"media_type"`
 	Title       string        `json:"title"`
 	Duration    time.Duration `json:"duration"`
 	Artist      string        `json:"artist"`
@@ -56,24 +57,26 @@ type SongModel struct {
 
 type GroupCallInfo struct {
 	GroupCallId       PublicGroupCallId `json:"group_call_id" gorm:"primaryKey"`
+	GroupRegion       string            `json:"group_region"`
 	GroupCallUsername string            `json:"group_call_username"`
 	TelegramId        int64             `json:"telegram_id"`
 	TelegramUsername  string            `json:"telegram_username"`
-	CurrentPlaying    SongModelId       `json:"current_playing"`
+	CurrentPlaying    MediaModelId      `json:"current_playing"`
 }
 
-type UserSongHistoryElement struct {
+type UserMediaHistoryElement struct {
 	UserId        PublicUserId      `json:"user_id" gorm:"primaryKey"`
 	AtGroupCallId PublicGroupCallId `json:"at_group_call_id"`
-	Song          SongModelId       `json:"song_model_id"`
+	Media         MediaModelId      `json:"media_model_id"`
 	PlayedBy      PublicUserId      `json:"played_by"`
 }
 
-type GroupCallSongHistoryElement struct {
+type GroupCallMediaHistoryElement struct {
 	GroupCallId PublicGroupCallId `json:"group_call_id" gorm:"primaryKey"`
+	Media       MediaModelId      `json:"media_model_id"`
 }
 
-type SongTag struct {
+type MediaTag struct {
 	ModelId   string    `json:"model_id" gorm:"primaryKey"`
 	Tag       string    `json:"tag"`
 	CreatedAt time.Time `json:"created_at"`
@@ -82,8 +85,10 @@ type SongTag struct {
 type UserInfo struct {
 	UserId         PublicUserId          `json:"user_id" gorm:"primaryKey"`
 	PrivateHash    string                `json:"private_hash"`
+	AuthKey        string                `json:"auth_key"`
+	AccessHash     string                `json:"access_hash"`
 	Password       string                `json:"password"`
-	Permission     UserPermission        `json:"-"`
+	Permission     UserPermission        `json:"permission"`
 	Bio            string                `json:"bio"`
 	ProfilePicture ProfilePictureModelId `json:"profile_picture"`
 	SourceUrl      string                `json:"source_url"`
@@ -95,6 +100,7 @@ type UserInfo struct {
 	UpdatedAt      time.Time             `json:"updated_at"`
 	IsVirtual      bool                  `json:"is_virtual"`
 	CreatedBy      PublicUserId          `json:"created_by"`
+	cachedTime     time.Time             `json:"-" gorm:"-" sql:"-"`
 }
 
 type WotoListener struct {

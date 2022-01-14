@@ -2,6 +2,7 @@ package wotoValues
 
 import (
 	"errors"
+	"sync"
 
 	"gorm.io/gorm"
 )
@@ -16,5 +17,7 @@ var ErrValueEmpty = errors.New("woto connection: received value was empty")
 
 //---------------------------------------------------------
 
-var DebugMode bool
-var SESSION *gorm.DB
+var (
+	SESSION      *gorm.DB
+	SessionMutex = &sync.Mutex{}
+)

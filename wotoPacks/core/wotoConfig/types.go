@@ -28,6 +28,7 @@ type Config struct {
 	AdminUsers     []string `json:"admin_users"`
 	ClientIDs      []string `json:"client_ids"`
 	DatabaseUrl    string   `json:"db_url"`
+	CacheTime      int      `json:"cache_time"`
 	DatabaseName   string   `json:"db_name"`
 	UseSQLLite     bool     `json:"use_sql_lite"`
 	IsDefault      bool     `json:"-"` // test purpose only

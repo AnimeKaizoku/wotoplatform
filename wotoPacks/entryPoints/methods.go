@@ -166,7 +166,7 @@ func (e *RequestEntry) ReadJson(i interface{}) error {
 
 func (e *RequestEntry) ReadString() (string, error) {
 	if e.Connection == nil {
-		return wv.EMPTY, nil
+		return "", nil
 	}
 
 	return e.Connection.ReadString()

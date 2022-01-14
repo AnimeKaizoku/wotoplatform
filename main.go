@@ -72,9 +72,6 @@ func loadLogger() func() {
 	zap.ReplaceGlobals(loggerMgr)
 	logging.SUGARED = loggerMgr.Sugar()
 	return func() {
-		err := loggerMgr.Sync()
-		if err != nil {
-			log.Fatal(err.Error())
-		}
+		_ = loggerMgr.Sync()
 	}
 }

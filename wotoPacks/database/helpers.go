@@ -20,8 +20,9 @@ package database
 import (
 	"wp-server/wotoPacks/core/utils/logging"
 	"wp-server/wotoPacks/core/wotoConfig"
+	wv "wp-server/wotoPacks/core/wotoValues"
 	"wp-server/wotoPacks/database/groupCallsDatabase"
-	"wp-server/wotoPacks/database/songsDatabase"
+	"wp-server/wotoPacks/database/mediaDatabase"
 	"wp-server/wotoPacks/database/usersDatabase"
 
 	"gorm.io/driver/postgres"
@@ -58,6 +59,7 @@ func StartDatabase() error {
 	}
 
 	SESSION = db
+	wv.SESSION = SESSION
 
 	logging.Info("Database connected ")
 
@@ -70,7 +72,7 @@ func StartDatabase() error {
 	}
 
 	groupCallsDatabase.LoadGroupCallsDatabase()
-	songsDatabase.LoadSongsDatabase()
+	mediaDatabase.LoadMediaDatabase()
 	usersDatabase.LoadUsersDatabase()
 
 	logging.Info("Auto-migrated database schema")

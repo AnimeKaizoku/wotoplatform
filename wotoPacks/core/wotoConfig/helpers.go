@@ -20,6 +20,7 @@ package wotoConfig
 import (
 	"encoding/json"
 	"io/ioutil"
+	"time"
 	"wp-server/wotoPacks/core/utils/logging"
 )
 
@@ -166,4 +167,11 @@ func GetDbPath() string {
 
 func GetDatabaseURL() string {
 	return WConfig.DatabaseUrl
+}
+
+func GetDatabaseCacheTime() time.Duration {
+	if WConfig == nil {
+		return 10 * (24 * time.Hour)
+	}
+	return time.Duration(WConfig.CacheTime) * (24 * time.Hour)
 }

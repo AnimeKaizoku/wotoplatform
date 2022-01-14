@@ -3,7 +3,7 @@
     "bind": "0.0.0.0",
     "port": "50100",
     "name": "woto-platform",
-    "description": "online music platform",
+    "description": "online media platform",
     "admin_passwords": [
         "123456789_something_sample"
     ],
@@ -15,5 +15,6 @@
     ],
     "db_url": "postgresql://Username:Password@localhost:5432/DatabaseName",
     "db_name": "wp-database",
+    "cache_time": 10,
     "use_sql_lite": true
 }

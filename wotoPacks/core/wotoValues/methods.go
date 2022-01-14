@@ -120,7 +120,7 @@ func (c *WotoConnection) ReadBytes() ([]byte, error) {
 func (c *WotoConnection) ReadString() (string, error) {
 	b, err := c.ReadBytes()
 	if err != nil {
-		return EMPTY, err
+		return "", err
 	}
 
 	return string(b), nil
@@ -211,6 +211,24 @@ func (c *WotoConnection) Register() {
 		c.registerer(c)
 		c.isRegistered = true
 	}
+}
+
+//---------------------------------------------------------
+
+func (u *UserInfo) HasUsername() bool {
+	return u.Username != ""
+}
+
+func (u *UserInfo) HasTelegramId() bool {
+	return u.TelegramId != 0
+}
+
+func (u *UserInfo) SetCachedTime() {
+	u.cachedTime = time.Now()
+}
+
+func (u *UserInfo) IsCacheExpired(d time.Duration) bool {
+	return time.Since(u.cachedTime) > d
 }
 
 //---------------------------------------------------------
