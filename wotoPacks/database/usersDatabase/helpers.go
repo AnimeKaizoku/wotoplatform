@@ -33,6 +33,10 @@ func LoadUsersDatabase() error {
 	usersMapByUsernameMutex.Lock()
 	usersMapByTelegramIdMutex.Lock()
 	for _, user := range allUsers {
+		if user.UserId > lastUserId {
+			lastUserId = user.UserId
+		}
+
 		usersMapById[user.UserId] = &user
 
 		if user.HasUsername() {

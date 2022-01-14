@@ -10,6 +10,7 @@ var (
 	ModelUserInfo *wv.UserInfo = &wv.UserInfo{}
 )
 
+// cache values and mutexes.
 var (
 	usersMapById              = make(map[wv.PublicUserId]*wv.UserInfo)
 	usersMapByIdMutex         = &sync.Mutex{}
