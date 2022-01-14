@@ -24,9 +24,9 @@ import (
 
 var (
 	_batchValuesMap = map[wa.BatchExecution]bool{
-		Batch_CHECK_VERSION: true,
+		BATCH_CHECK_VERSION: true,
 	}
 	_batchHandlers = map[wa.BatchExecution]wv.ReqHandler{
-		Batch_CHECK_VERSION: batchCheckVersion,
+		BATCH_CHECK_VERSION: batchCheckVersion,
 	}
 )

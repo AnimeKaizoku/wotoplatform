@@ -282,7 +282,7 @@ func writeVersionAction(conn net.Conn) (int, error) {
 	e := entryPoints.RequestEntry{
 		Action: wotoActions.ActionVersion,
 		BatchExecute: wotoActions.BatchStr +
-			versioning.Batch_CHECK_VERSION,
+			versioning.BATCH_CHECK_VERSION,
 		Data: string(data),
 	}
 
