@@ -112,3 +112,12 @@ func SendInvalidTitle(req inf.ReqBase, origin string) error {
 	})
 	return err
 }
+
+func SendAlreadyAuthorized(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrAlreadyAuthorized,
+		Message: MessageAlreadyAuthorized,
+		Origin:  origin,
+	})
+	return err
+}

@@ -136,6 +136,11 @@ func (e *RequestEntry) WriteResult(result interface{}) (int, error) {
 	})
 }
 
+func (e *RequestEntry) SendResult(result interface{}) error {
+	_, err := e.WriteResult(result)
+	return err
+}
+
 func (e *RequestEntry) WriteResp(resp *wotoActions.ActionResp) (int, error) {
 	return e.WriteJson(resp)
 }
@@ -208,6 +213,17 @@ func (e *RequestEntry) LetExit() error {
 		e.Connection = nil
 	}
 	return nil
+}
+
+func (e *RequestEntry) SetMe(user *wv.UserInfo) {
+
+}
+func (e *RequestEntry) GetMe() *wv.UserInfo {
+	return e.me
+}
+
+func (e *RequestEntry) IsAuthorized() bool {
+	return e.me != nil
 }
 
 //---------------------------------------------------------

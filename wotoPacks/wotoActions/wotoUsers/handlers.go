@@ -71,15 +71,19 @@ func batchRegisterUser(req interfaces.ReqBase) error {
 		register the user with the specified username and password.
 	*/
 
-	return nil
+	return req.SendResult(&RegisterUserResult{})
 }
 
 func batchLoginUser(req interfaces.ReqBase) error {
-	var entryData = new(RegisterUserData)
+	var entryData = new(LoginUserData)
 	err := req.ParseJsonData(entryData)
 	if err != nil {
 		logging.Error(err)
 		return err
+	}
+
+	if req.IsAuthorized() {
+		return we.SendAlreadyAuthorized(req, OriginLoginUser)
 	}
 
 	if !wv.IsCorrectUsernameFormat(entryData.Username) {
@@ -94,10 +98,11 @@ func batchLoginUser(req interfaces.ReqBase) error {
 		return we.SendWrongUsername(req, OriginLoginUser)
 	}
 
-	/*
-		TODO:
-		register the user with the specified username and password.
-	*/
+	user := usersDatabase.GetUserByUsername(entryData.Username)
 
-	return nil
+	if !user.IsPasswordCorrect(entryData.Password) {
+		return we.SendWrongPassword(req, OriginLoginUser)
+	}
+
+	return req.SendResult(&LoginUserResult{})
 }

@@ -13,4 +13,5 @@ const (
 	MessageInvalidFirstName        = "Invalid first name entered."
 	MessageInvalidLastName         = "Invalid last name entered."
 	MessageInvalidTitle            = "Invalid title entered."
+	MessageAlreadyAuthorized       = "You are already authorized; try using LogOut method."
 )

@@ -33,6 +33,7 @@ const (
 	ErrInvalidFirstName
 	ErrInvalidLastName
 	ErrInvalidTitle
+	ErrAlreadyAuthorized
 )
 
 const (

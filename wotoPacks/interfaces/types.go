@@ -18,9 +18,12 @@
 package interfaces
 
 import (
+	"wp-server/wotoPacks/core/wotoValues/wotoRaw"
 	"wp-server/wotoPacks/serverErrors"
 	"wp-server/wotoPacks/wotoActions"
 )
+
+type UserInfo = wotoRaw.UserInfo
 
 type ReqBase interface {
 	GetAction() wotoActions.RequestAction
@@ -34,6 +37,10 @@ type ReqBase interface {
 	WriteError(errCode int, errMessage string) (int, error)
 	SendError(err *serverErrors.EndPointError) (int, error)
 	WriteResult(result interface{}) (int, error)
+
+	// wrapper method for `WriteResult` which returns only error.
+	SendResult(result interface{}) error
+
 	WriteString(str string) (n int, err error)
 	ParseJsonData(v interface{}) error
 	ReadData() (n []byte, err error)
@@ -73,4 +80,16 @@ type ReqBase interface {
 	// package when we are checking for information of the
 	// client, such as client id, etc...
 	RegisterConnection()
+
+	// SetMe method will set the user information of the current
+	// connection.
+	SetMe(user *UserInfo)
+
+	// IsAuthorized returns true if and only if the current connection
+	// is authorized as a valid user.
+	IsAuthorized() bool
+
+	// GetMe method will return the user information of the current
+	// connection.
+	GetMe() *UserInfo
 }

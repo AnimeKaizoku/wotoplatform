@@ -20,14 +20,15 @@ package wotoValues
 import (
 	"net"
 	"time"
+	"wp-server/wotoPacks/core/wotoValues/wotoRaw"
 	"wp-server/wotoPacks/interfaces"
 )
 
-type PublicUserId int64
-type UserPermission int
-type PublicGroupCallId string
-type MediaModelId string
-type ProfilePictureModelId string
+type PublicUserId = wotoRaw.PublicUserId
+type UserPermission = wotoRaw.UserPermission
+type PublicGroupCallId = wotoRaw.PublicGroupCallId
+type MediaModelId = wotoRaw.MediaModelId
+type ProfilePictureModelId = wotoRaw.ProfilePictureModelId
 
 type ReqHandler func(interfaces.ReqBase) error
 type Registerer func(*WotoConnection)
@@ -82,26 +83,7 @@ type MediaTag struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
-type UserInfo struct {
-	UserId         PublicUserId          `json:"user_id" gorm:"primaryKey"`
-	PrivateHash    string                `json:"private_hash"`
-	AuthKey        string                `json:"auth_key"`
-	AccessHash     string                `json:"access_hash"`
-	Password       string                `json:"password"`
-	Permission     UserPermission        `json:"permission"`
-	Bio            string                `json:"bio"`
-	ProfilePicture ProfilePictureModelId `json:"profile_picture"`
-	SourceUrl      string                `json:"source_url"`
-	TelegramId     int64                 `json:"telegram_id"`
-	FirstName      string                `json:"first_name"`
-	LastName       string                `json:"last_name"`
-	Username       string                `json:"username"`
-	CreatedAt      time.Time             `json:"created_at"`
-	UpdatedAt      time.Time             `json:"updated_at"`
-	IsVirtual      bool                  `json:"is_virtual"`
-	CreatedBy      PublicUserId          `json:"created_by"`
-	cachedTime     time.Time             `json:"-" gorm:"-" sql:"-"`
-}
+type UserInfo = wotoRaw.UserInfo
 
 type WotoListener struct {
 	listener net.Listener

@@ -59,4 +59,6 @@ type RequestEntry struct {
 	// when this request entry is in exit mode, this value
 	// will be nil.
 	batchValues []wotoActions.BatchExecution `json:"-"`
+
+	me *wotoValues.UserInfo `json:"-"`
 }

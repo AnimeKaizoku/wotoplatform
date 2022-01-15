@@ -76,7 +76,7 @@ func batchCheckVersion(req interfaces.ReqBase) error {
 		req.RegisterConnection()
 	}
 
-	_, err = req.WriteResult(&VersionResults{
+	_, err = req.WriteResult(&VersionResult{
 		IsAcceptable: a,
 		ServerTime:   wotoTime.GenerateCurrentDateTime(),
 	})

@@ -35,6 +35,14 @@ const (
 )
 
 const (
+	PermissionNormalUser UserPermission = iota
+	PermissionSpecial
+	PermissionAdmin
+	PermissionDeveloper
+	PermissionOwner
+)
+
+const (
 	BaseIndexStr    = "0" // number 0
 	BaseOneIndexStr = "1" // number 1
 )

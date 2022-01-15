@@ -24,7 +24,7 @@ type Version struct {
 	Num4 uint8
 }
 
-type VersionResults struct {
+type VersionResult struct {
 	IsAcceptable bool   `json:"is_acceptable"`
 	ServerTime   string `json:"server_time"`
 }
