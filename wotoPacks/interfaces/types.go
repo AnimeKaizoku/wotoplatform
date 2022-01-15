@@ -38,7 +38,8 @@ type ReqBase interface {
 	SendError(err *serverErrors.EndPointError) (int, error)
 	WriteResult(result interface{}) (int, error)
 
-	// wrapper method for `WriteResult` which returns only error.
+	// SendResult is a wrapper method for `WriteResult` which returns
+	// only error value.
 	SendResult(result interface{}) error
 
 	WriteString(str string) (n int, err error)

@@ -136,6 +136,8 @@ func (e *RequestEntry) WriteResult(result interface{}) (int, error) {
 	})
 }
 
+// SendResult is a wrapper method for `WriteResult` which returns
+// only error value.
 func (e *RequestEntry) SendResult(result interface{}) error {
 	_, err := e.WriteResult(result)
 	return err
