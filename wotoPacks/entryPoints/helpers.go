@@ -18,17 +18,11 @@
 package entryPoints
 
 import (
-	"sync"
 	"time"
 	"wp-server/wotoPacks/core/wotoValues"
 )
 
 func checkRegistration() {
-	if registrationMap == nil {
-		registrationMap = make(map[*wotoValues.WotoConnection]bool)
-		registrationMutex = new(sync.Mutex)
-	}
-
 	for {
 		// sleep for 3 minutes
 		// each loop should be done in intervals of 3 mins.

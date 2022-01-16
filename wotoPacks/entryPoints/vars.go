@@ -42,9 +42,9 @@ var ErrConnectionNotRegistered = errors.New("entryPoints: the connection is not 
 
 //---------------------------------------------------------
 
-var registrationMap map[*wotoValues.WotoConnection]bool
-var registrationMutex *sync.Mutex
-var isCheckingRegistration bool
+var registrationMap = make(map[*wotoValues.WotoConnection]bool)
+var registrationMutex = new(sync.Mutex)
+var isCheckingRegistration = false
 
 //---------------------------------------------------------
 

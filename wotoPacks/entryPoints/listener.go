@@ -108,7 +108,6 @@ func checkEntry(conn *wotoValues.WotoConnection) error {
 		return err
 	}
 
-	logging.Debug("after reading json...")
 	if len(req.BatchExecute) == 0 || !req.IsActionValid() {
 		logging.Error("req.IsActionValid() returned false")
 		return ErrActionOrBatchInvalid
@@ -123,8 +122,6 @@ func checkEntry(conn *wotoValues.WotoConnection) error {
 	if !conn.IsRegistered() && req.Action != wotoActions.ActionVersion {
 		return ErrConnectionNotRegistered
 	}
-
-	logging.Debug("switching on req.Action")
 
 	handler := _handlersMap[req.Action]
 	parser := _parsersMap[req.Action]
@@ -166,7 +163,6 @@ func safeCheckEntry(conn *wotoValues.WotoConnection) {
 			// and after that, handle the error somehow.
 			// and break from the loop.
 			conn.Close()
-			logging.Error(err)
 			break
 		}
 	}
