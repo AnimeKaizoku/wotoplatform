@@ -82,6 +82,7 @@ func batchRegisterUser(req interfaces.ReqBase) error {
 	}
 
 	user := usersDatabase.CreateNewUser(dbData)
+	req.SetMe(user)
 
 	return req.SendResult(toRegisterUserResult(user))
 }
@@ -115,6 +116,8 @@ func batchLoginUser(req interfaces.ReqBase) error {
 	if !user.IsPasswordCorrect(entryData.Password) {
 		return we.SendWrongPassword(req, OriginLoginUser)
 	}
+
+	req.SetMe(user)
 
 	return req.SendResult(toLoginUserResult(user))
 }
