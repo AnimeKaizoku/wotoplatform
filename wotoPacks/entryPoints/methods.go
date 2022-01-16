@@ -218,15 +218,15 @@ func (e *RequestEntry) LetExit() error {
 }
 
 func (e *RequestEntry) SetMe(user *wv.UserInfo) {
-	e.me = user
+	e.Connection.SetMe(user)
 }
 
 func (e *RequestEntry) GetMe() *wv.UserInfo {
-	return e.me
+	return e.Connection.GetMe()
 }
 
 func (e *RequestEntry) IsAuthorized() bool {
-	return e.me != nil
+	return e.Connection.GetMe() != nil
 }
 
 //---------------------------------------------------------

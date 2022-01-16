@@ -96,4 +96,5 @@ type WotoConnection struct {
 	isClosed     bool
 	isRegistered bool
 	registerer   Registerer
+	me           *UserInfo
 }

@@ -198,6 +198,14 @@ func (c *WotoConnection) SetDeadline(t time.Time) {
 	}
 }
 
+func (c *WotoConnection) SetMe(user *UserInfo) {
+	c.me = user
+}
+
+func (c *WotoConnection) GetMe() *UserInfo {
+	return c.me
+}
+
 func (c *WotoConnection) IsRegistered() bool {
 	return c.isRegistered
 }
