@@ -218,8 +218,9 @@ func (e *RequestEntry) LetExit() error {
 }
 
 func (e *RequestEntry) SetMe(user *wv.UserInfo) {
-
+	e.me = user
 }
+
 func (e *RequestEntry) GetMe() *wv.UserInfo {
 	return e.me
 }
