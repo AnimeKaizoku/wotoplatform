@@ -118,3 +118,11 @@ func batchLoginUser(req interfaces.ReqBase) error {
 
 	return req.SendResult(toLoginUserResult(user))
 }
+
+func batchGetMe(req interfaces.ReqBase) error {
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginGetMe)
+	}
+
+	return req.SendResult(toGetMeResult(req.GetMe()))
+}

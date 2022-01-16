@@ -88,3 +88,21 @@ func toLoginUserResult(user *wv.UserInfo) *LoginUserResult {
 		CreatedBy:   user.CreatedBy,
 	}
 }
+
+func toGetMeResult(user *wv.UserInfo) *GetMeResult {
+	return &GetMeResult{
+		UserId:      user.UserId,
+		PrivateHash: user.PrivateHash,
+		Email:       user.Email,
+		Website:     user.Website,
+		Permission:  user.Permission,
+		Bio:         user.Bio,
+		SourceUrl:   user.SourceUrl,
+		TelegramId:  user.TelegramId,
+		FirstName:   user.FirstName,
+		LastName:    user.LastName,
+		Username:    user.Username,
+		CreatedAt:   user.CreatedAt.Format(wv.DateTimeFormat),
+		UpdatedAt:   user.UpdatedAt.Format(wv.DateTimeFormat),
+	}
+}

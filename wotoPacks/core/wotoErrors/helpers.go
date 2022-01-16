@@ -121,3 +121,12 @@ func SendAlreadyAuthorized(req inf.ReqBase, origin string) error {
 	})
 	return err
 }
+
+func SendNotAuthorized(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrNotAuthorized,
+		Message: MessageNotAuthorized,
+		Origin:  origin,
+	})
+	return err
+}

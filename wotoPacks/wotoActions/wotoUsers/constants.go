@@ -19,14 +19,14 @@ package wotoUsers
 
 // batch execution values
 const (
-	BATCH_REGISTER_USER          = "register_user"
-	BATCH_LOGIN_USER             = "login_user"
-	BATCH_GET_ME                 = "get_me"
-	BATCH_GET_USER_INFO          = "get_user_info"
-	BATCH_RESOLVE_USERNAME       = "resolve_username"
-	BATCH_GET_USER_MEDIA_HISTORY = "get_user_media_history"
+	BATCH_REGISTER_USER    = "register_user"
+	BATCH_LOGIN_USER       = "login_user"
+	BATCH_GET_ME           = "get_me"
+	BATCH_GET_USER_INFO    = "get_user_info"
+	BATCH_RESOLVE_USERNAME = "resolve_username"
 )
 const (
 	OriginRegisterUser = "RegisterUser"
 	OriginLoginUser    = "LoginUser"
+	OriginGetMe        = "GetMe"
 )

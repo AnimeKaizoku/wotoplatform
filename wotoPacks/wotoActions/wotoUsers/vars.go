@@ -26,5 +26,6 @@ var (
 	_batchHandlers = map[wa.BatchExecution]wv.ReqHandler{
 		BATCH_LOGIN_USER:    batchLoginUser,
 		BATCH_REGISTER_USER: batchRegisterUser,
+		BATCH_GET_ME:        batchGetMe,
 	}
 )

@@ -58,3 +58,19 @@ type LoginUserResult struct {
 	UpdatedAt   string            `json:"updated_at"`
 	CreatedBy   wv.PublicUserId   `json:"created_by"`
 }
+
+type GetMeResult struct {
+	UserId      wv.PublicUserId   `json:"user_id"`
+	PrivateHash string            `json:"private_hash"`
+	Email       string            `json:"email"`
+	Website     string            `json:"website"`
+	Permission  wv.UserPermission `json:"permission"`
+	Bio         string            `json:"bio"`
+	SourceUrl   string            `json:"source_url"`
+	TelegramId  int64             `json:"telegram_id"`
+	FirstName   string            `json:"first_name"`
+	LastName    string            `json:"last_name"`
+	Username    string            `json:"username"`
+	CreatedAt   string            `json:"created_at"`
+	UpdatedAt   string            `json:"updated_at"`
+}
