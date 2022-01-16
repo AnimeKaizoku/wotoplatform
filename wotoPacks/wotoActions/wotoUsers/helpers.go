@@ -18,6 +18,7 @@
 package wotoUsers
 
 import (
+	wv "wp-server/wotoPacks/core/wotoValues"
 	"wp-server/wotoPacks/interfaces"
 	"wp-server/wotoPacks/wotoActions"
 )
@@ -45,4 +46,45 @@ func batchValuesValid(e []wotoActions.BatchExecution) bool {
 	}
 
 	return true
+}
+
+func toRegisterUserResult(user *wv.UserInfo) *RegisterUserResult {
+	return &RegisterUserResult{
+		UserId:      user.UserId,
+		PrivateHash: user.PrivateHash,
+		Email:       user.Email,
+		Website:     user.Website,
+		AuthKey:     user.AuthKey,
+		AccessHash:  user.AccessHash,
+		Permission:  user.Permission,
+		Bio:         user.Bio,
+		SourceUrl:   user.SourceUrl,
+		TelegramId:  user.TelegramId,
+		FirstName:   user.FirstName,
+		LastName:    user.LastName,
+		Username:    user.Username,
+		CreatedAt:   user.CreatedAt.Format(wv.DateTimeFormat),
+		UpdatedAt:   user.UpdatedAt.Format(wv.DateTimeFormat),
+		IsVirtual:   user.IsVirtual,
+		CreatedBy:   user.CreatedBy,
+	}
+}
+
+func toLoginUserResult(user *wv.UserInfo) *LoginUserResult {
+	return &LoginUserResult{
+		UserId:      user.UserId,
+		PrivateHash: user.PrivateHash,
+		Email:       user.Email,
+		Website:     user.Website,
+		Permission:  user.Permission,
+		Bio:         user.Bio,
+		SourceUrl:   user.SourceUrl,
+		TelegramId:  user.TelegramId,
+		FirstName:   user.FirstName,
+		LastName:    user.LastName,
+		Username:    user.Username,
+		CreatedAt:   user.CreatedAt.Format(wv.DateTimeFormat),
+		UpdatedAt:   user.UpdatedAt.Format(wv.DateTimeFormat),
+		CreatedBy:   user.CreatedBy,
+	}
 }

@@ -54,6 +54,11 @@ func batchRegisterUser(req interfaces.ReqBase) error {
 		return err
 	}
 
+	doer := req.GetMe()
+	if doer != nil && !doer.CanCreateAccount() {
+		return we.SendAlreadyAuthorized(req, OriginRegisterUser)
+	}
+
 	if !wv.IsCorrectUsernameFormat(entryData.Username) {
 		return we.SendInvalidUsernameFormat(req, OriginRegisterUser)
 	}
@@ -66,12 +71,19 @@ func batchRegisterUser(req interfaces.ReqBase) error {
 		return we.SendUsernameExists(req, OriginRegisterUser)
 	}
 
-	/*
-		TODO:
-		register the user with the specified username and password.
-	*/
+	var dbData = &usersDatabase.NewUserData{
+		Username: entryData.Username,
+		Password: entryData.Password,
+	}
 
-	return req.SendResult(&RegisterUserResult{})
+	if doer != nil {
+		dbData.By = doer.UserId
+		dbData.Permission = entryData.Permission
+	}
+
+	user := usersDatabase.CreateNewUser(dbData)
+
+	return req.SendResult(toRegisterUserResult(user))
 }
 
 func batchLoginUser(req interfaces.ReqBase) error {
@@ -104,5 +116,5 @@ func batchLoginUser(req interfaces.ReqBase) error {
 		return we.SendWrongPassword(req, OriginLoginUser)
 	}
 
-	return req.SendResult(&LoginUserResult{})
+	return req.SendResult(toLoginUserResult(user))
 }

@@ -1,6 +1,8 @@
 package wotoUsers
 
-import wv "wp-server/wotoPacks/core/wotoValues"
+import (
+	wv "wp-server/wotoPacks/core/wotoValues"
+)
 
 type RegisterUserData struct {
 	UserId      wv.PublicUserId   `json:"user_id"`
@@ -14,11 +16,23 @@ type RegisterUserData struct {
 }
 
 type RegisterUserResult struct {
-	Username   string            `json:"username"`
-	FirstName  string            `json:"first_name"`
-	LastName   string            `json:"last_name"`
-	Permission wv.UserPermission `json:"permission"`
-	Bio        string            `json:"bio"`
+	UserId      wv.PublicUserId   `json:"user_id"`
+	PrivateHash string            `json:"private_hash"`
+	Email       string            `json:"email"`
+	Website     string            `json:"website"`
+	AuthKey     string            `json:"auth_key"`
+	AccessHash  string            `json:"access_hash"`
+	Permission  wv.UserPermission `json:"permission"`
+	Bio         string            `json:"bio"`
+	SourceUrl   string            `json:"source_url"`
+	TelegramId  int64             `json:"telegram_id"`
+	FirstName   string            `json:"first_name"`
+	LastName    string            `json:"last_name"`
+	Username    string            `json:"username"`
+	CreatedAt   string            `json:"created_at"`
+	UpdatedAt   string            `json:"updated_at"`
+	IsVirtual   bool              `json:"is_virtual"`
+	CreatedBy   wv.PublicUserId   `json:"created_by"`
 }
 
 type LoginUserData struct {
@@ -31,14 +45,16 @@ type LoginUserData struct {
 type LoginUserResult struct {
 	UserId      wv.PublicUserId   `json:"user_id"`
 	PrivateHash string            `json:"private_hash"`
-	Username    string            `json:"username"`
+	Email       string            `json:"email"`
+	Website     string            `json:"website"`
+	Permission  wv.UserPermission `json:"permission"`
+	Bio         string            `json:"bio"`
+	SourceUrl   string            `json:"source_url"`
+	TelegramId  int64             `json:"telegram_id"`
 	FirstName   string            `json:"first_name"`
 	LastName    string            `json:"last_name"`
-	Bio         string            `json:"bio"`
-	Website     string            `json:"website"`
-	Email       string            `json:"email"`
-	TelegramId  int64             `json:"telegram_id"`
-	AuthKey     *string           `json:"auth_key"`
-	AccessHash  *string           `json:"access_hash"`
-	Permission  wv.UserPermission `json:"permission"`
+	Username    string            `json:"username"`
+	CreatedAt   string            `json:"created_at"`
+	UpdatedAt   string            `json:"updated_at"`
+	CreatedBy   wv.PublicUserId   `json:"created_by"`
 }

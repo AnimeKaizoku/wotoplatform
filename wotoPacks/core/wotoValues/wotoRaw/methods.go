@@ -22,3 +22,11 @@ func (u *UserInfo) IsPasswordCorrect(password string) bool {
 	// TODO: encrypt the password
 	return u.Password == password
 }
+
+func (u *UserInfo) GetPublicId() PublicUserId {
+	return u.UserId
+}
+
+func (u *UserInfo) CanCreateAccount() bool {
+	return u.Permission >= PermissionAdmin
+}

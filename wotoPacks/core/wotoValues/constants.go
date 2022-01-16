@@ -45,6 +45,7 @@ const (
 const (
 	BaseIndexStr    = "0" // number 0
 	BaseOneIndexStr = "1" // number 1
+	DateTimeFormat  = "2006-01-02 15:04:05"
 )
 
 const (
