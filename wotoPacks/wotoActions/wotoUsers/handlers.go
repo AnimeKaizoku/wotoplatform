@@ -72,8 +72,10 @@ func batchRegisterUser(req interfaces.ReqBase) error {
 	}
 
 	var dbData = &usersDatabase.NewUserData{
-		Username: entryData.Username,
-		Password: entryData.Password,
+		Username:  entryData.Username,
+		Password:  entryData.Password,
+		FirstName: entryData.FirstName,
+		LastName:  entryData.LastName,
 	}
 
 	if doer != nil {

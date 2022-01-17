@@ -117,11 +117,13 @@ func SaveUser(user *wv.UserInfo, cache bool) {
 // CreateNewUser creates a new user and saves it to the database.
 // This function doesn't check for existing username.
 // It doesn't validate username or password. User parameters need
-// to be validate before this function is called.
+// to be validated before this function is called.
 func CreateNewUser(data *NewUserData) *wv.UserInfo {
 	u := &wv.UserInfo{
 		UserId:     generateUserId(),
 		Username:   data.Username,
+		FirstName:  data.FirstName,
+		LastName:   data.LastName,
 		Password:   data.Password,
 		Permission: data.Permission,
 		CreatedBy:  data.By,
