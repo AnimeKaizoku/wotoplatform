@@ -134,7 +134,7 @@ func batchGetMe(req interfaces.ReqBase) error {
 
 func batchChangeUserBio(req interfaces.ReqBase) error {
 	if !req.IsAuthorized() {
-		return we.SendNotAuthorized(req, OriginChangeBio)
+		return we.SendNotAuthorized(req, OriginChangeUserBio)
 	}
 
 	var entryData = new(ChangeBioData)
@@ -146,11 +146,11 @@ func batchChangeUserBio(req interfaces.ReqBase) error {
 
 	user := req.GetMe()
 	if user.Bio == entryData.Bio {
-		return we.SendNotModified(req, OriginChangeBio)
+		return we.SendNotModified(req, OriginChangeUserBio)
 	}
 
 	if wv.IsBioTooLong(entryData.Bio) {
-		return we.SendBioTooLong(req, OriginChangeBio)
+		return we.SendBioTooLong(req, OriginChangeUserBio)
 	}
 
 	user.Bio = entryData.Bio
