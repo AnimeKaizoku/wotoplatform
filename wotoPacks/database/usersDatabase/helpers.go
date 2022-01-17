@@ -27,7 +27,7 @@ func LoadUsersDatabase() error {
 	var allUsers []wv.UserInfo
 	lockDatabase()
 	wv.SESSION.Find(&allUsers)
-	wv.SessionMutex.Unlock()
+	unlockDatabase()
 
 	usersMapByIdMutex.Lock()
 	usersMapByUsernameMutex.Lock()

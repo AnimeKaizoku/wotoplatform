@@ -141,6 +141,9 @@ func getDefaultConfig() *Config {
 	// use a default db name for config value
 	WConfig.DatabaseName = DefaultDatabaseName
 
+	// 10 days for db memory cache by default
+	WConfig.CacheTime = 10
+
 	// use SQL-Lite by default, so we don't need any sql url and
 	// password.
 	WConfig.UseSQLLite = true
@@ -170,7 +173,7 @@ func GetDatabaseURL() string {
 }
 
 func GetDatabaseCacheTime() time.Duration {
-	if WConfig == nil {
+	if WConfig == nil || WConfig.CacheTime < 2 {
 		return 10 * (24 * time.Hour)
 	}
 	return time.Duration(WConfig.CacheTime) * (24 * time.Hour)
