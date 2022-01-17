@@ -82,7 +82,9 @@ func batchRegisterUser(req interfaces.ReqBase) error {
 	}
 
 	user := usersDatabase.CreateNewUser(dbData)
-	req.SetMe(user)
+	if doer == nil {
+		req.SetMe(user)
+	}
 
 	return req.SendResult(toRegisterUserResult(user))
 }
@@ -128,4 +130,32 @@ func batchGetMe(req interfaces.ReqBase) error {
 	}
 
 	return req.SendResult(toGetMeResult(req.GetMe()))
+}
+
+func batchChangeUserBio(req interfaces.ReqBase) error {
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginChangeBio)
+	}
+
+	var entryData = new(ChangeBioData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		logging.Error(err)
+		return err
+	}
+
+	user := req.GetMe()
+	if user.Bio == entryData.Bio {
+		return we.SendNotModified(req, OriginChangeBio)
+	}
+
+	if wv.IsBioTooLong(entryData.Bio) {
+		return we.SendBioTooLong(req, OriginChangeBio)
+	}
+
+	user.Bio = entryData.Bio
+	user.SetCachedTime()
+	usersDatabase.SaveUser(user, false)
+
+	return req.SendResult(true)
 }

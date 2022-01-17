@@ -130,3 +130,21 @@ func SendNotAuthorized(req inf.ReqBase, origin string) error {
 	})
 	return err
 }
+
+func SendNotModified(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrNotModified,
+		Message: MessageNotModified,
+		Origin:  origin,
+	})
+	return err
+}
+
+func SendBioTooLong(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrBioTooLong,
+		Message: MessageBioTooLong,
+		Origin:  origin,
+	})
+	return err
+}

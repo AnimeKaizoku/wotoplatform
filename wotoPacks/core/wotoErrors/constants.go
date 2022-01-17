@@ -15,4 +15,6 @@ const (
 	MessageInvalidTitle            = "Invalid title entered."
 	MessageAlreadyAuthorized       = "You are already authorized; try using LogOut method."
 	MessageNotAuthorized           = "You are not authorized; try using LoginUser method."
+	MessageNotModified             = "The value is not modified."
+	MessageBioTooLong              = "The bio is too long."
 )

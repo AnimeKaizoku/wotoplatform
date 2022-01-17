@@ -96,8 +96,6 @@ func SaveUser(user *wv.UserInfo, cache bool) {
 	unlockDatabase()
 
 	if cache {
-		user.SetCachedTime()
-
 		usersMapByIdMutex.Lock()
 		usersMapById[user.UserId] = user
 		usersMapByIdMutex.Unlock()

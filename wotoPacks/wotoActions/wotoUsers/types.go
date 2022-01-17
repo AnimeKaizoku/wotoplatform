@@ -74,3 +74,10 @@ type GetMeResult struct {
 	CreatedAt   string            `json:"created_at"`
 	UpdatedAt   string            `json:"updated_at"`
 }
+
+type ChangeBioData struct {
+	Bio string `json:"bio"`
+}
+
+type ChangeUserInfoData struct {
+}

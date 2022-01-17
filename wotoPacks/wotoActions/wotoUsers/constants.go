@@ -22,6 +22,8 @@ const (
 	BATCH_REGISTER_USER    = "register_user"
 	BATCH_LOGIN_USER       = "login_user"
 	BATCH_GET_ME           = "get_me"
+	BATCH_CHANGE_USER_BIO  = "change_user_bio"
+	BATCH_CHANGE_USER_INFO = "change_user_info"
 	BATCH_GET_USER_INFO    = "get_user_info"
 	BATCH_RESOLVE_USERNAME = "resolve_username"
 )
@@ -29,4 +31,5 @@ const (
 	OriginRegisterUser = "RegisterUser"
 	OriginLoginUser    = "LoginUser"
 	OriginGetMe        = "GetMe"
+	OriginChangeBio    = "ChangeBio"
 )

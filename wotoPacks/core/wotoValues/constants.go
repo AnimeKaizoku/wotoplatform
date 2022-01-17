@@ -29,6 +29,7 @@ const (
 	Base32Bit                    = 32 // number 32
 	Base64Bit                    = 64 // number 64
 	BaseTimeOut                  = 40 // 40 seconds
+	MaxBioLength                 = 34
 	BaseTen                      = 10 // 10 seconds
 	BaseUserId      PublicUserId = 10000
 	MAX_FIRST_BYTES              = 8 // the max first bytes for sending the length

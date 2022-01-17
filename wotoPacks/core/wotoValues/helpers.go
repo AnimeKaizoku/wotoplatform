@@ -72,3 +72,7 @@ func IsCorrectPasswordFormat(password string) bool {
 func IsCorrectUsernameFormat(username string) bool {
 	return len(username) >= 5
 }
+
+func IsBioTooLong(bio string) bool {
+	return len(bio) > MaxBioLength
+}

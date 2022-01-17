@@ -35,6 +35,8 @@ const (
 	ErrInvalidTitle
 	ErrAlreadyAuthorized
 	ErrNotAuthorized
+	ErrNotModified
+	ErrBioTooLong
 )
 
 const (
