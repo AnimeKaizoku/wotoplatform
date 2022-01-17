@@ -23,7 +23,7 @@ const (
 	BATCH_LOGIN_USER       = "login_user"
 	BATCH_GET_ME           = "get_me"
 	BATCH_CHANGE_USER_BIO  = "change_user_bio"
-	BATCH_CHANGE_NAMEs     = "change_names"
+	BATCH_CHANGE_NAMES     = "change_names"
 	BATCH_CHANGE_USER_INFO = "change_user_info"
 	BATCH_GET_USER_INFO    = "get_user_info"
 	BATCH_RESOLVE_USERNAME = "resolve_username"
@@ -33,4 +33,5 @@ const (
 	OriginLoginUser     = "LoginUser"
 	OriginGetMe         = "GetMe"
 	OriginChangeUserBio = "ChangeUserBio"
+	OriginChangeNames   = "ChangeNames"
 )

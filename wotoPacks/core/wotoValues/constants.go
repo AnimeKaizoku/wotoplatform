@@ -19,20 +19,22 @@ package wotoValues
 
 // the base constant values.
 const (
-	BaseIndex                    = 0  // number 0
-	BaseOneIndex                 = 1  // number 1
-	BaseTwoIndex                 = 2  // number 2
-	BaseThreeIndex               = 3  // number 2
-	Base4Bit                     = 4  // number 8
-	Base8Bit                     = 8  // number 8
-	Base16Bit                    = 16 // number 16
-	Base32Bit                    = 32 // number 32
-	Base64Bit                    = 64 // number 64
-	BaseTimeOut                  = 40 // 40 seconds
-	MaxBioLength                 = 34
-	BaseTen                      = 10 // 10 seconds
-	BaseUserId      PublicUserId = 10000
-	MAX_FIRST_BYTES              = 8 // the max first bytes for sending the length
+	BaseIndex                       = 0  // number 0
+	BaseOneIndex                    = 1  // number 1
+	BaseTwoIndex                    = 2  // number 2
+	BaseThreeIndex                  = 3  // number 2
+	Base4Bit                        = 4  // number 8
+	Base8Bit                        = 8  // number 8
+	Base16Bit                       = 16 // number 16
+	Base32Bit                       = 32 // number 32
+	Base64Bit                       = 64 // number 64
+	BaseTimeOut                     = 40 // 40 seconds
+	MaxBioLength                    = 200
+	MaxFirstNameLength              = 50
+	MaxLastNameLength               = 50
+	BaseTen                         = 10 // 10 seconds
+	BaseUserId         PublicUserId = 10000
+	MAX_FIRST_BYTES                 = 8 // the max first bytes for sending the length
 )
 
 const (

@@ -76,3 +76,11 @@ func IsCorrectUsernameFormat(username string) bool {
 func IsBioTooLong(bio string) bool {
 	return len(bio) > MaxBioLength
 }
+
+func IsFirstNameTooLong(firstName string) bool {
+	return len(firstName) > MaxFirstNameLength
+}
+
+func IsLastNameTooLong(lastName string) bool {
+	return len(lastName) > MaxFirstNameLength
+}

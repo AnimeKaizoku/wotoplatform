@@ -76,7 +76,14 @@ type GetMeResult struct {
 }
 
 type ChangeBioData struct {
-	Bio string `json:"bio"`
+	UserId wv.PublicUserId `json:"user_id"`
+	Bio    string          `json:"bio"`
+}
+
+type ChangeNamesData struct {
+	UserId    wv.PublicUserId `json:"user_id"`
+	FirstName string          `json:"first_name"`
+	LastName  string          `json:"last_name"`
 }
 
 type ChangeUserInfoData struct {

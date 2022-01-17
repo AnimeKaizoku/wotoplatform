@@ -134,7 +134,7 @@ func batchGetMe(req interfaces.ReqBase) error {
 
 func batchChangeUserBio(req interfaces.ReqBase) error {
 	if !req.IsAuthorized() {
-		return we.SendNotAuthorized(req, OriginChangeUserBio)
+		return we.SendNotAuthorized(req, OriginChangeNames)
 	}
 
 	var entryData = new(ChangeBioData)
@@ -145,15 +145,62 @@ func batchChangeUserBio(req interfaces.ReqBase) error {
 	}
 
 	user := req.GetMe()
-	if user.Bio == entryData.Bio {
-		return we.SendNotModified(req, OriginChangeUserBio)
+	if user.IsAdmin() && !entryData.UserId.IsZero() {
+		user = usersDatabase.GetUserById(entryData.UserId)
+		if user == nil || user.IsInvalid() {
+			return we.SendUserNotFound(req, OriginChangeNames)
+		}
 	}
 
-	if wv.IsBioTooLong(entryData.Bio) {
-		return we.SendBioTooLong(req, OriginChangeUserBio)
+	if entryData.HasNotModified(user) {
+		return we.SendNotModified(req, OriginChangeNames)
+	}
+
+	if entryData.IsBioTooLong() {
+		return we.SendBioTooLong(req, OriginChangeNames)
 	}
 
 	user.Bio = entryData.Bio
+	user.SetCachedTime()
+	usersDatabase.SaveUser(user, false)
+
+	return req.SendResult(true)
+}
+
+func batchChangeNames(req interfaces.ReqBase) error {
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginChangeNames)
+	}
+
+	var entryData = new(ChangeNamesData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		logging.Error(err)
+		return err
+	}
+
+	user := req.GetMe()
+	if user.IsAdmin() && !entryData.UserId.IsZero() {
+		user = usersDatabase.GetUserById(entryData.UserId)
+		if user == nil || user.IsInvalid() {
+			return we.SendUserNotFound(req, OriginChangeNames)
+		}
+	}
+
+	if entryData.HasNotModified(user) {
+		return we.SendNotModified(req, OriginChangeNames)
+	}
+
+	if entryData.IsFirstNameTooLong() {
+		return we.SendFirstNameTooLong(req, OriginChangeNames)
+	}
+
+	if entryData.IsLastNameTooLong() {
+		return we.SendLastNameTooLong(req, OriginChangeNames)
+	}
+
+	user.FirstName = entryData.FirstName
+	user.LastName = entryData.LastName
 	user.SetCachedTime()
 	usersDatabase.SaveUser(user, false)
 

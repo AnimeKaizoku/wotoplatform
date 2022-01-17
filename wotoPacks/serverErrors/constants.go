@@ -37,6 +37,9 @@ const (
 	ErrNotAuthorized
 	ErrNotModified
 	ErrBioTooLong
+	ErrUserNotFound
+	ErrFirstNameTooLong
+	ErrLastNameTooLong
 )
 
 const (

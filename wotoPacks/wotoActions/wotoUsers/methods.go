@@ -17,11 +17,28 @@
 
 package wotoUsers
 
+import wv "wp-server/wotoPacks/core/wotoValues"
+
 //---------------------------------------------------------
 
-func (u *RegisterUserData) ValidateParam() error {
+func (b *ChangeBioData) IsBioTooLong() bool {
+	return wv.IsBioTooLong(b.Bio)
+}
 
-	return nil
+func (b *ChangeBioData) HasNotModified(info *wv.UserInfo) bool {
+	return b.Bio == info.Bio
 }
 
 //---------------------------------------------------------
+
+func (n *ChangeNamesData) IsFirstNameTooLong() bool {
+	return wv.IsFirstNameTooLong(n.FirstName)
+}
+
+func (n *ChangeNamesData) IsLastNameTooLong() bool {
+	return wv.IsLastNameTooLong(n.LastName)
+}
+
+func (n *ChangeNamesData) HasNotModified(info *wv.UserInfo) bool {
+	return n.FirstName == info.FirstName && n.LastName == info.LastName
+}

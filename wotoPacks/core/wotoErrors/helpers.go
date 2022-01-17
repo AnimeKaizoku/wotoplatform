@@ -148,3 +148,30 @@ func SendBioTooLong(req inf.ReqBase, origin string) error {
 	})
 	return err
 }
+
+func SendUserNotFound(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrUserNotFound,
+		Message: MessageUserNotFound,
+		Origin:  origin,
+	})
+	return err
+}
+
+func SendFirstNameTooLong(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrFirstNameTooLong,
+		Message: MessageFirstNameTooLong,
+		Origin:  origin,
+	})
+	return err
+}
+
+func SendLastNameTooLong(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrLastNameTooLong,
+		Message: MessageLastNameTooLong,
+		Origin:  origin,
+	})
+	return err
+}

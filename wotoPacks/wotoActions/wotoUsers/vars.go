@@ -28,5 +28,6 @@ var (
 		BATCH_REGISTER_USER:   batchRegisterUser,
 		BATCH_GET_ME:          batchGetMe,
 		BATCH_CHANGE_USER_BIO: batchChangeUserBio,
+		BATCH_CHANGE_NAMES:    batchChangeNames,
 	}
 )

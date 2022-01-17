@@ -17,4 +17,7 @@ const (
 	MessageNotAuthorized           = "You are not authorized; try using LoginUser method."
 	MessageNotModified             = "The value is not modified."
 	MessageBioTooLong              = "The bio is too long."
+	MessageUserNotFound            = "Target user not found."
+	MessageFirstNameTooLong        = "The first name is too long."
+	MessageLastNameTooLong         = "The last name is too long."
 )

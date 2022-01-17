@@ -2,6 +2,8 @@ package wotoRaw
 
 import "time"
 
+//---------------------------------------------------------
+
 func (u *UserInfo) HasUsername() bool {
 	return u.Username != ""
 }
@@ -29,4 +31,22 @@ func (u *UserInfo) GetPublicId() PublicUserId {
 
 func (u *UserInfo) CanCreateAccount() bool {
 	return u.Permission >= PermissionAdmin
+}
+
+func (u *UserInfo) IsAdmin() bool {
+	return u.Permission >= PermissionAdmin
+}
+
+func (u *UserInfo) IsValid() bool {
+	return !u.UserId.IsZero()
+}
+
+func (u *UserInfo) IsInvalid() bool {
+	return u.UserId.IsZero()
+}
+
+//---------------------------------------------------------
+
+func (i PublicUserId) IsZero() bool {
+	return i == 0
 }
