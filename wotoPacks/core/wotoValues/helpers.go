@@ -82,5 +82,5 @@ func IsFirstNameTooLong(firstName string) bool {
 }
 
 func IsLastNameTooLong(lastName string) bool {
-	return len(lastName) > MaxFirstNameLength
+	return len(lastName) > MaxLastNameLength
 }
