@@ -40,6 +40,7 @@ const (
 	ErrUserNotFound
 	ErrFirstNameTooLong
 	ErrLastNameTooLong
+	ErrInvalidUsernameAndUserId
 )
 
 const (

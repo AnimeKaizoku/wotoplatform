@@ -42,7 +42,7 @@ func (u *UserInfo) IsValid() bool {
 }
 
 func (u *UserInfo) IsInvalid() bool {
-	return u.UserId.IsZero()
+	return u == nil || u.UserId.IsZero()
 }
 
 //---------------------------------------------------------

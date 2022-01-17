@@ -42,3 +42,8 @@ func (n *ChangeNamesData) IsLastNameTooLong() bool {
 func (n *ChangeNamesData) HasNotModified(info *wv.UserInfo) bool {
 	return n.FirstName == info.FirstName && n.LastName == info.LastName
 }
+
+//---------------------------------------------------------
+func (i *GetUserInfoData) IsInvalid() bool {
+	return !wv.IsCorrectUsernameFormat(i.Username) && i.UserId.IsZero()
+}

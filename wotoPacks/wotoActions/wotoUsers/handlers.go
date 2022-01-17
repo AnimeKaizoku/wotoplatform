@@ -147,7 +147,7 @@ func batchChangeUserBio(req interfaces.ReqBase) error {
 	user := req.GetMe()
 	if user.IsAdmin() && !entryData.UserId.IsZero() {
 		user = usersDatabase.GetUserById(entryData.UserId)
-		if user == nil || user.IsInvalid() {
+		if user.IsInvalid() {
 			return we.SendUserNotFound(req, OriginChangeNames)
 		}
 	}
@@ -182,7 +182,7 @@ func batchChangeNames(req interfaces.ReqBase) error {
 	user := req.GetMe()
 	if user.IsAdmin() && !entryData.UserId.IsZero() {
 		user = usersDatabase.GetUserById(entryData.UserId)
-		if user == nil || user.IsInvalid() {
+		if user.IsInvalid() {
 			return we.SendUserNotFound(req, OriginChangeNames)
 		}
 	}
@@ -205,4 +205,34 @@ func batchChangeNames(req interfaces.ReqBase) error {
 	usersDatabase.SaveUser(user, false)
 
 	return req.SendResult(true)
+}
+
+func batchGetUserInfo(req interfaces.ReqBase) error {
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginChangeNames)
+	}
+
+	var entryData = new(GetUserInfoData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		logging.Error(err)
+		return err
+	}
+
+	if entryData.IsInvalid() {
+		return we.SendInvalidUsernameAndUserId(req, OriginChangeNames)
+	}
+
+	var user *wv.UserInfo
+	if !entryData.UserId.IsZero() {
+		user = usersDatabase.GetUserById(entryData.UserId)
+	} else {
+		user = usersDatabase.GetUserByUsername(entryData.Username)
+	}
+
+	if user.IsInvalid() {
+		return we.SendUserNotFound(req, OriginChangeNames)
+	}
+
+	return req.SendResult(toGetUserInfoResult(user))
 }

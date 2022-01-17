@@ -29,5 +29,6 @@ var (
 		BATCH_GET_ME:          batchGetMe,
 		BATCH_CHANGE_USER_BIO: batchChangeUserBio,
 		BATCH_CHANGE_NAMES:    batchChangeNames,
+		BATCH_GET_USER_INFO:   batchGetUserInfo,
 	}
 )

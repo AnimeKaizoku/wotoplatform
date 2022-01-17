@@ -175,3 +175,12 @@ func SendLastNameTooLong(req inf.ReqBase, origin string) error {
 	})
 	return err
 }
+
+func SendInvalidUsernameAndUserId(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrInvalidUsernameAndUserId,
+		Message: MessageInvalidUsernameAndUserId,
+		Origin:  origin,
+	})
+	return err
+}
