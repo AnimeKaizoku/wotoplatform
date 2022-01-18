@@ -24,7 +24,7 @@ import (
 )
 
 func LoadUsersDatabase() error {
-	var allUsers []wv.UserInfo
+	var allUsers []*wv.UserInfo
 	lockDatabase()
 	wv.SESSION.Find(&allUsers)
 	unlockDatabase()
@@ -37,14 +37,14 @@ func LoadUsersDatabase() error {
 			lastUserId = user.UserId
 		}
 
-		usersMapById[user.UserId] = &user
+		usersMapById[user.UserId] = user
 
 		if user.HasUsername() {
-			usersMapByUsername[user.Username] = &user
+			usersMapByUsername[user.Username] = user
 		}
 
 		if user.HasTelegramId() {
-			usersMapByTelegramId[user.TelegramId] = &user
+			usersMapByTelegramId[user.TelegramId] = user
 		}
 	}
 	usersMapByIdMutex.Unlock()
