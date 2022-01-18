@@ -211,7 +211,7 @@ func batchChangeNames(req interfaces.ReqBase) error {
 
 func batchGetUserInfo(req interfaces.ReqBase) error {
 	if !req.IsAuthorized() {
-		return we.SendNotAuthorized(req, OriginChangeNames)
+		return we.SendNotAuthorized(req, OriginGetUserInfo)
 	}
 
 	var entryData = new(GetUserInfoData)
@@ -222,7 +222,7 @@ func batchGetUserInfo(req interfaces.ReqBase) error {
 	}
 
 	if entryData.IsInvalid() {
-		return we.SendInvalidUsernameAndUserId(req, OriginChangeNames)
+		return we.SendInvalidUsernameAndUserId(req, OriginGetUserInfo)
 	}
 
 	var user *wv.UserInfo
@@ -233,7 +233,7 @@ func batchGetUserInfo(req interfaces.ReqBase) error {
 	}
 
 	if user.IsInvalid() {
-		return we.SendUserNotFound(req, OriginChangeNames)
+		return we.SendUserNotFound(req, OriginGetUserInfo)
 	}
 
 	return req.SendResult(toGetUserInfoResult(user))

@@ -35,4 +35,5 @@ const (
 	OriginGetMe         = "GetMe"
 	OriginChangeUserBio = "ChangeUserBio"
 	OriginChangeNames   = "ChangeNames"
+	OriginGetUserInfo   = "GetUserInfo"
 )
