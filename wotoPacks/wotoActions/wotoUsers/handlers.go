@@ -76,6 +76,7 @@ func batchRegisterUser(req interfaces.ReqBase) error {
 		Password:  entryData.Password,
 		FirstName: entryData.FirstName,
 		LastName:  entryData.LastName,
+		Birthday:  entryData.Birthday,
 	}
 
 	if doer != nil {
@@ -89,6 +90,40 @@ func batchRegisterUser(req interfaces.ReqBase) error {
 	}
 
 	return req.SendResult(toRegisterUserResult(user))
+}
+
+func batchRegisterVirtualUser(req interfaces.ReqBase) error {
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginGetUserInfo)
+	}
+
+	var entryData = new(RegisterVirtualUserData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		logging.Error(err)
+		return err
+	}
+
+	doer := req.GetMe()
+	if doer != nil && !doer.CanCreateAccount() {
+		return we.SendAlreadyAuthorized(req, OriginRegisterVirtualUser)
+	}
+
+	var dbData = &usersDatabase.NewUserData{
+		TelegramId: entryData.TelegramId,
+		FirstName:  entryData.FirstName,
+		LastName:   entryData.LastName,
+		Birthday:   entryData.Birthday,
+	}
+
+	if doer != nil {
+		dbData.By = doer.UserId
+		dbData.Permission = entryData.Permission
+	}
+
+	user := usersDatabase.CreateNewUser(dbData)
+
+	return req.SendResult(toRegisterVirtualUserResult(user))
 }
 
 func batchLoginUser(req interfaces.ReqBase) error {

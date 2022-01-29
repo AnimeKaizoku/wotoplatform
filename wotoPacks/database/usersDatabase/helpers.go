@@ -124,9 +124,11 @@ func CreateNewUser(data *NewUserData) *wv.UserInfo {
 		Username:   data.Username,
 		FirstName:  data.FirstName,
 		LastName:   data.LastName,
+		TelegramId: data.TelegramId,
 		Password:   data.Password,
 		Permission: data.Permission,
 		CreatedBy:  data.By,
+		Birthday:   data.Birthday,
 		IsVirtual:  data.Username == "",
 	}
 	SaveUser(u, true)

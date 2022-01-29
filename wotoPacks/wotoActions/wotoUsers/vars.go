@@ -24,11 +24,12 @@ import (
 
 var (
 	_batchHandlers = map[wa.BatchExecution]wv.ReqHandler{
-		BATCH_LOGIN_USER:      batchLoginUser,
-		BATCH_REGISTER_USER:   batchRegisterUser,
-		BATCH_GET_ME:          batchGetMe,
-		BATCH_CHANGE_USER_BIO: batchChangeUserBio,
-		BATCH_CHANGE_NAMES:    batchChangeNames,
-		BATCH_GET_USER_INFO:   batchGetUserInfo,
+		BATCH_REGISTER_USER:         batchRegisterUser,
+		BATCH_REGISTER_VIRTUAL_USER: batchRegisterVirtualUser,
+		BATCH_LOGIN_USER:            batchLoginUser,
+		BATCH_GET_ME:                batchGetMe,
+		BATCH_CHANGE_USER_BIO:       batchChangeUserBio,
+		BATCH_CHANGE_NAMES:          batchChangeNames,
+		BATCH_GET_USER_INFO:         batchGetUserInfo,
 	}
 )
