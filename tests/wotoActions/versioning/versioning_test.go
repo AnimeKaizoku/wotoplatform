@@ -88,10 +88,11 @@ func TestWrongVersioning(t *testing.T) {
 	//writeMe(conn, []byte("are"))
 	//writeMe(conn, []byte("you"))
 
-	time.Sleep(100 * time.Millisecond)
+	time.Sleep(700 * time.Millisecond)
 
 	n, err = writeMe(conn, []byte("hello"))
 	if err == nil {
+		time.Sleep(400 * time.Millisecond)
 		n, err = writeMe(conn, []byte("hello"))
 		if err == nil {
 			t.Error("connection is not closed")
