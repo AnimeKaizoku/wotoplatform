@@ -32,7 +32,6 @@ const (
 	MaxBioLength                    = 200
 	MaxFirstNameLength              = 50
 	MaxLastNameLength               = 50
-	BaseTen                         = 10 // 10 seconds
 	BaseUserId         PublicUserId = 10000
 	MAX_FIRST_BYTES                 = 8 // the max first bytes for sending the length
 )

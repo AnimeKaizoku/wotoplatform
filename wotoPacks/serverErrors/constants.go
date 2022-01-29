@@ -41,6 +41,7 @@ const (
 	ErrFirstNameTooLong
 	ErrLastNameTooLong
 	ErrInvalidUsernameAndUserId
+	ErrMethodNotImplemented
 )
 
 const (

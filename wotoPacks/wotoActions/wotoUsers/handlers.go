@@ -273,3 +273,15 @@ func batchGetUserInfo(req interfaces.ReqBase) error {
 
 	return req.SendResult(toGetUserInfoResult(user))
 }
+
+func batchGetUserByTelegramID(req interfaces.ReqBase) error {
+	return we.SendMethodNotImplemented(req, OriginGetUserByTelegramID)
+}
+
+func batchGetUserByEmail(req interfaces.ReqBase) error {
+	return we.SendMethodNotImplemented(req, OriginGetUserByEmail)
+}
+
+func batchResolveUsername(req interfaces.ReqBase) error {
+	return we.SendMethodNotImplemented(req, OriginResolveUsername)
+}

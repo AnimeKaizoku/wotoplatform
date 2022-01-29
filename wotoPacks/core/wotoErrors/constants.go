@@ -21,4 +21,5 @@ const (
 	MessageFirstNameTooLong         = "The first name is too long."
 	MessageLastNameTooLong          = "The last name is too long."
 	MessageInvalidUsernameAndUserId = "Invalid username and user id entered."
+	MessageMethodNotImplemented     = "The method is not implemented yet."
 )

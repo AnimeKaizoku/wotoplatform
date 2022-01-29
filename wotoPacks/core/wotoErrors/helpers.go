@@ -184,3 +184,12 @@ func SendInvalidUsernameAndUserId(req inf.ReqBase, origin string) error {
 	})
 	return err
 }
+
+func SendMethodNotImplemented(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrMethodNotImplemented,
+		Message: MessageMethodNotImplemented,
+		Origin:  origin,
+	})
+	return err
+}

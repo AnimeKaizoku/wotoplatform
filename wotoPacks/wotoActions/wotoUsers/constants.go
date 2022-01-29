@@ -38,4 +38,7 @@ const (
 	OriginChangeNames         = "ChangeNames"
 	OriginGetUserInfo         = "GetUserInfo"
 	OriginRegisterVirtualUser = "RegisterVirtualUser"
+	OriginGetUserByTelegramID = "GetUserByTelegramID"
+	OriginGetUserByEmail      = "GetUserByEmail"
+	OriginResolveUsername     = "ResolveUsername"
 )
