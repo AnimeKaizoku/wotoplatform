@@ -50,7 +50,7 @@ func LoadUsersDatabase() error {
 	usersMapByUsernameMutex.Unlock()
 	usersMapByTelegramIdMutex.Unlock()
 
-	mergeOwners()
+	migrateOwners()
 
 	return nil
 }
@@ -134,30 +134,32 @@ func CreateNewUser(data *NewUserData) *wv.UserInfo {
 	return u
 }
 
-func mergeOwners() {
+func migrateOwners() {
 	owners := wotoConfig.GetOwners()
 	if len(owners) == 0 {
 		return
 	}
 
 	var currentUser *wv.UserInfo
-	var shouldCache bool
 
 	for _, current := range owners {
 		currentUser = GetUserByUsername(current.Username)
-		shouldCache = currentUser == nil
-		if shouldCache {
-			currentUser = CreateNewUser(&NewUserData{
-				Username: current.Username,
-				Password: current.Password,
+		if currentUser == nil {
+			CreateNewUser(&NewUserData{
+				Username:   current.Username,
+				Password:   current.Password,
+				Permission: wv.PermissionOwner,
 			})
+			continue
 		}
 
 		if currentUser.IsOwner() && currentUser.IsPasswordCorrect(current.Password) {
 			continue
 		}
 
-		SaveUser(currentUser, shouldCache)
+		currentUser.Permission = wv.PermissionOwner
+		currentUser.Password = current.Password
+		SaveUser(currentUser, false)
 	}
 }
 
