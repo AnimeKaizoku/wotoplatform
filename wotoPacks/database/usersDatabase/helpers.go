@@ -24,8 +24,11 @@ import (
 
 func LoadUsersDatabase() error {
 	var allUsers []*wv.UserInfo
+	var allFavorites []*wv.FavoriteInfo
+
 	lockDatabase()
 	wv.SESSION.Find(&allUsers)
+	wv.SESSION.Find(&allFavorites)
 	unlockDatabase()
 
 	usersMapByIdMutex.Lock()
@@ -49,6 +52,8 @@ func LoadUsersDatabase() error {
 	usersMapByIdMutex.Unlock()
 	usersMapByUsernameMutex.Unlock()
 	usersMapByTelegramIdMutex.Unlock()
+
+	usersFavoriteManager.LoadAll(allFavorites)
 
 	migrateOwners()
 
@@ -85,6 +90,19 @@ func GetUserByUsername(username string) *wv.UserInfo {
 	usersMapByUsernameMutex.Unlock()
 
 	return user
+}
+
+func GetUserFavorite(id wv.PublicUserId, key string) string {
+	return usersFavoriteManager.GetUserFavorite(id, key)
+}
+
+func SetUserFavorite(id wv.PublicUserId, key, value string) {
+	info := usersFavoriteManager.NewFavorite(id, key, value)
+	lockDatabase()
+	tx := wv.SESSION.Begin()
+	tx.Save(info)
+	tx.Commit()
+	unlockDatabase()
 }
 
 func SaveUser(user *wv.UserInfo, cache bool) {

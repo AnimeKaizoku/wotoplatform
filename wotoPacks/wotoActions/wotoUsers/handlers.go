@@ -335,3 +335,15 @@ func batchChangeUserPermission(req interfaces.ReqBase) error {
 		CurrentPermission:  target.Permission,
 	})
 }
+
+func batchGetUserFavorite(req interfaces.ReqBase) error {
+	return we.SendMethodNotImplemented(req, OriginGetUserFavorite)
+}
+
+func batchGetUserFavoriteCount(req interfaces.ReqBase) error {
+	return we.SendMethodNotImplemented(req, OriginGetUserFavoriteCount)
+}
+
+func batchSetUserFavorite(req interfaces.ReqBase) error {
+	return we.SendMethodNotImplemented(req, OriginSetUserFavorite)
+}

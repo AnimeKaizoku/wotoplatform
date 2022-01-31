@@ -35,5 +35,8 @@ var (
 		BATCH_GET_USER_BY_EMAIL:       batchGetUserByEmail,
 		BATCH_RESOLVE_USERNAME:        batchResolveUsername,
 		BATCH_CHANGE_USER_PERMISSION:  batchChangeUserPermission,
+		BATCH_GET_USER_FAVORITE:       batchGetUserFavorite,
+		BATCH_GET_USER_FAVORITE_COUNT: batchGetUserFavoriteCount,
+		BATCH_SET_USER_FAVORITE:       batchSetUserFavorite,
 	}
 )

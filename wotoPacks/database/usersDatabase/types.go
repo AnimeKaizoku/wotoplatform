@@ -1,6 +1,14 @@
 package usersDatabase
 
-import wv "wp-server/wotoPacks/core/wotoValues"
+import (
+	"sync"
+	wv "wp-server/wotoPacks/core/wotoValues"
+)
+
+type UserFavorites struct {
+	mut    *sync.Mutex
+	values map[string]string
+}
 
 type NewUserData struct {
 	Username   string
@@ -11,4 +19,9 @@ type NewUserData struct {
 	Birthday   string
 	Permission wv.UserPermission
 	By         wv.PublicUserId
+}
+
+type favoriteManager struct {
+	mut    *sync.Mutex
+	values map[wv.PublicUserId]*UserFavorites
 }

@@ -7,7 +7,8 @@ import (
 
 // database models
 var (
-	ModelUserInfo *wv.UserInfo = &wv.UserInfo{}
+	ModelUserInfo     *wv.UserInfo     = &wv.UserInfo{}
+	ModelUserFavorite *wv.FavoriteInfo = &wv.FavoriteInfo{}
 )
 
 // cache values and mutexes.
@@ -20,4 +21,7 @@ var (
 	usersMapByTelegramIdMutex = &sync.Mutex{}
 	lastUserId                = wv.BaseUserId
 	userIdGeneratorMutex      = &sync.Mutex{}
+	usersFavoriteManager      = &favoriteManager{
+		mut: &sync.Mutex{},
+	}
 )

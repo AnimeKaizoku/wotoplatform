@@ -30,6 +30,9 @@ const (
 	BATCH_GET_USER_BY_EMAIL       = "get_user_by_email"
 	BATCH_CHANGE_USER_PERMISSION  = "change_user_permission"
 	BATCH_RESOLVE_USERNAME        = "resolve_username"
+	BATCH_GET_USER_FAVORITE       = "get_user_favorite"
+	BATCH_GET_USER_FAVORITE_COUNT = "get_user_favorite_count"
+	BATCH_SET_USER_FAVORITE       = "set_user_favorite"
 )
 const (
 	OriginRegisterUser         = "RegisterUser"
@@ -43,4 +46,7 @@ const (
 	OriginGetUserByEmail       = "GetUserByEmail"
 	OriginResolveUsername      = "ResolveUsername"
 	OriginChangeUserPermission = "ChangeUserPermission"
+	OriginGetUserFavorite      = "GetUserFavorite"
+	OriginGetUserFavoriteCount = "GetUserFavoriteCount"
+	OriginSetUserFavorite      = "SetUserFavorite"
 )
