@@ -23,4 +23,5 @@ const (
 	MessageInvalidUsernameAndUserId = "Invalid username and user id entered."
 	MessageMethodNotImplemented     = "The method is not implemented yet."
 	MessagePermissionDenied         = "Permission denied."
+	MessageKeyNotFound              = "Key not found."
 )

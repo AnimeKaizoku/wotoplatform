@@ -238,3 +238,12 @@ type GetUserByEmailResult struct {
 	UpdatedAt          string            `json:"updated_at"`
 	IsVirtual          bool              `json:"is_virtual"`
 }
+
+type GetUserFavoriteData struct {
+	UserId      wv.PublicUserId `json:"user_id"`
+	FavoriteKey string          `json:"favorite_key"`
+}
+
+type GetUserFavoriteResult struct {
+	FavoriteValue string `json:"favorite_value"`
+}

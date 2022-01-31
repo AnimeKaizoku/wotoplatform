@@ -43,6 +43,7 @@ const (
 	ErrInvalidUsernameAndUserId
 	ErrMethodNotImplemented
 	ErrPermissionDenied
+	ErrKeyNotFound
 )
 
 const (

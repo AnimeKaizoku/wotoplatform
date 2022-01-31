@@ -202,3 +202,12 @@ func SendPermissionDenied(req inf.ReqBase, origin string) error {
 	})
 	return err
 }
+
+func SendKeyNotFound(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrKeyNotFound,
+		Message: MessageKeyNotFound,
+		Origin:  origin,
+	})
+	return err
+}
