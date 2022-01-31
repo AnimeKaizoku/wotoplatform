@@ -24,6 +24,6 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.11 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.7.0 // indirect
-	golang.org/x/crypto v0.0.0-20220128200615-198e4374d7ed // indirect
+	golang.org/x/crypto v0.0.0-20220131195533-30dcbda58838 // indirect
 	golang.org/x/text v0.3.7 // indirect
 )

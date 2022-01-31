@@ -18,7 +18,6 @@
 package wotoUsers
 
 import (
-	"wp-server/wotoPacks/core/utils/logging"
 	we "wp-server/wotoPacks/core/wotoErrors"
 	wv "wp-server/wotoPacks/core/wotoValues"
 	"wp-server/wotoPacks/core/wotoValues/wotoValidate"
@@ -51,7 +50,6 @@ func batchRegisterUser(req interfaces.ReqBase) error {
 	var entryData = new(RegisterUserData)
 	err := req.ParseJsonData(entryData)
 	if err != nil {
-		logging.Error(err)
 		return err
 	}
 
@@ -101,7 +99,6 @@ func batchRegisterVirtualUser(req interfaces.ReqBase) error {
 	var entryData = new(RegisterVirtualUserData)
 	err := req.ParseJsonData(entryData)
 	if err != nil {
-		logging.Error(err)
 		return err
 	}
 
@@ -131,7 +128,6 @@ func batchLoginUser(req interfaces.ReqBase) error {
 	var entryData = new(LoginUserData)
 	err := req.ParseJsonData(entryData)
 	if err != nil {
-		logging.Error(err)
 		return err
 	}
 
@@ -178,7 +174,6 @@ func batchChangeUserBio(req interfaces.ReqBase) error {
 	var entryData = new(ChangeBioData)
 	err := req.ParseJsonData(entryData)
 	if err != nil {
-		logging.Error(err)
 		return err
 	}
 
@@ -252,7 +247,6 @@ func batchGetUserInfo(req interfaces.ReqBase) error {
 	var entryData = new(GetUserInfoData)
 	err := req.ParseJsonData(entryData)
 	if err != nil {
-		logging.Error(err)
 		return err
 	}
 
@@ -311,7 +305,6 @@ func batchChangeUserPermission(req interfaces.ReqBase) error {
 	var entryData = new(ChangeUserPermissionData)
 	err := req.ParseJsonData(entryData)
 	if err != nil {
-		logging.Error(err)
 		return err
 	}
 
@@ -414,7 +407,11 @@ func batchSetUserFavorite(req interfaces.ReqBase) error {
 		return we.SendNotModified(req, OriginSetUserFavorite)
 	}
 
-	usersDatabase.SetUserFavorite(user.UserId, entryData.FavoriteKey, entryData.FavoriteValue)
+	usersDatabase.SetUserFavorite(
+		user.UserId,
+		entryData.FavoriteKey,
+		entryData.FavoriteValue,
+	)
 
 	return req.SendResult(true)
 }
