@@ -84,6 +84,7 @@ type MediaTag struct {
 }
 
 type UserInfo = wotoRaw.UserInfo
+type FavoriteInfo = wotoRaw.FavoriteValue
 
 type WotoListener struct {
 	listener net.Listener

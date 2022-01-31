@@ -21,6 +21,7 @@ import (
 	"wp-server/wotoPacks/core/utils/logging"
 	we "wp-server/wotoPacks/core/wotoErrors"
 	wv "wp-server/wotoPacks/core/wotoValues"
+	"wp-server/wotoPacks/core/wotoValues/wotoValidate"
 	"wp-server/wotoPacks/database/usersDatabase"
 	"wp-server/wotoPacks/interfaces"
 	wa "wp-server/wotoPacks/wotoActions"
@@ -59,11 +60,11 @@ func batchRegisterUser(req interfaces.ReqBase) error {
 		return we.SendAlreadyAuthorized(req, OriginRegisterUser)
 	}
 
-	if !wv.IsCorrectUsernameFormat(entryData.Username) {
+	if !wotoValidate.IsCorrectUsernameFormat(entryData.Username) {
 		return we.SendInvalidUsernameFormat(req, OriginRegisterUser)
 	}
 
-	if !wv.IsCorrectPasswordFormat(entryData.Password) {
+	if !wotoValidate.IsCorrectPasswordFormat(entryData.Password) {
 		return we.SendInvalidUsernameFormat(req, OriginRegisterUser)
 	}
 
@@ -138,11 +139,11 @@ func batchLoginUser(req interfaces.ReqBase) error {
 		return we.SendAlreadyAuthorized(req, OriginLoginUser)
 	}
 
-	if !wv.IsCorrectUsernameFormat(entryData.Username) {
+	if !wotoValidate.IsCorrectUsernameFormat(entryData.Username) {
 		return we.SendInvalidUsernameFormat(req, OriginLoginUser)
 	}
 
-	if !wv.IsCorrectPasswordFormat(entryData.Password) {
+	if !wotoValidate.IsCorrectPasswordFormat(entryData.Password) {
 		return we.SendInvalidPasswordFormat(req, OriginLoginUser)
 	}
 

@@ -64,23 +64,3 @@ func GetWotoListener(l net.Listener) *WotoListener {
 		listener: l,
 	}
 }
-
-func IsCorrectPasswordFormat(password string) bool {
-	return len(password) >= 8
-}
-
-func IsCorrectUsernameFormat(username string) bool {
-	return len(username) >= 5
-}
-
-func IsBioTooLong(bio string) bool {
-	return len(bio) > MaxBioLength
-}
-
-func IsFirstNameTooLong(firstName string) bool {
-	return len(firstName) > MaxFirstNameLength
-}
-
-func IsLastNameTooLong(lastName string) bool {
-	return len(lastName) > MaxLastNameLength
-}

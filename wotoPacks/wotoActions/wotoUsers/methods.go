@@ -17,12 +17,15 @@
 
 package wotoUsers
 
-import wv "wp-server/wotoPacks/core/wotoValues"
+import (
+	wv "wp-server/wotoPacks/core/wotoValues"
+	"wp-server/wotoPacks/core/wotoValues/wotoValidate"
+)
 
 //---------------------------------------------------------
 
 func (b *ChangeBioData) IsBioTooLong() bool {
-	return wv.IsBioTooLong(b.Bio)
+	return wotoValidate.IsBioTooLong(b.Bio)
 }
 
 func (b *ChangeBioData) HasNotModified(info *wv.UserInfo) bool {
@@ -32,11 +35,11 @@ func (b *ChangeBioData) HasNotModified(info *wv.UserInfo) bool {
 //---------------------------------------------------------
 
 func (n *ChangeNamesData) IsFirstNameTooLong() bool {
-	return wv.IsFirstNameTooLong(n.FirstName)
+	return wotoValidate.IsFirstNameTooLong(n.FirstName)
 }
 
 func (n *ChangeNamesData) IsLastNameTooLong() bool {
-	return wv.IsLastNameTooLong(n.LastName)
+	return wotoValidate.IsLastNameTooLong(n.LastName)
 }
 
 func (n *ChangeNamesData) HasNotModified(info *wv.UserInfo) bool {
@@ -45,5 +48,5 @@ func (n *ChangeNamesData) HasNotModified(info *wv.UserInfo) bool {
 
 //---------------------------------------------------------
 func (i *GetUserInfoData) IsInvalid() bool {
-	return !wv.IsCorrectUsernameFormat(i.Username) && i.UserId.IsZero()
+	return !wotoValidate.IsCorrectUsernameFormat(i.Username) && i.UserId.IsZero()
 }
