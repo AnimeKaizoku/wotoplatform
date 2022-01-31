@@ -1,11 +1,11 @@
 package wotoValidate
 
 func IsCorrectPasswordFormat(password string) bool {
-	return len(password) >= 8
+	return len(password) >= MinPasswordLength && len(password) <= MaxPasswordLength
 }
 
 func IsCorrectUsernameFormat(username string) bool {
-	return len(username) >= 5 && isCorrectUsername(username)
+	return len(username) >= 5 && len(username) <= MaxUsernameLength && isCorrectUsername(username)
 }
 
 func isCorrectUsername(username string) bool {
@@ -21,7 +21,11 @@ func isCorrectUsername(username string) bool {
 		}
 	}
 
-	return false
+	return true
+}
+
+func IsKeyValid(key string) bool {
+	return len(key) >= MinKeyLength && len(key) <= MaxKeyLength
 }
 
 func IsBioTooLong(bio string) bool {
