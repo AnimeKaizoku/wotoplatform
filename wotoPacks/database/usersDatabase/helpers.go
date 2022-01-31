@@ -18,7 +18,6 @@
 package usersDatabase
 
 import (
-	"time"
 	"wp-server/wotoPacks/core/wotoConfig"
 	wv "wp-server/wotoPacks/core/wotoValues"
 )
@@ -51,7 +50,7 @@ func LoadUsersDatabase() error {
 	usersMapByUsernameMutex.Unlock()
 	usersMapByTelegramIdMutex.Unlock()
 
-	go checkUsersMap()
+	mergeOwners()
 
 	return nil
 }
@@ -135,47 +134,39 @@ func CreateNewUser(data *NewUserData) *wv.UserInfo {
 	return u
 }
 
+func mergeOwners() {
+	owners := wotoConfig.GetOwners()
+	if len(owners) == 0 {
+		return
+	}
+
+	var currentUser *wv.UserInfo
+	var shouldCache bool
+
+	for _, current := range owners {
+		currentUser = GetUserByUsername(current.Username)
+		shouldCache = currentUser == nil
+		if shouldCache {
+			currentUser = CreateNewUser(&NewUserData{
+				Username: current.Username,
+				Password: current.Password,
+			})
+		}
+
+		if currentUser.IsOwner() && currentUser.IsPasswordCorrect(current.Password) {
+			continue
+		}
+
+		SaveUser(currentUser, shouldCache)
+	}
+}
+
 func generateUserId() wv.PublicUserId {
 	userIdGeneratorMutex.Lock()
 	lastUserId++
 	userIdGeneratorMutex.Unlock()
 
 	return lastUserId
-}
-
-func checkUsersMap() {
-	d := wotoConfig.GetDatabaseCacheTime()
-	for {
-		if usersMapById == nil || usersMapByIdMutex == nil {
-			return
-		}
-
-		time.Sleep(d)
-
-		if len(usersMapById) == 0 {
-			continue
-		}
-
-		usersMapByIdMutex.Lock()
-		usersMapByTelegramIdMutex.Lock()
-		usersMapByUsernameMutex.Lock()
-		for key, value := range usersMapById {
-			if value.IsCacheExpired(d) {
-				delete(usersMapById, key)
-
-				if value.HasUsername() {
-					delete(usersMapByUsername, value.Username)
-				}
-
-				if value.HasTelegramId() {
-					delete(usersMapByTelegramId, value.TelegramId)
-				}
-			}
-		}
-		usersMapByIdMutex.Unlock()
-		usersMapByTelegramIdMutex.Unlock()
-		usersMapByUsernameMutex.Unlock()
-	}
 }
 
 func lockDatabase() {

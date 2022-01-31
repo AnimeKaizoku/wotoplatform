@@ -275,13 +275,33 @@ func batchGetUserInfo(req interfaces.ReqBase) error {
 }
 
 func batchGetUserByTelegramID(req interfaces.ReqBase) error {
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginGetUserByTelegramID)
+	}
+
 	return we.SendMethodNotImplemented(req, OriginGetUserByTelegramID)
 }
 
 func batchGetUserByEmail(req interfaces.ReqBase) error {
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginGetUserByEmail)
+	}
+
 	return we.SendMethodNotImplemented(req, OriginGetUserByEmail)
 }
 
 func batchResolveUsername(req interfaces.ReqBase) error {
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginResolveUsername)
+	}
+
 	return we.SendMethodNotImplemented(req, OriginResolveUsername)
+}
+
+func batchChangeUserPermission(req interfaces.ReqBase) error {
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginChangeUserPermission)
+	}
+
+	return we.SendMethodNotImplemented(req, OriginChangeUserPermission)
 }

@@ -4,17 +4,24 @@
     "port": "50100",
     "name": "woto-platform",
     "description": "online media platform",
-    "admin_passwords": [
-        "123456789_something_sample"
-    ],
-    "admin_users": [
-        "aliwoto"
+    "owners": [
+        {
+            "username": "aliwoto",
+            "password": "sample_password"
+        },
+        {
+            "username": "aliwoto2",
+            "password": "sample_password"
+        },
+        {
+            "username": "aliwoto3",
+            "password": "sample_password"
+        }
     ],
     "client_ids": [
         "cli-12345678910"
     ],
     "db_url": "postgresql://Username:Password@localhost:5432/DatabaseName",
     "db_name": "wp-database",
-    "cache_time": 10,
     "use_sql_lite": true
 }

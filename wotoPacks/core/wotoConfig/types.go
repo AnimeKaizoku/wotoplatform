@@ -19,17 +19,20 @@ package wotoConfig
 
 // config struct types defined in config.json
 type Config struct {
-	Name           string   `json:"name"`
-	Network        string   `json:"network"`
-	Bind           string   `json:"bind"`
-	Port           string   `json:"port"`
-	Description    string   `json:"description"`
-	AdminPasswords []string `json:"admin_passwords"`
-	AdminUsers     []string `json:"admin_users"`
-	ClientIDs      []string `json:"client_ids"`
-	DatabaseUrl    string   `json:"db_url"`
-	CacheTime      int      `json:"cache_time"`
-	DatabaseName   string   `json:"db_name"`
-	UseSQLLite     bool     `json:"use_sql_lite"`
-	IsDefault      bool     `json:"-"` // test purpose only
+	Name         string      `json:"name"`
+	Network      string      `json:"network"`
+	Bind         string      `json:"bind"`
+	Port         string      `json:"port"`
+	Description  string      `json:"description"`
+	Owners       []WotoOwner `json:"owners"`
+	ClientIDs    []string    `json:"client_ids"`
+	DatabaseUrl  string      `json:"db_url"`
+	DatabaseName string      `json:"db_name"`
+	UseSQLLite   bool        `json:"use_sql_lite"`
+	IsDefault    bool        `json:"-"` // test purpose only
+}
+
+type WotoOwner struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
 }

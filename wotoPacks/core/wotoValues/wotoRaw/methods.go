@@ -33,8 +33,16 @@ func (u *UserInfo) CanCreateAccount() bool {
 	return u.Permission >= PermissionAdmin
 }
 
+func (u *UserInfo) CanChangePermission() bool {
+	return u.Permission >= PermissionDeveloper
+}
+
 func (u *UserInfo) IsAdmin() bool {
 	return u.Permission >= PermissionAdmin
+}
+
+func (u *UserInfo) IsOwner() bool {
+	return u.Permission >= PermissionOwner
 }
 
 func (u *UserInfo) IsValid() bool {

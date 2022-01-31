@@ -34,5 +34,6 @@ var (
 		BATCH_GET_USER_BY_TELEGRAM_ID: batchGetUserByTelegramID,
 		BATCH_GET_USER_BY_EMAIL:       batchGetUserByEmail,
 		BATCH_RESOLVE_USERNAME:        batchResolveUsername,
+		BATCH_CHANGE_USER_PERMISSION:  batchChangeUserPermission,
 	}
 )

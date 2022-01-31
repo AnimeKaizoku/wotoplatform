@@ -20,7 +20,6 @@ package wotoConfig
 import (
 	"encoding/json"
 	"io/ioutil"
-	"time"
 	"wp-server/wotoPacks/core/utils/logging"
 )
 
@@ -141,9 +140,6 @@ func getDefaultConfig() *Config {
 	// use a default db name for config value
 	WConfig.DatabaseName = DefaultDatabaseName
 
-	// 10 days for db memory cache by default
-	WConfig.CacheTime = 10
-
 	// use SQL-Lite by default, so we don't need any sql url and
 	// password.
 	WConfig.UseSQLLite = true
@@ -172,9 +168,9 @@ func GetDatabaseURL() string {
 	return WConfig.DatabaseUrl
 }
 
-func GetDatabaseCacheTime() time.Duration {
-	if WConfig == nil || WConfig.CacheTime < 2 {
-		return 10 * (24 * time.Hour)
+func GetOwners() []WotoOwner {
+	if WConfig == nil {
+		return nil
 	}
-	return time.Duration(WConfig.CacheTime) * (24 * time.Hour)
+	return WConfig.Owners
 }
