@@ -369,7 +369,25 @@ func batchGetUserFavoriteCount(req interfaces.ReqBase) error {
 		return we.SendNotAuthorized(req, OriginGetUserFavoriteCount)
 	}
 
-	return we.SendMethodNotImplemented(req, OriginGetUserFavoriteCount)
+	var entryData = new(GetUserFavoriteCountData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		return err
+	}
+
+	var user *wv.UserInfo
+	if entryData.UserId.IsZero() {
+		user = req.GetMe()
+	} else {
+		user = usersDatabase.GetUserById(entryData.UserId)
+		if user == nil {
+			return we.SendUserNotFound(req, OriginGetUserFavoriteCount)
+		}
+	}
+
+	return req.SendResult(&GetUserFavoriteCountResult{
+		FavoritesCount: usersDatabase.GetUserFavoriteCount(user.UserId),
+	})
 }
 
 func batchSetUserFavorite(req interfaces.ReqBase) error {
@@ -377,5 +395,26 @@ func batchSetUserFavorite(req interfaces.ReqBase) error {
 		return we.SendNotAuthorized(req, OriginSetUserFavorite)
 	}
 
-	return we.SendMethodNotImplemented(req, OriginSetUserFavorite)
+	var entryData = new(SetUserFavoriteData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		return err
+	}
+
+	user := req.GetMe()
+	if user.IsAdmin() && !entryData.UserId.IsZero() {
+		user = usersDatabase.GetUserById(entryData.UserId)
+		if user.IsInvalid() {
+			return we.SendUserNotFound(req, OriginSetUserFavorite)
+		}
+	}
+
+	favoriteValue := usersDatabase.GetUserFavorite(user.UserId, entryData.FavoriteKey)
+	if favoriteValue == entryData.FavoriteValue {
+		return we.SendNotModified(req, OriginSetUserFavorite)
+	}
+
+	usersDatabase.SetUserFavorite(user.UserId, entryData.FavoriteKey, entryData.FavoriteValue)
+
+	return req.SendResult(true)
 }

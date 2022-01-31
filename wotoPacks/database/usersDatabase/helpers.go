@@ -96,6 +96,10 @@ func GetUserFavorite(id wv.PublicUserId, key string) string {
 	return usersFavoriteManager.GetUserFavorite(id, key)
 }
 
+func GetUserFavoriteCount(id wv.PublicUserId) int {
+	return usersFavoriteManager.Length(id)
+}
+
 func SetUserFavorite(id wv.PublicUserId, key, value string) {
 	info := usersFavoriteManager.NewFavorite(id, key, value)
 	lockDatabase()

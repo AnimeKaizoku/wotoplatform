@@ -247,3 +247,17 @@ type GetUserFavoriteData struct {
 type GetUserFavoriteResult struct {
 	FavoriteValue string `json:"favorite_value"`
 }
+
+type GetUserFavoriteCountData struct {
+	UserId wv.PublicUserId `json:"user_id"`
+}
+
+type GetUserFavoriteCountResult struct {
+	FavoritesCount int `json:"favorites_count"`
+}
+
+type SetUserFavoriteData struct {
+	UserId        wv.PublicUserId `json:"user_id"`
+	FavoriteKey   string          `json:"favorite_key"`
+	FavoriteValue string          `json:"favorite_value"`
+}
