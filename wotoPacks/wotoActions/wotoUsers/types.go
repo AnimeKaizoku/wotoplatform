@@ -161,6 +161,12 @@ type ChangeUserPermissionData struct {
 	Permission wv.UserPermission `json:"permission"`
 }
 
+type ChangeUserPermissionResult struct {
+	UserId             wv.PublicUserId   `json:"user_id"`
+	PreviousPermission wv.UserPermission `json:"previous_permission"`
+	CurrentPermission  wv.UserPermission `json:"current_permission"`
+}
+
 type GetUserByTelegramIdData struct {
 	TelegramId int64 `json:"telegram_id"`
 }

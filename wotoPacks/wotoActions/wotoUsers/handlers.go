@@ -324,8 +324,13 @@ func batchChangeUserPermission(req interfaces.ReqBase) error {
 		return we.SendNotModified(req, OriginChangeUserPermission)
 	}
 
+	last := target.Permission
 	target.Permission = entryData.Permission
 	usersDatabase.SaveUser(target, false)
 
-	return we.SendMethodNotImplemented(req, OriginChangeUserPermission)
+	return req.SendResult(&ChangeUserPermissionResult{
+		UserId:             target.UserId,
+		PreviousPermission: last,
+		CurrentPermission:  target.Permission,
+	})
 }
