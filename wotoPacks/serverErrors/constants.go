@@ -42,6 +42,7 @@ const (
 	ErrLastNameTooLong
 	ErrInvalidUsernameAndUserId
 	ErrMethodNotImplemented
+	ErrPermissionDenied
 )
 
 const (

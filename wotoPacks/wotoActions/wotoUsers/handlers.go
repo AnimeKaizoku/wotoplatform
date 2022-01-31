@@ -303,5 +303,29 @@ func batchChangeUserPermission(req interfaces.ReqBase) error {
 		return we.SendNotAuthorized(req, OriginChangeUserPermission)
 	}
 
+	me := req.GetMe()
+	if !me.CanChangePermission() {
+		return we.SendPermissionDenied(req, OriginChangeUserPermission)
+	}
+
+	var entryData = new(ChangeUserPermissionData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		logging.Error(err)
+		return err
+	}
+
+	target := usersDatabase.GetUserById(entryData.UserId)
+	if target.IsInvalid() {
+		return we.SendUserNotFound(req, OriginChangeUserPermission)
+	}
+
+	if target.Permission == entryData.Permission {
+		return we.SendNotModified(req, OriginChangeUserPermission)
+	}
+
+	target.Permission = entryData.Permission
+	usersDatabase.SaveUser(target, false)
+
 	return we.SendMethodNotImplemented(req, OriginChangeUserPermission)
 }

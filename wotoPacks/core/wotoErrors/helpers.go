@@ -193,3 +193,12 @@ func SendMethodNotImplemented(req inf.ReqBase, origin string) error {
 	})
 	return err
 }
+
+func SendPermissionDenied(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrPermissionDenied,
+		Message: MessagePermissionDenied,
+		Origin:  origin,
+	})
+	return err
+}

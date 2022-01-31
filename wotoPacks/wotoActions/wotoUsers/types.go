@@ -156,6 +156,11 @@ type GetUserInfoResult struct {
 	IsVirtual      bool              `json:"is_virtual"`
 }
 
+type ChangeUserPermissionData struct {
+	UserId     wv.PublicUserId   `json:"user_id"`
+	Permission wv.UserPermission `json:"permission"`
+}
+
 type GetUserByTelegramIdData struct {
 	TelegramId int64 `json:"telegram_id"`
 }
