@@ -44,6 +44,8 @@ const (
 	ErrMethodNotImplemented
 	ErrPermissionDenied
 	ErrKeyNotFound
+	ErrInvalidTelegramId
+	ErrInvalidEmail
 )
 
 const (

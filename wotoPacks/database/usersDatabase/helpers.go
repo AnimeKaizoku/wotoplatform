@@ -18,6 +18,7 @@
 package usersDatabase
 
 import (
+	"strings"
 	"wp-server/wotoPacks/core/wotoConfig"
 	wv "wp-server/wotoPacks/core/wotoValues"
 )
@@ -34,6 +35,7 @@ func LoadUsersDatabase() error {
 	usersMapByIdMutex.Lock()
 	usersMapByUsernameMutex.Lock()
 	usersMapByTelegramIdMutex.Lock()
+	usersMapByEmailMutex.Lock()
 	for _, user := range allUsers {
 		if user.UserId > lastUserId {
 			lastUserId = user.UserId
@@ -42,16 +44,21 @@ func LoadUsersDatabase() error {
 		usersMapById[user.UserId] = user
 
 		if user.HasUsername() {
-			usersMapByUsername[user.Username] = user
+			usersMapByUsername[strings.ToLower(user.Username)] = user
 		}
 
 		if user.HasTelegramId() {
 			usersMapByTelegramId[user.TelegramId] = user
 		}
+
+		if user.HasEmail() {
+			usersMapByEmail[strings.ToLower(user.Email)] = user
+		}
 	}
 	usersMapByIdMutex.Unlock()
 	usersMapByUsernameMutex.Unlock()
 	usersMapByTelegramIdMutex.Unlock()
+	usersMapByEmailMutex.Unlock()
 
 	usersFavoriteManager.LoadAll(allFavorites)
 
@@ -62,7 +69,7 @@ func LoadUsersDatabase() error {
 
 func UsernameExists(username string) bool {
 	usersMapByUsernameMutex.Lock()
-	b := usersMapByUsername[username] != nil
+	b := usersMapByUsername[strings.ToLower(username)] != nil
 	usersMapByUsernameMutex.Unlock()
 
 	return b
@@ -84,9 +91,17 @@ func GetUserByTelegramId(id int64) *wv.UserInfo {
 	return user
 }
 
+func GetUserByEmail(email string) *wv.UserInfo {
+	usersMapByEmailMutex.Lock()
+	user := usersMapByEmail[email]
+	usersMapByEmailMutex.Unlock()
+
+	return user
+}
+
 func GetUserByUsername(username string) *wv.UserInfo {
 	usersMapByUsernameMutex.Lock()
-	user := usersMapByUsername[username]
+	user := usersMapByUsername[strings.ToLower(username)]
 	usersMapByUsernameMutex.Unlock()
 
 	return user
@@ -123,7 +138,7 @@ func SaveUser(user *wv.UserInfo, cache bool) {
 
 		if user.HasUsername() {
 			usersMapByUsernameMutex.Lock()
-			usersMapByUsername[user.Username] = user
+			usersMapByUsername[strings.ToLower(user.Username)] = user
 			usersMapByUsernameMutex.Unlock()
 		}
 
@@ -131,6 +146,12 @@ func SaveUser(user *wv.UserInfo, cache bool) {
 			usersMapByTelegramIdMutex.Lock()
 			usersMapByTelegramId[user.TelegramId] = user
 			usersMapByTelegramIdMutex.Unlock()
+		}
+
+		if user.HasEmail() {
+			usersMapByEmailMutex.Lock()
+			usersMapByEmail[strings.ToLower(user.Email)] = user
+			usersMapByEmailMutex.Unlock()
 		}
 	}
 }
@@ -148,6 +169,7 @@ func CreateNewUser(data *NewUserData) *wv.UserInfo {
 		TelegramId: data.TelegramId,
 		Password:   data.Password,
 		Permission: data.Permission,
+		Email:      data.Email,
 		CreatedBy:  data.By,
 		Birthday:   data.Birthday,
 		IsVirtual:  data.Username == "",

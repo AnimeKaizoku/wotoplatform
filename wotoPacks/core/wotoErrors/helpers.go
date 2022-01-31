@@ -211,3 +211,21 @@ func SendKeyNotFound(req inf.ReqBase, origin string) error {
 	})
 	return err
 }
+
+func SendInvalidTelegramId(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrInvalidTelegramId,
+		Message: MessageInvalidTelegramId,
+		Origin:  origin,
+	})
+	return err
+}
+
+func SendInvalidEmail(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrInvalidEmail,
+		Message: MessageInvalidEmail,
+		Origin:  origin,
+	})
+	return err
+}

@@ -12,6 +12,10 @@ func (u *UserInfo) HasTelegramId() bool {
 	return u.TelegramId != 0
 }
 
+func (u *UserInfo) HasEmail() bool {
+	return u.Email != ""
+}
+
 func (u *UserInfo) SetCachedTime() {
 	u.cachedTime = time.Now()
 }

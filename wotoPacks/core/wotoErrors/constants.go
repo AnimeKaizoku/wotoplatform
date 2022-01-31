@@ -24,4 +24,6 @@ const (
 	MessageMethodNotImplemented     = "The method is not implemented yet."
 	MessagePermissionDenied         = "Permission denied."
 	MessageKeyNotFound              = "Key not found."
+	MessageInvalidTelegramId        = "Invalid telegram id entered."
+	MessageInvalidEmail             = "Invalid email entered."
 )

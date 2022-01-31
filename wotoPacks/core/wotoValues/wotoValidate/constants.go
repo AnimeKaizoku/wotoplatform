@@ -11,3 +11,7 @@ const (
 	MinKeyLength       = 3
 	MaxKeyLength       = 20
 )
+
+const (
+	EmailRegex = `/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/`
+)

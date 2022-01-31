@@ -1,5 +1,7 @@
 package wotoValidate
 
+import "regexp"
+
 func IsCorrectPasswordFormat(password string) bool {
 	return len(password) >= MinPasswordLength && len(password) <= MaxPasswordLength
 }
@@ -26,6 +28,11 @@ func isCorrectUsername(username string) bool {
 
 func IsKeyValid(key string) bool {
 	return len(key) >= MinKeyLength && len(key) <= MaxKeyLength
+}
+
+func IsEmailValid(email string) bool {
+	b, err := regexp.MatchString(EmailRegex, email)
+	return err == nil && b
 }
 
 func IsBioTooLong(bio string) bool {

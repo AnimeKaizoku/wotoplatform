@@ -273,7 +273,22 @@ func batchGetUserByTelegramID(req interfaces.ReqBase) error {
 		return we.SendNotAuthorized(req, OriginGetUserByTelegramID)
 	}
 
-	return we.SendMethodNotImplemented(req, OriginGetUserByTelegramID)
+	var entryData = new(GetUserByTelegramIdData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		return err
+	}
+
+	if entryData.TelegramId == 0 {
+		return we.SendInvalidTelegramId(req, OriginGetUserByTelegramID)
+	}
+
+	user := usersDatabase.GetUserByTelegramId(entryData.TelegramId)
+	if user.IsInvalid() {
+		return we.SendUserNotFound(req, OriginGetUserByTelegramID)
+	}
+
+	return req.SendResult(toGetUserInfoResult(user))
 }
 
 func batchGetUserByEmail(req interfaces.ReqBase) error {
@@ -281,7 +296,22 @@ func batchGetUserByEmail(req interfaces.ReqBase) error {
 		return we.SendNotAuthorized(req, OriginGetUserByEmail)
 	}
 
-	return we.SendMethodNotImplemented(req, OriginGetUserByEmail)
+	var entryData = new(GetUserByEmailData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		return err
+	}
+
+	if entryData.Email == "" || !wotoValidate.IsEmailValid(entryData.Email) {
+		return we.SendInvalidEmail(req, OriginGetUserByTelegramID)
+	}
+
+	user := usersDatabase.GetUserByEmail(entryData.Email)
+	if user.IsInvalid() {
+		return we.SendUserNotFound(req, OriginGetUserByTelegramID)
+	}
+
+	return req.SendResult(toGetUserInfoResult(user))
 }
 
 func batchResolveUsername(req interfaces.ReqBase) error {

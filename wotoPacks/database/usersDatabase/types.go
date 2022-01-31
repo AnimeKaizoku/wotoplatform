@@ -13,6 +13,7 @@ type UserFavorites struct {
 type NewUserData struct {
 	Username   string
 	Password   string
+	Email      string
 	TelegramId int64
 	FirstName  string
 	LastName   string

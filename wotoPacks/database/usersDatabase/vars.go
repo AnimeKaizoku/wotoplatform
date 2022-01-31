@@ -19,9 +19,12 @@ var (
 	usersMapByUsernameMutex   = &sync.Mutex{}
 	usersMapByTelegramId      = make(map[int64]*wv.UserInfo)
 	usersMapByTelegramIdMutex = &sync.Mutex{}
+	usersMapByEmail           = make(map[string]*wv.UserInfo)
+	usersMapByEmailMutex      = &sync.Mutex{}
 	lastUserId                = wv.BaseUserId
 	userIdGeneratorMutex      = &sync.Mutex{}
 	usersFavoriteManager      = &favoriteManager{
-		mut: &sync.Mutex{},
+		mut:    &sync.Mutex{},
+		values: make(map[wv.PublicUserId]*UserFavorites),
 	}
 )
