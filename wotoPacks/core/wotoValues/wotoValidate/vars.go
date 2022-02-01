@@ -5,4 +5,21 @@ var (
 		'_': true,
 		'-': true,
 	}
+	allowedKeyChars = map[rune]bool{
+		' ': true,
+		'_': true,
+		'-': true,
+	}
+	replaceKeyChars = map[rune]string{
+		' ': "_",
+		'-': "_",
+		'_': "_",
+		'~': "_",
+		'.': "_",
+		'+': "_",
+		'/': "_",
+		'|': "_",
+		'*': "_",
+		'^': "_",
+	}
 )

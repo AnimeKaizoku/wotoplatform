@@ -229,3 +229,12 @@ func SendInvalidEmail(req inf.ReqBase, origin string) error {
 	})
 	return err
 }
+
+func SendInvalidKey(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrInvalidKey,
+		Message: MessageInvalidKey,
+		Origin:  origin,
+	})
+	return err
+}

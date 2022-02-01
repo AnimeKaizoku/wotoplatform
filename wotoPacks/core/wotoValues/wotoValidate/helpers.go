@@ -1,6 +1,9 @@
 package wotoValidate
 
-import "regexp"
+import (
+	"regexp"
+	"strings"
+)
 
 func IsCorrectPasswordFormat(password string) bool {
 	return len(password) >= MinPasswordLength && len(password) <= MaxPasswordLength
@@ -27,7 +30,76 @@ func isCorrectUsername(username string) bool {
 }
 
 func IsKeyValid(key string) bool {
-	return len(key) >= MinKeyLength && len(key) <= MaxKeyLength
+	return len(key) >= MinKeyLength && len(key) <= MaxKeyLength && isCorrectKey(key)
+}
+
+func isCorrectKey(key string) bool {
+	for i, c := range key {
+		if !IsEnglish(c) {
+			if i == 0 || i == len(key)-1 {
+				return false
+			}
+
+			if !allowedKeyChars[c] {
+				return false
+			}
+		}
+	}
+
+	return true
+}
+
+func IsEnglish(r rune) bool {
+	return (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z')
+}
+
+func IsNonEnglish(r rune) bool {
+	return !IsEnglish(r)
+}
+
+func PurifyKey(key string) string {
+	key = strings.ToLower(strings.TrimSpace(key))
+	result := ""
+	lastSpecial := false
+	firstPassed := false
+
+	for i, c := range key {
+		if !firstPassed {
+			if !IsEnglish(c) {
+				continue
+			}
+			firstPassed = true
+		}
+
+		if !IsEnglish(c) || (c == 32) {
+			if i == 0 || i == len(key)-1 {
+				lastSpecial = false
+				continue
+			}
+
+			if lastSpecial {
+				continue
+			}
+
+			lastSpecial = true
+			result += replaceKeyChars[c]
+			continue
+		}
+
+		if replaceKeyChars[c] != "" {
+			if lastSpecial {
+				continue
+			}
+
+			lastSpecial = true
+			result += replaceKeyChars[c]
+			continue
+		}
+
+		result += string(c)
+	}
+
+	return strings.TrimFunc(result, IsNonEnglish)
 }
 
 func IsEmailValid(email string) bool {

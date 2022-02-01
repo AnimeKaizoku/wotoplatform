@@ -392,6 +392,11 @@ func batchGetUserFavorite(req interfaces.ReqBase) error {
 		}
 	}
 
+	entryData.FavoriteKey = wotoValidate.PurifyKey(entryData.FavoriteKey)
+	if entryData.FavoriteKey == "" {
+		return we.SendInvalidKey(req, OriginSetUserFavorite)
+	}
+
 	favoriteValue := usersDatabase.GetUserFavorite(user.UserId, entryData.FavoriteKey)
 	if favoriteValue == "" {
 		return we.SendKeyNotFound(req, OriginGetUserFavorite)
@@ -447,6 +452,11 @@ func batchSetUserFavorite(req interfaces.ReqBase) error {
 		}
 	}
 
+	entryData.FavoriteKey = wotoValidate.PurifyKey(entryData.FavoriteKey)
+	if entryData.FavoriteKey == "" {
+		return we.SendInvalidKey(req, OriginSetUserFavorite)
+	}
+
 	favoriteValue := usersDatabase.GetUserFavorite(user.UserId, entryData.FavoriteKey)
 	if favoriteValue == entryData.FavoriteValue {
 		return we.SendNotModified(req, OriginSetUserFavorite)
@@ -478,6 +488,11 @@ func batchDeleteUserFavorite(req interfaces.ReqBase) error {
 		if user.IsInvalid() {
 			return we.SendUserNotFound(req, OriginDeleteUserFavorite)
 		}
+	}
+
+	entryData.FavoriteKey = wotoValidate.PurifyKey(entryData.FavoriteKey)
+	if entryData.FavoriteKey == "" {
+		return we.SendInvalidKey(req, OriginSetUserFavorite)
 	}
 
 	if !usersDatabase.FavoriteValueExists(user.UserId, entryData.FavoriteKey) {

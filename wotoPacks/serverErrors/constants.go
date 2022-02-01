@@ -46,6 +46,7 @@ const (
 	ErrKeyNotFound
 	ErrInvalidTelegramId
 	ErrInvalidEmail
+	ErrInvalidKey
 )
 
 const (
