@@ -182,6 +182,7 @@ type GetUserFavoriteData struct {
 
 type GetUserFavoriteResult struct {
 	FavoriteValue string `json:"favorite_value"`
+	UpdatedAt     string `json:"updated_at"`
 }
 
 type GetUserFavoriteCountData struct {

@@ -23,22 +23,24 @@ func (m *favoriteManager) GetFavorites(id wv.PublicUserId) *UserFavorites {
 	return f
 }
 
-func (m *favoriteManager) GetUserFavorite(id wv.PublicUserId, key string) string {
+func (m *favoriteManager) GetUserFavorite(id wv.PublicUserId, key string) *wv.FavoriteInfo {
 	return m.GetFavorites(id).GetValue(key)
 }
 
 func (m *favoriteManager) AddFavorite(f *wv.FavoriteInfo) {
 	favorites := m.GetFavorites(f.UserId)
 	if favorites == nil {
-		m.mut.Lock()
-		m.values[f.UserId] = &UserFavorites{
+		favorites = &UserFavorites{
 			mut:    &sync.Mutex{},
-			values: make(map[string]string),
+			values: make(map[string]*wv.FavoriteInfo),
 		}
+
+		m.mut.Lock()
+		m.values[f.UserId] = favorites
 		m.mut.Unlock()
 	}
 
-	favorites.Add(f.FavoriteKey, f.TheValue)
+	favorites.Add(f)
 }
 
 func (m *favoriteManager) NewFavorite(id wv.PublicUserId, key, value string) *wv.FavoriteInfo {
@@ -80,7 +82,7 @@ func (f *UserFavorites) Exists(key string) bool {
 	}
 
 	f.mut.Lock()
-	b := f.values[key] != ""
+	b := f.values[key] != nil
 	f.mut.Unlock()
 
 	return b
@@ -96,19 +98,19 @@ func (f *UserFavorites) Delete(key string) {
 	f.mut.Unlock()
 }
 
-func (f *UserFavorites) Add(key string, value string) {
+func (f *UserFavorites) Add(info *wv.FavoriteInfo) {
 	if f == nil {
 		return
 	}
 
 	f.mut.Lock()
-	f.values[key] = value
+	f.values[info.FavoriteKey] = info
 	f.mut.Unlock()
 }
 
-func (f *UserFavorites) GetValue(key string) string {
+func (f *UserFavorites) GetValue(key string) *wv.FavoriteInfo {
 	if f == nil {
-		return ""
+		return nil
 	}
 
 	f.mut.Lock()

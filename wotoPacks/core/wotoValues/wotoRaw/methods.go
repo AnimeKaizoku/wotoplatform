@@ -62,3 +62,9 @@ func (u *UserInfo) IsInvalid() bool {
 func (i PublicUserId) IsZero() bool {
 	return i == 0
 }
+
+//---------------------------------------------------------
+
+func (f *FavoriteValue) IsInvalid() bool {
+	return f == nil || f.UserId.IsZero() || f.FavoriteKey == ""
+}

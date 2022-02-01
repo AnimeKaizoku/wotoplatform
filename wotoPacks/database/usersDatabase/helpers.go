@@ -107,7 +107,7 @@ func GetUserByUsername(username string) *wv.UserInfo {
 	return user
 }
 
-func GetUserFavorite(id wv.PublicUserId, key string) string {
+func GetUserFavorite(id wv.PublicUserId, key string) *wv.FavoriteInfo {
 	return usersFavoriteManager.GetUserFavorite(id, key)
 }
 

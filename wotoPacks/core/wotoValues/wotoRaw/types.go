@@ -45,4 +45,5 @@ type FavoriteValue struct {
 	UserId      PublicUserId `json:"user_id" gorm:"primaryKey"`
 	FavoriteKey string       `json:"favorite_key"`
 	TheValue    string       `json:"the_value"`
+	UpdatedAt   time.Time    `json:"updated_at"`
 }

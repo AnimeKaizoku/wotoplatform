@@ -7,7 +7,7 @@ import (
 
 type UserFavorites struct {
 	mut    *sync.Mutex
-	values map[string]string
+	values map[string]*wv.FavoriteInfo
 }
 
 type NewUserData struct {

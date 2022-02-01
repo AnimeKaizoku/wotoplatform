@@ -161,3 +161,10 @@ func toGetUserInfoResult(user *wv.UserInfo) *GetUserInfoResult {
 		IsVirtual:      user.IsVirtual,
 	}
 }
+
+func toGetUserFavoriteResult(info *wv.FavoriteInfo) *GetUserFavoriteResult {
+	return &GetUserFavoriteResult{
+		FavoriteValue: info.TheValue,
+		UpdatedAt:     info.UpdatedAt.Format(wv.DateTimeFormat),
+	}
+}

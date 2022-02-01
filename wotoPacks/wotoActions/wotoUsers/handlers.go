@@ -397,14 +397,12 @@ func batchGetUserFavorite(req interfaces.ReqBase) error {
 		return we.SendInvalidKey(req, OriginSetUserFavorite)
 	}
 
-	favoriteValue := usersDatabase.GetUserFavorite(user.UserId, entryData.FavoriteKey)
-	if favoriteValue == "" {
+	fav := usersDatabase.GetUserFavorite(user.UserId, entryData.FavoriteKey)
+	if fav.IsInvalid() {
 		return we.SendKeyNotFound(req, OriginGetUserFavorite)
 	}
 
-	return req.SendResult(&GetUserFavoriteResult{
-		FavoriteValue: favoriteValue,
-	})
+	return req.SendResult(toGetUserFavoriteResult(fav))
 }
 
 func batchGetUserFavoriteCount(req interfaces.ReqBase) error {
@@ -457,8 +455,8 @@ func batchSetUserFavorite(req interfaces.ReqBase) error {
 		return we.SendInvalidKey(req, OriginSetUserFavorite)
 	}
 
-	favoriteValue := usersDatabase.GetUserFavorite(user.UserId, entryData.FavoriteKey)
-	if favoriteValue == entryData.FavoriteValue {
+	fav := usersDatabase.GetUserFavorite(user.UserId, entryData.FavoriteKey)
+	if !fav.IsInvalid() && fav.TheValue == entryData.FavoriteValue {
 		return we.SendNotModified(req, OriginSetUserFavorite)
 	}
 
