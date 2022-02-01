@@ -319,7 +319,22 @@ func batchResolveUsername(req interfaces.ReqBase) error {
 		return we.SendNotAuthorized(req, OriginResolveUsername)
 	}
 
-	return we.SendMethodNotImplemented(req, OriginResolveUsername)
+	var entryData = new(ResolveUsernameData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		return err
+	}
+
+	if !wotoValidate.IsCorrectUsernameFormat(entryData.Username) {
+		return we.SendInvalidUsernameFormat(req, OriginResolveUsername)
+	}
+
+	user := usersDatabase.GetUserByUsername(entryData.Username)
+	if user.IsInvalid() {
+		return we.SendUserNotFound(req, OriginResolveUsername)
+	}
+
+	return req.SendResult(toGetUserInfoResult(user))
 }
 
 func batchChangeUserPermission(req interfaces.ReqBase) error {
@@ -442,6 +457,34 @@ func batchSetUserFavorite(req interfaces.ReqBase) error {
 		entryData.FavoriteKey,
 		entryData.FavoriteValue,
 	)
+
+	return req.SendResult(true)
+}
+
+func batchDeleteUserFavorite(req interfaces.ReqBase) error {
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginDeleteUserFavorite)
+	}
+
+	var entryData = new(DeleteUserFavoriteData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		return err
+	}
+
+	user := req.GetMe()
+	if user.IsAdmin() && !entryData.UserId.IsZero() {
+		user = usersDatabase.GetUserById(entryData.UserId)
+		if user.IsInvalid() {
+			return we.SendUserNotFound(req, OriginDeleteUserFavorite)
+		}
+	}
+
+	if !usersDatabase.FavoriteValueExists(user.UserId, entryData.FavoriteKey) {
+		return we.SendKeyNotFound(req, OriginDeleteUserFavorite)
+	}
+
+	usersDatabase.DeleteUserFavorite(user.UserId, entryData.FavoriteKey)
 
 	return req.SendResult(true)
 }

@@ -38,5 +38,6 @@ var (
 		BATCH_GET_USER_FAVORITE:       batchGetUserFavorite,
 		BATCH_GET_USER_FAVORITE_COUNT: batchGetUserFavoriteCount,
 		BATCH_SET_USER_FAVORITE:       batchSetUserFavorite,
+		BATCH_DELETE_USER_FAVORITE:    batchDeleteUserFavorite,
 	}
 )

@@ -52,6 +52,16 @@ func (m *favoriteManager) NewFavorite(id wv.PublicUserId, key, value string) *wv
 	return info
 }
 
+func (m *favoriteManager) DeleteFavorite(id wv.PublicUserId, key string) *wv.FavoriteInfo {
+	info := &wv.FavoriteInfo{
+		UserId:      id,
+		FavoriteKey: key,
+	}
+
+	m.GetFavorites(id).Delete(key)
+	return info
+}
+
 func (m *favoriteManager) Exists(id wv.PublicUserId, key string) bool {
 	return m.GetFavorites(id).Exists(key)
 }
@@ -74,6 +84,16 @@ func (f *UserFavorites) Exists(key string) bool {
 	f.mut.Unlock()
 
 	return b
+}
+
+func (f *UserFavorites) Delete(key string) {
+	if f == nil {
+		return
+	}
+
+	f.mut.Lock()
+	delete(f.values, key)
+	f.mut.Unlock()
 }
 
 func (f *UserFavorites) Add(key string, value string) {

@@ -197,3 +197,12 @@ type SetUserFavoriteData struct {
 	FavoriteKey   string          `json:"favorite_key"`
 	FavoriteValue string          `json:"favorite_value"`
 }
+
+type DeleteUserFavoriteData struct {
+	UserId      wv.PublicUserId `json:"user_id"`
+	FavoriteKey string          `json:"favorite_key"`
+}
+
+type ResolveUsernameData struct {
+	Username string `json:"username"`
+}

@@ -111,6 +111,10 @@ func GetUserFavorite(id wv.PublicUserId, key string) string {
 	return usersFavoriteManager.GetUserFavorite(id, key)
 }
 
+func FavoriteValueExists(id wv.PublicUserId, key string) bool {
+	return usersFavoriteManager.Exists(id, key)
+}
+
 func GetUserFavoriteCount(id wv.PublicUserId) int {
 	return usersFavoriteManager.Length(id)
 }
@@ -121,6 +125,13 @@ func SetUserFavorite(id wv.PublicUserId, key, value string) {
 	tx := wv.SESSION.Begin()
 	tx.Save(info)
 	tx.Commit()
+	unlockDatabase()
+}
+
+func DeleteUserFavorite(id wv.PublicUserId, key string) {
+	info := usersFavoriteManager.DeleteFavorite(id, key)
+	lockDatabase()
+	wv.SESSION.Delete(info)
 	unlockDatabase()
 }
 

@@ -33,6 +33,7 @@ const (
 	BATCH_GET_USER_FAVORITE       = "get_user_favorite"
 	BATCH_GET_USER_FAVORITE_COUNT = "get_user_favorite_count"
 	BATCH_SET_USER_FAVORITE       = "set_user_favorite"
+	BATCH_DELETE_USER_FAVORITE    = "delete_user_favorite"
 )
 const (
 	OriginRegisterUser         = "RegisterUser"
@@ -49,4 +50,5 @@ const (
 	OriginGetUserFavorite      = "GetUserFavorite"
 	OriginGetUserFavoriteCount = "GetUserFavoriteCount"
 	OriginSetUserFavorite      = "SetUserFavorite"
+	OriginDeleteUserFavorite   = "DeleteUserFavorite"
 )
