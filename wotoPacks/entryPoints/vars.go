@@ -50,16 +50,16 @@ var isCheckingRegistration = false
 
 var (
 	_handlersMap = map[wa.RequestAction]wotoValues.ReqHandler{
-		wa.ActionVersion:    versioning.HandleVersionAction,
-		wa.ActionUser:       wotoUsers.HandleUserAction,
-		wa.ActionMedia:      wotoMedia.HandleMediaAction,
-		wa.ActionGroupCalls: wotoGroups.HandleGroupCallsAction,
+		wa.ActionVersion: versioning.HandleVersionAction,
+		wa.ActionUser:    wotoUsers.HandleUserAction,
+		wa.ActionMedia:   wotoMedia.HandleMediaAction,
+		wa.ActionGroups:  wotoGroups.HandleGroupsAction,
 	}
 
 	_parsersMap = map[wa.RequestAction]wotoValues.ReqHandler{
-		wa.ActionVersion:    versioning.ParseBatchExecute,
-		wa.ActionUser:       wotoUsers.ParseBatchExecute,
-		wa.ActionMedia:      wotoMedia.ParseBatchExecute,
-		wa.ActionGroupCalls: wotoGroups.ParseBatchExecute,
+		wa.ActionVersion: versioning.ParseBatchExecute,
+		wa.ActionUser:    wotoUsers.ParseBatchExecute,
+		wa.ActionMedia:   wotoMedia.ParseBatchExecute,
+		wa.ActionGroups:  wotoGroups.ParseBatchExecute,
 	}
 )

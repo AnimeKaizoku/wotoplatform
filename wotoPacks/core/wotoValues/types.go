@@ -26,7 +26,7 @@ import (
 
 type PublicUserId = wotoRaw.PublicUserId
 type UserPermission = wotoRaw.UserPermission
-type PublicGroupCallId = wotoRaw.PublicGroupCallId
+type PublicGroupId = wotoRaw.PublicGroupId
 type MediaModelId = wotoRaw.MediaModelId
 type ProfilePictureModelId = wotoRaw.ProfilePictureModelId
 
@@ -56,25 +56,25 @@ type MediaModel struct {
 	UpdatedBy   PublicUserId  `json:"updated_by"`
 }
 
-type GroupCallInfo struct {
-	GroupCallId       PublicGroupCallId `json:"group_call_id" gorm:"primaryKey"`
-	GroupRegion       string            `json:"group_region"`
-	GroupCallUsername string            `json:"group_call_username"`
-	TelegramId        int64             `json:"telegram_id"`
-	TelegramUsername  string            `json:"telegram_username"`
-	CurrentPlaying    MediaModelId      `json:"current_playing"`
+type GroupInfo struct {
+	GroupId          PublicGroupId `json:"group_id" gorm:"primaryKey"`
+	GroupRegion      string        `json:"group_region"`
+	GroupUsername    string        `json:"group_username"`
+	TelegramId       int64         `json:"telegram_id"`
+	TelegramUsername string        `json:"telegram_username"`
+	CurrentPlaying   MediaModelId  `json:"current_playing"`
 }
 
 type UserMediaHistoryElement struct {
-	UserId        PublicUserId      `json:"user_id" gorm:"primaryKey"`
-	AtGroupCallId PublicGroupCallId `json:"at_group_call_id"`
-	Media         MediaModelId      `json:"media_model_id"`
-	PlayedBy      PublicUserId      `json:"played_by"`
+	UserId    PublicUserId  `json:"user_id" gorm:"primaryKey"`
+	AtGroupId PublicGroupId `json:"at_group_id"`
+	Media     MediaModelId  `json:"media_model_id"`
+	PlayedBy  PublicUserId  `json:"played_by"`
 }
 
-type GroupCallMediaHistoryElement struct {
-	GroupCallId PublicGroupCallId `json:"group_call_id" gorm:"primaryKey"`
-	Media       MediaModelId      `json:"media_model_id"`
+type GroupMediaHistoryElement struct {
+	GroupId PublicGroupId `json:"group_id" gorm:"primaryKey"`
+	Media   MediaModelId  `json:"media_model_id"`
 }
 
 type MediaTag struct {

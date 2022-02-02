@@ -4,7 +4,7 @@ import "time"
 
 type PublicUserId int64
 type UserPermission int
-type PublicGroupCallId string
+type PublicGroupId string
 type MediaModelId string
 type ProfilePictureModelId string
 

@@ -28,8 +28,8 @@ const (
 	// All actions related to medias.
 	ActionMedia
 
-	// All actions related to group calls.
-	ActionGroupCalls
+	// All actions related to groups.
+	ActionGroups
 )
 
 // batch execution parsing special data

@@ -21,7 +21,7 @@ import (
 	"wp-server/wotoPacks/core/utils/logging"
 	"wp-server/wotoPacks/core/wotoConfig"
 	wv "wp-server/wotoPacks/core/wotoValues"
-	"wp-server/wotoPacks/database/groupCallsDatabase"
+	"wp-server/wotoPacks/database/groupsDatabase"
 	"wp-server/wotoPacks/database/mediaDatabase"
 	"wp-server/wotoPacks/database/usersDatabase"
 
@@ -72,7 +72,7 @@ func StartDatabase() error {
 		return err
 	}
 
-	groupCallsDatabase.LoadGroupCallsDatabase()
+	groupsDatabase.LoadGroupsDatabase()
 	mediaDatabase.LoadMediaDatabase()
 	usersDatabase.LoadUsersDatabase()
 

@@ -15,9 +15,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package groupCallsDatabase
+package groupsDatabase
 
-func LoadGroupCallsDatabase() error {
+func LoadGroupsDatabase() error {
 
 	return nil
 }
