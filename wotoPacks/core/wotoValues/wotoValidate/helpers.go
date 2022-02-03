@@ -118,3 +118,7 @@ func IsFirstNameTooLong(firstName string) bool {
 func IsLastNameTooLong(lastName string) bool {
 	return len(lastName) > MaxLastNameLength
 }
+
+func IsUserFavoriteTooMany(count int) bool {
+	return count > MaxUserFavoriteCount
+}

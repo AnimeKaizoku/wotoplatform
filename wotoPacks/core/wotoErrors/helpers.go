@@ -238,3 +238,12 @@ func SendInvalidKey(req inf.ReqBase, origin string) error {
 	})
 	return err
 }
+
+func SendTooManyFavorites(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrTooManyFavorites,
+		Message: MessageTooManyFavorites,
+		Origin:  origin,
+	})
+	return err
+}

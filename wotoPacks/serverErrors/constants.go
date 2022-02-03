@@ -47,6 +47,7 @@ const (
 	ErrInvalidTelegramId
 	ErrInvalidEmail
 	ErrInvalidKey
+	ErrTooManyFavorites
 )
 
 const (

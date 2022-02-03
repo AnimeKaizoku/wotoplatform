@@ -18,6 +18,7 @@
 package wotoUsers
 
 import (
+	"strings"
 	we "wp-server/wotoPacks/core/wotoErrors"
 	wv "wp-server/wotoPacks/core/wotoValues"
 	"wp-server/wotoPacks/core/wotoValues/wotoValidate"
@@ -455,9 +456,19 @@ func batchSetUserFavorite(req interfaces.ReqBase) error {
 		return we.SendInvalidKey(req, OriginSetUserFavorite)
 	}
 
+	entryData.FavoriteValue = strings.TrimSpace(entryData.FavoriteValue)
+
 	fav := usersDatabase.GetUserFavorite(user.UserId, entryData.FavoriteKey)
 	if !fav.IsInvalid() && fav.TheValue == entryData.FavoriteValue {
 		return we.SendNotModified(req, OriginSetUserFavorite)
+	}
+
+	if fav.IsInvalid() {
+		// it means user wants to set new favorite value in a new key, so
+		// we should check if user already has too many favorites slots or not.
+		if wotoValidate.IsUserFavoriteTooMany(getFavCount(user.UserId)) {
+			return we.SendTooManyFavorites(req, OriginSetUserFavorite)
+		}
 	}
 
 	usersDatabase.SetUserFavorite(

@@ -27,4 +27,5 @@ const (
 	MessageInvalidTelegramId        = "Invalid telegram id entered."
 	MessageInvalidEmail             = "Invalid email entered."
 	MessageInvalidKey               = "Invalid key entered."
+	MessageTooManyFavorites         = "User has too many favorites already."
 )

@@ -19,6 +19,7 @@ package wotoUsers
 
 import (
 	wv "wp-server/wotoPacks/core/wotoValues"
+	"wp-server/wotoPacks/database/usersDatabase"
 	"wp-server/wotoPacks/interfaces"
 	"wp-server/wotoPacks/wotoActions"
 )
@@ -134,6 +135,10 @@ func toGetMeResult(user *wv.UserInfo) *GetMeResult {
 		CreatedAt:      user.CreatedAt.Format(wv.DateTimeFormat),
 		UpdatedAt:      user.UpdatedAt.Format(wv.DateTimeFormat),
 	}
+}
+
+func getFavCount(id wv.PublicUserId) int {
+	return usersDatabase.GetUserFavoriteCount(id)
 }
 
 func toGetUserInfoResult(user *wv.UserInfo) *GetUserInfoResult {
