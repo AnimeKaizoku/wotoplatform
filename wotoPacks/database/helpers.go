@@ -67,6 +67,7 @@ func StartDatabase() error {
 	err = SESSION.AutoMigrate(
 		usersDatabase.ModelUserInfo,
 		usersDatabase.ModelUserFavorite,
+		usersDatabase.ModelLikedListElement,
 	)
 	if err != nil {
 		return err

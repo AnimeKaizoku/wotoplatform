@@ -7,8 +7,9 @@ import (
 
 // database models
 var (
-	ModelUserInfo     *wv.UserInfo     = &wv.UserInfo{}
-	ModelUserFavorite *wv.FavoriteInfo = &wv.FavoriteInfo{}
+	ModelUserInfo         *wv.UserInfo         = &wv.UserInfo{}
+	ModelUserFavorite     *wv.FavoriteInfo     = &wv.FavoriteInfo{}
+	ModelLikedListElement *wv.LikedListElement = &wv.LikedListElement{}
 )
 
 // cache values and mutexes.
