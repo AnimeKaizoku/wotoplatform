@@ -48,6 +48,9 @@ const (
 	ErrInvalidEmail
 	ErrInvalidKey
 	ErrTooManyFavorites
+	ErrLikedListElementAlreadyExists
+	ErrTooManyLikedList
+	ErrInvalidUniqueId
 )
 
 const (

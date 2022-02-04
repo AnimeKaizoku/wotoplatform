@@ -140,6 +140,9 @@ func toGetMeResult(user *wv.UserInfo) *GetMeResult {
 func getFavCount(id wv.PublicUserId) int {
 	return usersDatabase.GetUserFavoriteCount(id)
 }
+func getLikedListCount(id wv.PublicUserId, key string) int {
+	return usersDatabase.GetUserLikedListCount(id, key)
+}
 
 func toGetUserInfoResult(user *wv.UserInfo) *GetUserInfoResult {
 	return &GetUserInfoResult{
@@ -171,5 +174,16 @@ func toGetUserFavoriteResult(info *wv.FavoriteInfo) *GetUserFavoriteResult {
 	return &GetUserFavoriteResult{
 		FavoriteValue: info.TheValue,
 		UpdatedAt:     info.UpdatedAt.Format(wv.DateTimeFormat),
+	}
+}
+
+func toGetUserLikedListResult(list []*wv.LikedListElement) *GetUserLikedListResult {
+	var updatedAt string
+	if len(list) != 0 {
+		updatedAt = list[len(list)-1].UpdatedAt.Format(wv.DateTimeFormat)
+	}
+	return &GetUserLikedListResult{
+		LikedList: list,
+		UpdatedAt: updatedAt,
 	}
 }

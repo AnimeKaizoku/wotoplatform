@@ -23,8 +23,5 @@ var (
 	usersMapByEmailMutex      = &sync.Mutex{}
 	lastUserId                = wv.BaseUserId
 	userIdGeneratorMutex      = &sync.Mutex{}
-	usersFavoriteManager      = &favoriteManager{
-		mut:    &sync.Mutex{},
-		values: make(map[wv.PublicUserId]*UserFavorites),
-	}
+	usersFavoriteManager      = _getFavoriteManager()
 )

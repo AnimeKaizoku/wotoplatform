@@ -1,6 +1,10 @@
 package wotoRaw
 
-import "time"
+import (
+	"time"
+
+	ws "github.com/ALiwoto/StrongStringGo/strongStringGo"
+)
 
 //---------------------------------------------------------
 
@@ -63,8 +67,44 @@ func (i PublicUserId) IsZero() bool {
 	return i == 0
 }
 
+func (i PublicUserId) ToBase32() string {
+	return ws.ToBase32(int64(i))
+}
+
+func (i PublicUserId) ToBase16() string {
+	return ws.ToBase16(int64(i))
+}
+
+func (i PublicUserId) ToBase18() string {
+	return ws.ToBase18(int64(i))
+}
+
+func (i PublicUserId) ToBase20() string {
+	return ws.ToBase20(int64(i))
+}
+
+func (i PublicUserId) ToBase28() string {
+	return ws.ToBase28(int64(i))
+}
+
+func (i PublicUserId) ToBase30() string {
+	return ws.ToBase30(int64(i))
+}
+
 //---------------------------------------------------------
 
 func (f *FavoriteValue) IsInvalid() bool {
 	return f == nil || f.UserId.IsZero() || f.FavoriteKey == ""
 }
+
+//---------------------------------------------------------
+
+func (e *LikedListElement) IsInvalid() bool {
+	return e == nil || e.OwnerId.IsZero() || e.LikedKey == ""
+}
+
+func (e *LikedListElement) CompareWith(title string, media MediaModelId) bool {
+	return e.Title == title || e.MediaId == media
+}
+
+//---------------------------------------------------------

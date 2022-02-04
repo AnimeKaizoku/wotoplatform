@@ -5,9 +5,14 @@ import (
 	wv "wp-server/wotoPacks/core/wotoValues"
 )
 
-type UserFavorites struct {
+type UserFavoritesAndLiked struct {
 	mut    *sync.Mutex
-	values map[string]*wv.FavoriteInfo
+	values map[string]*UserFavoriteAndLikedInfo
+}
+
+type UserFavoriteAndLikedInfo struct {
+	FavoriteInfo *wv.FavoriteInfo
+	LikedList    []*wv.LikedListElement
 }
 
 type NewUserData struct {
@@ -22,7 +27,16 @@ type NewUserData struct {
 	By         wv.PublicUserId
 }
 
+type NewLikedListElementData struct {
+	UserId       wv.PublicUserId
+	MediaId      wv.MediaModelId
+	Title        string
+	LikedKey     string
+	ReferenceUrl string
+	SourceUrl    string
+}
+
 type favoriteManager struct {
 	mut    *sync.Mutex
-	values map[wv.PublicUserId]*UserFavorites
+	values map[wv.PublicUserId]*UserFavoritesAndLiked
 }

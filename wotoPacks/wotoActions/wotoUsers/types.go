@@ -207,3 +207,46 @@ type DeleteUserFavoriteData struct {
 type ResolveUsernameData struct {
 	Username string `json:"username"`
 }
+
+type GetUserLikedListData struct {
+	UserId   wv.PublicUserId `json:"user_id"`
+	LikedKey string          `json:"liked_key"`
+}
+
+type GetUserLikedListResult struct {
+	LikedList []*wv.LikedListElement `json:"liked_list"`
+	UpdatedAt string                 `json:"updated_at"`
+}
+
+type GetUserLikedListCountData struct {
+	UserId       wv.PublicUserId `json:"user_id"`
+	LikedListKey string          `json:"liked_list_key"`
+}
+
+type GetUserLikedListCountResult struct {
+	LikedListCount int `json:"liked_list_count"`
+}
+
+type AppendUserLikedListData struct {
+	UserId       wv.PublicUserId `json:"user_id"`
+	LikedListKey string          `json:"liked_list_key"`
+	MediaId      wv.MediaModelId `json:"media_id"`
+	Title        string          `json:"title"`
+	ReferenceUrl string          `json:"reference_url"`
+	SourceUrl    string          `json:"source_url"`
+}
+
+type AppendUserLikedListResult struct {
+	UniqueId     string          `json:"unique_id"`
+	UserId       wv.PublicUserId `json:"user_id"`
+	LikedListKey string          `json:"liked_list_key"`
+	MediaId      wv.MediaModelId `json:"media_id"`
+	Title        string          `json:"title"`
+	ReferenceUrl string          `json:"reference_url"`
+	SourceUrl    string          `json:"source_url"`
+}
+
+type DeleteUserLikedListItemData struct {
+	UserId   wv.PublicUserId `json:"user_id"`
+	UniqueId string          `json:"unique_id"`
+}

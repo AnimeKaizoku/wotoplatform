@@ -47,3 +47,14 @@ type FavoriteValue struct {
 	TheValue    string       `json:"the_value"`
 	UpdatedAt   time.Time    `json:"updated_at"`
 }
+
+type LikedListElement struct {
+	UniqueId     string       `json:"unique_id" gorm:"primaryKey"`
+	OwnerId      PublicUserId `json:"owner_id"`
+	MediaId      MediaModelId `json:"media_id"`
+	Title        string       `json:"title"`
+	LikedKey     string       `json:"liked_key"`
+	SourceUrl    string       `json:"source_url"`
+	ReferenceUrl string       `json:"reference_url"`
+	UpdatedAt    time.Time    `json:"-"`
+}

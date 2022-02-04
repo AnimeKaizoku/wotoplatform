@@ -512,3 +512,171 @@ func batchDeleteUserFavorite(req interfaces.ReqBase) error {
 
 	return req.SendResult(true)
 }
+
+func batchGetUserLikedList(req interfaces.ReqBase) error {
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginGetUserLikedList)
+	}
+
+	var entryData = new(GetUserLikedListData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		return err
+	}
+
+	user := req.GetMe()
+	if user.IsAdmin() && !entryData.UserId.IsZero() {
+		user = usersDatabase.GetUserById(entryData.UserId)
+		if user.IsInvalid() {
+			return we.SendUserNotFound(req, OriginGetUserLikedList)
+		}
+	}
+
+	entryData.LikedKey = wotoValidate.PurifyKey(entryData.LikedKey)
+	if entryData.LikedKey == "" {
+		return we.SendInvalidKey(req, OriginSetUserFavorite)
+	}
+
+	likedList := usersDatabase.GetUserLikedList(user.UserId, entryData.LikedKey)
+	if len(likedList) == 0 {
+		return we.SendKeyNotFound(req, OriginGetUserFavorite)
+	}
+
+	return req.SendResult(toGetUserLikedListResult(likedList))
+}
+
+func batchGetUserLikedListCount(req interfaces.ReqBase) error {
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginGetUserLikedListCount)
+	}
+
+	var entryData = new(GetUserLikedListCountData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		return err
+	}
+
+	var user *wv.UserInfo
+	if entryData.UserId.IsZero() {
+		user = req.GetMe()
+	} else {
+		user = usersDatabase.GetUserById(entryData.UserId)
+		if user == nil {
+			return we.SendUserNotFound(req, OriginGetUserLikedListCount)
+		}
+	}
+
+	entryData.LikedListKey = wotoValidate.PurifyKey(entryData.LikedListKey)
+	if entryData.LikedListKey == "" {
+		return we.SendInvalidKey(req, OriginGetUserLikedListCount)
+	}
+
+	return req.SendResult(&GetUserLikedListCountResult{
+		LikedListCount: getLikedListCount(user.UserId, entryData.LikedListKey),
+	})
+}
+
+func batchAppendUserLikedList(req interfaces.ReqBase) error {
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginAppendUserLikedList)
+	}
+
+	var entryData = new(AppendUserLikedListData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		return err
+	}
+
+	user := req.GetMe()
+	if user.IsAdmin() && !entryData.UserId.IsZero() {
+		user = usersDatabase.GetUserById(entryData.UserId)
+		if user.IsInvalid() {
+			return we.SendUserNotFound(req, OriginAppendUserLikedList)
+		}
+	}
+
+	entryData.LikedListKey = wotoValidate.PurifyKey(entryData.LikedListKey)
+	if entryData.LikedListKey == "" {
+		return we.SendInvalidKey(req, OriginAppendUserLikedList)
+	}
+
+	entryData.Title = strings.TrimSpace(entryData.Title)
+	if entryData.Title == "" {
+		return we.SendInvalidTitle(req, OriginAppendUserLikedList)
+	}
+
+	likedList := usersDatabase.GetUserLikedList(user.UserId, entryData.LikedListKey)
+	if len(likedList) != 0 {
+		for _, current := range likedList {
+			if current.IsInvalid() {
+				continue
+			}
+
+			if current.CompareWith(entryData.Title, entryData.MediaId) {
+				return we.SendLikedListElementAlreadyExists(req, OriginAppendUserLikedList)
+			}
+		}
+	}
+
+	if len(likedList) == 0 {
+		// it means user wants to set an entirely new liked list in a new key, so
+		// we should check if user already has too many favorites slots or not.
+		// please do notice that here we consider count of slots used for user's
+		// favorites is **always** equal to count of slots used for user's
+		// liked list.
+		if wotoValidate.IsUserFavoriteTooMany(getFavCount(user.UserId)) {
+			return we.SendTooManyLikedList(req, OriginAppendUserLikedList)
+		}
+	}
+
+	liked := usersDatabase.AddUserLikedList(
+		&usersDatabase.NewLikedListElementData{
+			UserId:       user.UserId,
+			MediaId:      entryData.MediaId,
+			Title:        entryData.Title,
+			LikedKey:     entryData.LikedListKey,
+			ReferenceUrl: entryData.ReferenceUrl,
+			SourceUrl:    entryData.SourceUrl,
+		},
+	)
+
+	return req.SendResult(&AppendUserLikedListResult{
+		UniqueId:     liked.UniqueId,
+		UserId:       liked.OwnerId,
+		LikedListKey: liked.LikedKey,
+		MediaId:      liked.MediaId,
+		Title:        liked.Title,
+		SourceUrl:    liked.SourceUrl,
+	})
+}
+
+func batchDeleteUserLikedListItem(req interfaces.ReqBase) error {
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginDeleteUserLikedListItem)
+	}
+
+	var entryData = new(DeleteUserLikedListItemData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		return err
+	}
+
+	user := req.GetMe()
+	if user.IsAdmin() && !entryData.UserId.IsZero() {
+		user = usersDatabase.GetUserById(entryData.UserId)
+		if user.IsInvalid() {
+			return we.SendUserNotFound(req, OriginDeleteUserLikedListItem)
+		}
+	}
+
+	if !usersDatabase.IsLikedItemUniqueIdValid(entryData.UniqueId) {
+		return we.SendInvalidUniqueId(req, OriginDeleteUserLikedListItem)
+	}
+
+	usersDatabase.DeleteLikedListItem(
+		user.UserId,
+		entryData.UniqueId,
+	)
+
+	return req.SendResult(true)
+}

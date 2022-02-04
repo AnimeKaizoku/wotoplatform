@@ -247,3 +247,30 @@ func SendTooManyFavorites(req inf.ReqBase, origin string) error {
 	})
 	return err
 }
+
+func SendLikedListElementAlreadyExists(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrLikedListElementAlreadyExists,
+		Message: MessageLikedListElementAlreadyExists,
+		Origin:  origin,
+	})
+	return err
+}
+
+func SendTooManyLikedList(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrTooManyLikedList,
+		Message: MessageTooManyLikedList,
+		Origin:  origin,
+	})
+	return err
+}
+
+func SendInvalidUniqueId(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrInvalidUniqueId,
+		Message: MessageInvalidUniqueId,
+		Origin:  origin,
+	})
+	return err
+}

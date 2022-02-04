@@ -19,6 +19,7 @@ package usersDatabase
 
 import (
 	"strings"
+	"sync"
 	"wp-server/wotoPacks/core/wotoConfig"
 	wv "wp-server/wotoPacks/core/wotoValues"
 )
@@ -26,10 +27,12 @@ import (
 func LoadUsersDatabase() error {
 	var allUsers []*wv.UserInfo
 	var allFavorites []*wv.FavoriteInfo
+	var allLiked []*wv.LikedListElement
 
 	lockDatabase()
 	wv.SESSION.Find(&allUsers)
 	wv.SESSION.Find(&allFavorites)
+	wv.SESSION.Find(&allLiked)
 	unlockDatabase()
 
 	usersMapByIdMutex.Lock()
@@ -60,7 +63,8 @@ func LoadUsersDatabase() error {
 	usersMapByTelegramIdMutex.Unlock()
 	usersMapByEmailMutex.Unlock()
 
-	usersFavoriteManager.LoadAll(allFavorites)
+	usersFavoriteManager.LoadAllFavorites(allFavorites)
+	usersFavoriteManager.LoadAllLikedList(allLiked)
 
 	migrateOwners()
 
@@ -111,12 +115,36 @@ func GetUserFavorite(id wv.PublicUserId, key string) *wv.FavoriteInfo {
 	return usersFavoriteManager.GetUserFavorite(id, key)
 }
 
+func GetUserLikedList(id wv.PublicUserId, key string) []*wv.LikedListElement {
+	return usersFavoriteManager.GetUserLikeList(id, key)
+}
+
 func FavoriteValueExists(id wv.PublicUserId, key string) bool {
-	return usersFavoriteManager.Exists(id, key)
+	return usersFavoriteManager.FavoriteExists(id, key)
+}
+
+func LikedListExists(id wv.PublicUserId, key string) bool {
+	return usersFavoriteManager.LikedListExists(id, key)
+}
+
+func LikedItemExists(id wv.PublicUserId, uniqueId string) bool {
+	return usersFavoriteManager.LikedItemExists(id, uniqueId)
+}
+
+func IsLikedItemUniqueIdValid(uniqueId string) bool {
+	// a unique id should look like this:
+	// "abcd=a1bcd"
+	// we are sure that it should *always* contain more than
+	// 6 characters (at least) and it should contain sep character ('=')
+	return len(uniqueId) > minUniqueIdLen && strings.Contains(uniqueId, likedListUIDSep)
 }
 
 func GetUserFavoriteCount(id wv.PublicUserId) int {
 	return usersFavoriteManager.Length(id)
+}
+
+func GetUserLikedListCount(id wv.PublicUserId, key string) int {
+	return usersFavoriteManager.GetLikedListCount(id, key)
 }
 
 func SetUserFavorite(id wv.PublicUserId, key, value string) {
@@ -126,6 +154,25 @@ func SetUserFavorite(id wv.PublicUserId, key, value string) {
 	tx.Save(info)
 	tx.Commit()
 	unlockDatabase()
+}
+
+func DeleteLikedListItem(id wv.PublicUserId, uniqueId string) {
+	liked := usersFavoriteManager.DeleteLikedItemByUniqueId(id, uniqueId)
+	lockDatabase()
+	wv.SESSION.Delete(liked)
+	unlockDatabase()
+}
+
+func AddUserLikedList(data *NewLikedListElementData) *wv.LikedListElement {
+	liked := data.ToLikedListElement()
+	usersFavoriteManager.AddLiked(liked)
+	lockDatabase()
+	tx := wv.SESSION.Begin()
+	tx.Save(liked)
+	tx.Commit()
+	unlockDatabase()
+
+	return liked
 }
 
 func DeleteUserFavorite(id wv.PublicUserId, key string) {
@@ -235,5 +282,12 @@ func lockDatabase() {
 func unlockDatabase() {
 	if wotoConfig.UseSqlite() {
 		wv.SessionMutex.Unlock()
+	}
+}
+
+func _getFavoriteManager() *favoriteManager {
+	return &favoriteManager{
+		mut:    &sync.Mutex{},
+		values: make(map[wv.PublicUserId]*UserFavoritesAndLiked),
 	}
 }

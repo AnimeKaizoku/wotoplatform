@@ -2,7 +2,10 @@ package usersDatabase
 
 import (
 	"sync"
+	"time"
 	wv "wp-server/wotoPacks/core/wotoValues"
+
+	ws "github.com/ALiwoto/StrongStringGo/strongStringGo"
 )
 
 //---------------------------------------------------------
@@ -15,7 +18,11 @@ func (m *favoriteManager) Length(id wv.PublicUserId) int {
 	return favorites.Length()
 }
 
-func (m *favoriteManager) GetFavorites(id wv.PublicUserId) *UserFavorites {
+func (m *favoriteManager) GetLikedListCount(id wv.PublicUserId, key string) int {
+	return len(m.GetFavoritesAndLiked(id).GetLikedList(key))
+}
+
+func (m *favoriteManager) GetFavoritesAndLiked(id wv.PublicUserId) *UserFavoritesAndLiked {
 	m.mut.Lock()
 	f := m.values[id]
 	m.mut.Unlock()
@@ -24,15 +31,19 @@ func (m *favoriteManager) GetFavorites(id wv.PublicUserId) *UserFavorites {
 }
 
 func (m *favoriteManager) GetUserFavorite(id wv.PublicUserId, key string) *wv.FavoriteInfo {
-	return m.GetFavorites(id).GetValue(key)
+	return m.GetFavoritesAndLiked(id).GetFavoriteInfo(key)
+}
+
+func (m *favoriteManager) GetUserLikeList(id wv.PublicUserId, key string) []*wv.LikedListElement {
+	return m.GetFavoritesAndLiked(id).GetLikedList(key)
 }
 
 func (m *favoriteManager) AddFavorite(f *wv.FavoriteInfo) {
-	favorites := m.GetFavorites(f.UserId)
+	favorites := m.GetFavoritesAndLiked(f.UserId)
 	if favorites == nil {
-		favorites = &UserFavorites{
+		favorites = &UserFavoritesAndLiked{
 			mut:    &sync.Mutex{},
-			values: make(map[string]*wv.FavoriteInfo),
+			values: make(map[string]*UserFavoriteAndLikedInfo),
 		}
 
 		m.mut.Lock()
@@ -40,7 +51,23 @@ func (m *favoriteManager) AddFavorite(f *wv.FavoriteInfo) {
 		m.mut.Unlock()
 	}
 
-	favorites.Add(f)
+	favorites.AddFavorite(f)
+}
+
+func (m *favoriteManager) AddLiked(l *wv.LikedListElement) {
+	favLikes := m.GetFavoritesAndLiked(l.OwnerId)
+	if favLikes == nil {
+		favLikes = &UserFavoritesAndLiked{
+			mut:    &sync.Mutex{},
+			values: make(map[string]*UserFavoriteAndLikedInfo),
+		}
+
+		m.mut.Lock()
+		m.values[l.OwnerId] = favLikes
+		m.mut.Unlock()
+	}
+
+	favLikes.AddLiked(l)
 }
 
 func (m *favoriteManager) NewFavorite(id wv.PublicUserId, key, value string) *wv.FavoriteInfo {
@@ -60,35 +87,149 @@ func (m *favoriteManager) DeleteFavorite(id wv.PublicUserId, key string) *wv.Fav
 		FavoriteKey: key,
 	}
 
-	m.GetFavorites(id).Delete(key)
+	m.GetFavoritesAndLiked(id).Delete(key)
 	return info
 }
 
-func (m *favoriteManager) Exists(id wv.PublicUserId, key string) bool {
-	return m.GetFavorites(id).Exists(key)
+func (m *favoriteManager) FavoriteExists(id wv.PublicUserId, key string) bool {
+	return m.GetFavoritesAndLiked(id).FavoriteExists(key)
 }
 
-func (m *favoriteManager) LoadAll(favorites []*wv.FavoriteInfo) {
+func (m *favoriteManager) LikedListExists(id wv.PublicUserId, key string) bool {
+	return m.GetFavoritesAndLiked(id).LikedListExists(key)
+}
+
+func (m *favoriteManager) LikedItemExists(id wv.PublicUserId, uniqueId string) bool {
+	return m.GetFavoritesAndLiked(id).LikedItemExists(uniqueId)
+}
+
+func (m *favoriteManager) GetLikedItemByUniqueId(id wv.PublicUserId, uniqueId string) *wv.LikedListElement {
+	return m.GetFavoritesAndLiked(id).GetLikedItemByUniqueId(uniqueId)
+}
+
+func (m *favoriteManager) DeleteLikedItemByUniqueId(id wv.PublicUserId, uniqueId string) *wv.LikedListElement {
+	return m.GetFavoritesAndLiked(id).DeleteLikedItemByUniqueId(uniqueId)
+}
+
+func (m *favoriteManager) LoadAllFavorites(favorites []*wv.FavoriteInfo) {
 	for _, current := range favorites {
 		m.AddFavorite(current)
 	}
 }
 
+func (m *favoriteManager) LoadAllLikedList(liked []*wv.LikedListElement) {
+	for _, current := range liked {
+		m.AddLiked(current)
+	}
+}
+
 //---------------------------------------------------------
 
-func (f *UserFavorites) Exists(key string) bool {
+func (f *UserFavoritesAndLiked) FavoriteExists(key string) bool {
 	if f == nil {
 		return false
 	}
 
 	f.mut.Lock()
-	b := f.values[key] != nil
+	value := f.values[key]
 	f.mut.Unlock()
 
-	return b
+	return value != nil && value.FavoriteInfo != nil
 }
 
-func (f *UserFavorites) Delete(key string) {
+func (f *UserFavoritesAndLiked) LikedListExists(key string) bool {
+	if f == nil {
+		return false
+	}
+
+	f.mut.Lock()
+	value := f.values[key]
+	f.mut.Unlock()
+
+	return value != nil && len(value.LikedList) != 0
+}
+
+func (f *UserFavoritesAndLiked) LikedItemExists(uniqueId string) bool {
+	if f == nil {
+		return false
+	}
+
+	f.mut.Lock()
+	for _, currentValue := range f.values {
+		if currentValue == nil || len(currentValue.LikedList) == 0 {
+			continue
+		}
+
+		for _, currentItem := range currentValue.LikedList {
+			if currentItem.UniqueId == uniqueId {
+				f.mut.Unlock()
+				return true
+			}
+		}
+	}
+	f.mut.Unlock()
+
+	return false
+}
+
+func (f *UserFavoritesAndLiked) GetLikedItemByUniqueId(uniqueId string) *wv.LikedListElement {
+	if f == nil {
+		return nil
+	}
+
+	f.mut.Lock()
+	for _, currentValue := range f.values {
+		if currentValue == nil || len(currentValue.LikedList) == 0 {
+			continue
+		}
+
+		for _, currentItem := range currentValue.LikedList {
+			if currentItem.UniqueId == uniqueId {
+				f.mut.Unlock()
+				return currentItem
+			}
+		}
+	}
+	f.mut.Unlock()
+
+	return nil
+}
+
+func (f *UserFavoritesAndLiked) DeleteLikedItemByUniqueId(uniqueId string) *wv.LikedListElement {
+	if f == nil {
+		return nil
+	}
+
+	var item *wv.LikedListElement
+	var newList []*wv.LikedListElement
+
+	f.mut.Lock()
+	for _, currentValue := range f.values {
+		if currentValue == nil || len(currentValue.LikedList) == 0 {
+			continue
+		}
+
+		newList = nil
+
+		for _, currentItem := range currentValue.LikedList {
+			if currentItem.UniqueId == uniqueId {
+				item = currentItem
+				continue
+			}
+			newList = append(newList, currentItem)
+		}
+
+		if item != nil {
+			currentValue.LikedList = newList
+			break
+		}
+	}
+	f.mut.Unlock()
+
+	return item
+}
+
+func (f *UserFavoritesAndLiked) Delete(key string) {
 	if f == nil {
 		return
 	}
@@ -98,17 +239,42 @@ func (f *UserFavorites) Delete(key string) {
 	f.mut.Unlock()
 }
 
-func (f *UserFavorites) Add(info *wv.FavoriteInfo) {
+func (f *UserFavoritesAndLiked) AddFavorite(info *wv.FavoriteInfo) {
 	if f == nil {
 		return
 	}
 
 	f.mut.Lock()
-	f.values[info.FavoriteKey] = info
+	all := f.values[info.FavoriteKey]
+	f.mut.Unlock()
+	if all == nil {
+		f.values[info.FavoriteKey] = &UserFavoriteAndLikedInfo{
+			FavoriteInfo: info,
+		}
+		return
+	}
+	all.FavoriteInfo = info
+}
+
+func (f *UserFavoritesAndLiked) AddLiked(liked *wv.LikedListElement) {
+	if f == nil {
+		return
+	}
+
+	f.mut.Lock()
+	all := f.values[liked.LikedKey]
+	if all == nil {
+		f.values[liked.LikedKey] = &UserFavoriteAndLikedInfo{
+			LikedList: []*wv.LikedListElement{liked},
+		}
+		f.mut.Unlock()
+		return
+	}
+	all.LikedList = append(all.LikedList, liked)
 	f.mut.Unlock()
 }
 
-func (f *UserFavorites) GetValue(key string) *wv.FavoriteInfo {
+func (f *UserFavoritesAndLiked) GetFavoriteInfo(key string) *wv.FavoriteInfo {
 	if f == nil {
 		return nil
 	}
@@ -117,10 +283,30 @@ func (f *UserFavorites) GetValue(key string) *wv.FavoriteInfo {
 	v := f.values[key]
 	f.mut.Unlock()
 
-	return v
+	if v == nil {
+		return nil
+	}
+
+	return v.FavoriteInfo
 }
 
-func (f *UserFavorites) Length() int {
+func (f *UserFavoritesAndLiked) GetLikedList(key string) []*wv.LikedListElement {
+	if f == nil {
+		return nil
+	}
+
+	f.mut.Lock()
+	v := f.values[key]
+	f.mut.Unlock()
+
+	if v == nil {
+		return nil
+	}
+
+	return v.LikedList
+}
+
+func (f *UserFavoritesAndLiked) Length() int {
 	if f == nil {
 		return 0
 	}
@@ -130,4 +316,21 @@ func (f *UserFavorites) Length() int {
 	f.mut.Unlock()
 
 	return l
+}
+
+//---------------------------------------------------------
+
+func (d *NewLikedListElementData) ToLikedListElement() *wv.LikedListElement {
+	return &wv.LikedListElement{
+		UniqueId:  d.getUniqueId(),
+		OwnerId:   d.UserId,
+		MediaId:   d.MediaId,
+		Title:     d.Title,
+		LikedKey:  d.LikedKey,
+		SourceUrl: d.SourceUrl,
+	}
+}
+
+func (d *NewLikedListElementData) getUniqueId() string {
+	return ws.ToBase30(time.Now().Unix()) + likedListUIDSep + d.UserId.ToBase32()
 }
