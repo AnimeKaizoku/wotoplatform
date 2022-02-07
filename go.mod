@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/ALiwoto/StrongStringGo v1.0.10
-	go.uber.org/zap v1.20.0
+	go.uber.org/zap v1.21.0
 	gorm.io/driver/postgres v1.2.3
 	gorm.io/driver/sqlite v1.2.6
 	gorm.io/gorm v1.22.5
