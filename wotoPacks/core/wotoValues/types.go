@@ -20,6 +20,7 @@ package wotoValues
 import (
 	"net"
 	"time"
+	"wp-server/wotoPacks/core/wotoCrypto"
 	"wp-server/wotoPacks/core/wotoValues/wotoRaw"
 	"wp-server/wotoPacks/interfaces"
 )
@@ -98,5 +99,16 @@ type WotoConnection struct {
 	isClosed     bool
 	isRegistered bool
 	registerer   Registerer
+	keys         *EntryKeys
 	me           *UserInfo
+}
+
+type EntryKeys struct {
+	PastKey    string `json:"past_key"`
+	PresentKey string `json:"present_key"`
+	FutureKey  string `json:"future_key"`
+
+	_pastKey    wotoCrypto.WotoKey `json:"-"`
+	_presentKey wotoCrypto.WotoKey `json:"-"`
+	_futureKey  wotoCrypto.WotoKey `json:"-"`
 }

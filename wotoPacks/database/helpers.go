@@ -63,7 +63,7 @@ func StartDatabase() error {
 
 	logging.Info("Database connected ")
 
-	//Create tables if they don't exist
+	// create tables if they don't exist
 	err = SESSION.AutoMigrate(
 		usersDatabase.ModelUserInfo,
 		usersDatabase.ModelUserFavorite,

@@ -18,7 +18,7 @@
 package entryPoints
 
 import (
-	"wp-server/wotoPacks/core/wotoValues"
+	wv "wp-server/wotoPacks/core/wotoValues"
 	"wp-server/wotoPacks/wotoActions"
 )
 
@@ -35,12 +35,14 @@ type RequestEntry struct {
 	// the different packages and different batch executions.
 	Data string `json:"data"`
 
+	Keys *wv.EntryKeys `json:"keys"`
+
 	// Connection field is the connection between the client and
 	// server; use this field to communicate with the client.
 	// this field should be ignored by json decoder.
 	// when this request entry is in exit mode, this value
 	// will be nil.
-	Connection *wotoValues.WotoConnection `json:"-"`
+	Connection *wv.WotoConnection `json:"-"`
 
 	// exit tells us if should we exit from the batch execution
 	// and let the client to execute another batch execution?

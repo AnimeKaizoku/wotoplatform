@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 	"wp-server/wotoPacks/core/utils/logging"
+	"wp-server/wotoPacks/core/wotoCrypto"
 )
 
 //---------------------------------------------------------
@@ -221,6 +222,61 @@ func (c *WotoConnection) Register() {
 	}
 }
 
+func (c *WotoConnection) GetEntryKeys() *EntryKeys {
+	return c.keys
+}
+
+func (c *WotoConnection) SetAsPastKey(key wotoCrypto.WotoKey) *EntryKeys {
+	if c.keys == nil {
+		c.keys = &EntryKeys{
+			_pastKey: key,
+		}
+		return c.keys
+	}
+
+	c.keys._pastKey = key
+	return c.keys
+}
+
+func (c *WotoConnection) SetAsPresentKey(key wotoCrypto.WotoKey) *EntryKeys {
+	if c.keys == nil {
+		c.keys = &EntryKeys{
+			_presentKey: key,
+		}
+		return c.keys
+	}
+
+	c.keys._presentKey = key
+	return c.keys
+}
+
+func (c *WotoConnection) SetAsFutureKey(key wotoCrypto.WotoKey) *EntryKeys {
+	if c.keys == nil {
+		c.keys = &EntryKeys{
+			_futureKey: key,
+		}
+		return c.keys
+	}
+
+	c.keys._futureKey = key
+	return c.keys
+}
+
+func (c *WotoConnection) SyncKeys() {
+	if c.keys == nil {
+		/* TODO: generate new series of key for the new connection */
+		return
+	}
+
+	c.keys.Sync()
+}
+
 //---------------------------------------------------------
+
+func (k *EntryKeys) Sync() {
+	k.FutureKey = k._futureKey.StrSerialize()
+	k.PresentKey = k._presentKey.StrSerialize()
+	k.PastKey = k._pastKey.StrSerialize()
+}
 
 //---------------------------------------------------------
