@@ -3,8 +3,14 @@ module wp-server
 go 1.17
 
 require (
+<<<<<<< HEAD
 	github.com/ALiwoto/StrongStringGo v1.0.10
 	go.uber.org/zap v1.21.0
+=======
+	github.com/ALiwoto/StrongStringGo v1.0.11
+	github.com/TheGolangHub/wotoCrypto v1.0.1
+	go.uber.org/zap v1.20.0
+>>>>>>> f69b2f2 (User wotoCrypto library)
 	gorm.io/driver/postgres v1.2.3
 	gorm.io/driver/sqlite v1.2.6
 	gorm.io/gorm v1.22.5
@@ -24,6 +30,6 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.11 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.7.0 // indirect
-	golang.org/x/crypto v0.0.0-20220131195533-30dcbda58838 // indirect
+	golang.org/x/crypto v0.0.0-20220214200702-86341886e292 // indirect
 	golang.org/x/text v0.3.7 // indirect
 )

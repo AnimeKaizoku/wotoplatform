@@ -6,7 +6,8 @@ import (
 	"strings"
 	"time"
 	"wp-server/wotoPacks/core/utils/logging"
-	"wp-server/wotoPacks/core/wotoCrypto"
+
+	"github.com/TheGolangHub/wotoCrypto/wotoCrypto"
 )
 
 //---------------------------------------------------------
@@ -148,6 +149,10 @@ func (c *WotoConnection) ReadJson(v interface{}) error {
 	if len(b) < 2 {
 		return ErrValueEmpty
 	}
+
+	/*
+		All cryptography operations should go here.
+	*/
 
 	return json.Unmarshal(b, v)
 }

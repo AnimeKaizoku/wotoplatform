@@ -20,9 +20,10 @@ package wotoValues
 import (
 	"net"
 	"time"
-	"wp-server/wotoPacks/core/wotoCrypto"
 	"wp-server/wotoPacks/core/wotoValues/wotoRaw"
 	"wp-server/wotoPacks/interfaces"
+
+	"github.com/TheGolangHub/wotoCrypto/wotoCrypto"
 )
 
 type PublicUserId = wotoRaw.PublicUserId
