@@ -41,7 +41,6 @@ func GetConfig() (*Config, error) {
 		// continue your work with default configuration
 		// (WARNIGN: usage: GitHub workflows ONLY).
 		logging.Warn("got an error while tried to open config.json file: ")
-		logging.Warn("got an error while tried to open config.json file: ")
 		logging.Warn(err)
 		logging.Warn("continuing with a default config variable.")
 
