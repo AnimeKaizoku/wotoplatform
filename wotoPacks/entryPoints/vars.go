@@ -39,6 +39,7 @@ var ErrDataLengthInvalid = errors.New("entryPoints: the data length is not valid
 var ErrActionOrBatchInvalid = errors.New("entryPoints: action or batch is invalid")
 var ErrConnectionUnavailable = errors.New("entryPoints: connection is no longer available")
 var ErrConnectionNotRegistered = errors.New("entryPoints: the connection is not registered")
+var ErrListenerNil = errors.New("entryPoints: listener cannot be nil")
 
 //---------------------------------------------------------
 

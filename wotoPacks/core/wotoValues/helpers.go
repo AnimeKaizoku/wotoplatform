@@ -1,11 +1,34 @@
 package wotoValues
 
 import (
+	"crypto/rand"
+	"crypto/sha512"
 	"net"
 	"strconv"
 
 	_ "github.com/ALiwoto/StrongStringGo/strongStringGo"
+	wcr "github.com/TheGolangHub/wotoCrypto/wotoCrypto"
 )
+
+func InitKeys() error {
+	for keyIndex, current := range _initialKeys {
+		if current == nil {
+			continue
+		}
+
+		for _, currentLayer := range keyLayers[keyIndex] {
+			current.AppendLayer(&currentLayer)
+		}
+
+		current.SetSignatureByBytes(keySigns[keyIndex])
+
+		if current.IsRealLengthInvalid() {
+			return ErrInvalidRealLength
+		}
+	}
+
+	return nil
+}
 
 // MakeSureNum will make sure that when you convert `i`
 // to string, its length be the exact same as `count`.
@@ -63,4 +86,55 @@ func GetWotoListener(l net.Listener) *WotoListener {
 	return &WotoListener{
 		listener: l,
 	}
+}
+
+func getInitialWotoKey(index int) wcr.WotoKey {
+	return _initialKeys[index]
+}
+
+// newEntryKeys returns a new instance of EntryKeys struct.
+// Do notice that this function doesn't call `Sync` method on the new instance
+// of the EntryKeys, you need to do this yourself after getting the new instance.
+func newEntryKeys() *EntryKeys {
+	eKeys := &EntryKeys{
+		_pastKey:    getPastFreshKey(),
+		_presentKey: getPresentFreshKey(),
+		_futureKey:  getFutureFreshKey(),
+	}
+
+	return eKeys
+}
+
+func getNewLayerO27(key wcr.WotoKey) *wcr.CryptoLayer {
+	b := make([]byte, key.GetSignatureRealLength())
+	_, _ = rand.Read(b)
+	return &wcr.CryptoLayer{
+		Kind: wcr.CryptoLayerKindO27,
+		Hash: string(b),
+	}
+}
+
+func getPastFreshKey() wcr.WotoKey {
+	key := wcr.GeneratePresentKey(wcr.WotoAlgorithmM250).ToPastKey()
+	key.SetSignatureByFunc(sha512.New)
+	key.AppendLayer(getNewLayerO27(key))
+	key.AppendLayer(getNewLayerO27(key))
+	key.AppendLayer(getNewLayerO27(key))
+	return key
+}
+func getPresentFreshKey() wcr.WotoKey {
+	key := wcr.GeneratePresentKey(wcr.WotoAlgorithmM250)
+	key.SetSignatureByFunc(sha512.New)
+	key.AppendLayer(getNewLayerO27(key))
+	key.AppendLayer(getNewLayerO27(key))
+	key.AppendLayer(getNewLayerO27(key))
+	return key
+}
+func getFutureFreshKey() wcr.WotoKey {
+	key := wcr.GenerateFutureKey(wcr.GeneratePresentKey(wcr.WotoAlgorithmM250).ToPastKey())
+	key.SetSignatureByFunc(sha512.New)
+	key.AppendLayer(getNewLayerO27(key))
+	key.AppendLayer(getNewLayerO27(key))
+	key.AppendLayer(getNewLayerO27(key))
+	return key
 }

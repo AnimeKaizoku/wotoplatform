@@ -7,7 +7,7 @@ import (
 	"time"
 	"wp-server/wotoPacks/core/utils/logging"
 
-	"github.com/TheGolangHub/wotoCrypto/wotoCrypto"
+	wcr "github.com/TheGolangHub/wotoCrypto/wotoCrypto"
 )
 
 //---------------------------------------------------------
@@ -150,11 +150,37 @@ func (c *WotoConnection) ReadJson(v interface{}) error {
 		return ErrValueEmpty
 	}
 
-	/*
-		All cryptography operations should go here.
-	*/
+	return json.Unmarshal(c._decryptData(b), v)
+}
 
-	return json.Unmarshal(b, v)
+func (c *WotoConnection) _decryptData(data []byte) []byte {
+	if c.keys == nil {
+		/* first time receiving a request */
+		myStr := string(data)
+		keyIndex, err := strconv.Atoi(strings.TrimSpace(myStr[:2]))
+		if err != nil {
+			return nil
+		}
+
+		presentKey := getInitialWotoKey(keyIndex)
+		if presentKey == nil {
+			return nil
+		}
+
+		c.keys = newEntryKeys()
+		c.keys.Sync()
+
+		return presentKey.Decrypt([]byte(myStr[2:]))
+	}
+
+	myData := c.keys._presentKey.Decrypt(data)
+	c.keys.ContinueLifeCycle()
+	c.keys.Sync()
+
+	return myData
+}
+func (c *WotoConnection) _encryptData(data []byte) []byte {
+	return c.keys._presentKey.Encrypt(data)
 }
 
 // WriteBytes will write the data to the `WotoConnection` using woto algorithm.
@@ -181,17 +207,21 @@ func (c *WotoConnection) writeAllBytes(b []byte) (int, error) {
 	return c.conn.Write(b)
 }
 
-func (c *WotoConnection) WriteJson(v interface{}) (int, error) {
+func (c *WotoConnection) WriteJson(v wcr.KeysContainer) (int, error) {
 	if v == nil {
 		return BaseIndex, ErrValueNil
 	} else if !c.CanReadAndWrite() {
 		return BaseIndex, ErrCantReadOrWrite
 	}
 
+	v.SetAsKeys(c.keys)
+
 	b, err := json.Marshal(v)
 	if err != nil {
 		return BaseIndex, err
 	}
+
+	b = c._encryptData(b)
 
 	logging.Debug("what we are writing is ", string(b))
 
@@ -231,7 +261,7 @@ func (c *WotoConnection) GetEntryKeys() *EntryKeys {
 	return c.keys
 }
 
-func (c *WotoConnection) SetAsPastKey(key wotoCrypto.WotoKey) *EntryKeys {
+func (c *WotoConnection) SetAsPastKey(key wcr.WotoKey) *EntryKeys {
 	if c.keys == nil {
 		c.keys = &EntryKeys{
 			_pastKey: key,
@@ -243,7 +273,7 @@ func (c *WotoConnection) SetAsPastKey(key wotoCrypto.WotoKey) *EntryKeys {
 	return c.keys
 }
 
-func (c *WotoConnection) SetAsPresentKey(key wotoCrypto.WotoKey) *EntryKeys {
+func (c *WotoConnection) SetAsPresentKey(key wcr.WotoKey) *EntryKeys {
 	if c.keys == nil {
 		c.keys = &EntryKeys{
 			_presentKey: key,
@@ -255,7 +285,7 @@ func (c *WotoConnection) SetAsPresentKey(key wotoCrypto.WotoKey) *EntryKeys {
 	return c.keys
 }
 
-func (c *WotoConnection) SetAsFutureKey(key wotoCrypto.WotoKey) *EntryKeys {
+func (c *WotoConnection) SetAsFutureKey(key wcr.WotoKey) *EntryKeys {
 	if c.keys == nil {
 		c.keys = &EntryKeys{
 			_futureKey: key,
@@ -282,6 +312,24 @@ func (k *EntryKeys) Sync() {
 	k.FutureKey = k._futureKey.StrSerialize()
 	k.PresentKey = k._presentKey.StrSerialize()
 	k.PastKey = k._pastKey.StrSerialize()
+}
+
+func (k *EntryKeys) ContinueLifeCycle() {
+	k._pastKey = k._presentKey.ToPastKey()
+	k._presentKey = k._futureKey.ToPresentKey()
+	k._futureKey = getFutureFreshKey()
+}
+
+func (k *EntryKeys) IsValid() bool {
+	if k._presentKey == nil {
+		return false
+	}
+
+	if k._pastKey != nil && !k._pastKey.IsValid() {
+		return false
+	}
+
+	return true
 }
 
 //---------------------------------------------------------

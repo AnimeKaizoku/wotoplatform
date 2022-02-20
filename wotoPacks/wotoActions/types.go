@@ -17,7 +17,11 @@
 
 package wotoActions
 
-import "wp-server/wotoPacks/serverErrors"
+import (
+	"wp-server/wotoPacks/serverErrors"
+
+	wcr "github.com/TheGolangHub/wotoCrypto/wotoCrypto"
+)
 
 type RequestAction uint
 type BatchExecution string
@@ -26,4 +30,5 @@ type ActionResp struct {
 	Success bool                        `json:"success"`
 	Error   *serverErrors.EndPointError `json:"error"`
 	Result  interface{}                 `json:"result"`
+	Keys    wcr.KeyCollection           `json:"keys"`
 }

@@ -21,6 +21,8 @@ import (
 	"wp-server/wotoPacks/core/wotoValues/wotoRaw"
 	"wp-server/wotoPacks/serverErrors"
 	"wp-server/wotoPacks/wotoActions"
+
+	wcr "github.com/TheGolangHub/wotoCrypto/wotoCrypto"
 )
 
 type UserInfo = wotoRaw.UserInfo
@@ -33,7 +35,7 @@ type ReqBase interface {
 	CanWrite() bool
 	SetBatchValues([]wotoActions.BatchExecution)
 	WriteData(b []byte) (n int, err error)
-	WriteJson(i interface{}) (n int, err error)
+	WriteJson(value wcr.KeysContainer) (n int, err error)
 	WriteError(errCode int, errMessage string) (int, error)
 	SendError(err *serverErrors.EndPointError) (int, error)
 	WriteResult(result interface{}) (int, error)

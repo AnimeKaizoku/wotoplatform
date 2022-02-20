@@ -27,19 +27,20 @@ import (
 
 // Listen function will listen for incoming connections
 // using the specified listener argument.
-func Listen(ln net.Listener) {
+func Listen(ln net.Listener) error {
 	if ln == nil {
-		logging.Warn("listener cannot be nil")
-		//log.Println("listener cannot be nil")
-		return
+		return ErrListenerNil
 	}
+
 	if !isCheckingRegistration {
 		isCheckingRegistration = true
 		go checkRegistration()
 	}
 
-	var conn *wotoValues.WotoConnection
-	var err error
+	err := wotoValues.InitKeys()
+	if err != nil {
+		return err
+	}
 
 	logging.Info("started to listening on: ", ln.Addr().String())
 
@@ -51,6 +52,7 @@ func Listen(ln net.Listener) {
 		}
 	}()
 
+	var conn *wotoValues.WotoConnection
 	for MainListener.CanAccept() {
 		conn, err = MainListener.Accept(registerConnection)
 
@@ -68,7 +70,7 @@ func Listen(ln net.Listener) {
 					"a new incoming connection from client", err)
 				//log.Println("an unexpected error happened during accpeting "+
 				//	"a new incoming connection from client", err)
-				return
+				return err
 			}
 
 			if isListenerClosed(opErr) {
@@ -96,6 +98,7 @@ func Listen(ln net.Listener) {
 		conn = nil
 	}
 
+	return nil
 }
 
 // checkEntry checks the incoming connection and will do read and

@@ -22,6 +22,8 @@ import (
 	wv "wp-server/wotoPacks/core/wotoValues"
 	"wp-server/wotoPacks/serverErrors"
 	"wp-server/wotoPacks/wotoActions"
+
+	wcr "github.com/TheGolangHub/wotoCrypto/wotoCrypto"
 )
 
 //---------------------------------------------------------
@@ -104,12 +106,12 @@ func (e *RequestEntry) WriteData(b []byte) (int, error) {
 	return e.Connection.WriteBytes(b)
 }
 
-func (e *RequestEntry) WriteJson(i interface{}) (int, error) {
+func (e *RequestEntry) WriteJson(v wcr.KeysContainer) (int, error) {
 	if e.Connection == nil {
 		return 0, ErrConnectionUnavailable
 	}
 
-	return e.Connection.WriteJson(i)
+	return e.Connection.WriteJson(v)
 }
 
 func (e *RequestEntry) WriteError(errType int, message string) (int, error) {
