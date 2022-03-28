@@ -3,7 +3,7 @@ module wp-server
 go 1.17
 
 require (
-	github.com/ALiwoto/StrongStringGo v1.0.12
+	github.com/ALiwoto/StrongStringGo v1.0.18
 	github.com/TheGolangHub/wotoCrypto v1.0.3
 	go.uber.org/zap v1.21.0
 	gorm.io/driver/postgres v1.3.1
