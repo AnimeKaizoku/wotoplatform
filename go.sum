@@ -1,5 +1,6 @@
-github.com/ALiwoto/StrongStringGo v1.0.12 h1:CLO2viBuypFlM71khPXlyRwYq6ClBFvLj3so/6TwDmQ=
 github.com/ALiwoto/StrongStringGo v1.0.12/go.mod h1:/DG8OuGgqkTxSPXxFKzz8YihHF57/Fa8JLl6NhXAbbQ=
+github.com/ALiwoto/StrongStringGo v1.0.19 h1:OhiwoMseu7eQ5dMSpRy2Z86AWYHjq79rKE3kxHeuRRw=
+github.com/ALiwoto/StrongStringGo v1.0.19/go.mod h1:TTdQ00xWfw4XTbG49A42DDSAODPsCUi0ZCRPM+/ga1k=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/Masterminds/semver/v3 v3.1.1 h1:hLg3sBzpNErnxhQtUy/mmLR2I9foDujNK030IGemrRc=
 github.com/Masterminds/semver/v3 v3.1.1/go.mod h1:VPu/7SZ7ePZ3QOrcuXROw5FAcLl4a0cBrbBpGY/8hQs=
