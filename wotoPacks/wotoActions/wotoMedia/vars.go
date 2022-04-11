@@ -17,15 +17,13 @@
 
 package wotoMedia
 
-// batch execution values
-const (
-	BATCH_REGISTER_MEDIA  = "register_media"
-	BATCH_GET_MEDIA_BY_ID = "get_media_by_id"
-	BATCH_SEARCH_MEDIA    = "search_media"
-	BATCH_DELETE_MEDIA    = "delete_media"
+import (
+	wv "wp-server/wotoPacks/core/wotoValues"
+	wa "wp-server/wotoPacks/wotoActions"
 )
 
-// origin constants
-const (
-	OriginRegisterMedia = "RegisterMedia"
+var (
+	_batchHandlers = map[wa.BatchExecution]wv.ReqHandler{
+		BATCH_REGISTER_MEDIA: batchRegisterMedia,
+	}
 )

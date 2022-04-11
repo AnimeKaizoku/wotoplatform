@@ -2,11 +2,16 @@ package wotoRaw
 
 import "time"
 
-type PublicUserId int64
-type UserPermission int
-type PublicGroupId string
-type MediaModelId string
-type ProfilePictureModelId string
+type (
+	PublicUserId          int64
+	UserPermission        int
+	PublicGroupId         string
+	MediaModelId          string
+	GenreId               uint32
+	CompanyId             uint32
+	AuthorId              uint32
+	ProfilePictureModelId string
+)
 
 // UserInfo struct in wotoRaw is a low level struct.
 // It shouldn't be used directly in any package.

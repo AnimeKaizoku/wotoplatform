@@ -15,17 +15,33 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package wotoMedia
+package mediaDatabase
 
-// batch execution values
-const (
-	BATCH_REGISTER_MEDIA  = "register_media"
-	BATCH_GET_MEDIA_BY_ID = "get_media_by_id"
-	BATCH_SEARCH_MEDIA    = "search_media"
-	BATCH_DELETE_MEDIA    = "delete_media"
+import (
+	"time"
+	wv "wp-server/wotoPacks/core/wotoValues"
 )
 
-// origin constants
-const (
-	OriginRegisterMedia = "RegisterMedia"
-)
+type NewMediaData struct {
+	Genre       wv.GenreId
+	Company     wv.CompanyId
+	Author      wv.AuthorId
+	Episode     int
+	MediaType   string
+	Title       string
+	Duration    time.Duration
+	Artist      string
+	Album       string
+	Year        int
+	Cover       string
+	File        string
+	Thumbnail   string
+	Lyrics      string
+	Lang        string
+	LangCode    string
+	Region      string
+	SourceUrl   string
+	ExternalUrl string
+	IsPrivate   bool
+	Description string
+}

@@ -21,3 +21,7 @@ func LoadMediaDatabase() error {
 
 	return nil
 }
+
+func SaveNewMedia(m *NewMediaData) {
+
+}

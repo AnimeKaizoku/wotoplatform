@@ -30,6 +30,9 @@ type PublicUserId = wotoRaw.PublicUserId
 type UserPermission = wotoRaw.UserPermission
 type PublicGroupId = wotoRaw.PublicGroupId
 type MediaModelId = wotoRaw.MediaModelId
+type GenreId = wotoRaw.GenreId
+type CompanyId = wotoRaw.CompanyId
+type AuthorId = wotoRaw.AuthorId
 type ProfilePictureModelId = wotoRaw.ProfilePictureModelId
 
 type ReqHandler func(interfaces.ReqBase) error
@@ -37,12 +40,15 @@ type Registerer func(*WotoConnection)
 
 type MediaModel struct {
 	ModelId     MediaModelId  `json:"model_id" gorm:"primaryKey"`
+	Genre       GenreId       `json:"genre"`
+	Company     CompanyId     `json:"company"`
+	Author      AuthorId      `json:"author"`
+	Episode     int           `json:"episode"`
 	MediaType   string        `json:"media_type"`
 	Title       string        `json:"title"`
 	Duration    time.Duration `json:"duration"`
 	Artist      string        `json:"artist"`
 	Album       string        `json:"album"`
-	Genre       string        `json:"genre"`
 	Year        int           `json:"year"`
 	Cover       string        `json:"cover"`
 	File        string        `json:"file"`
@@ -52,7 +58,9 @@ type MediaModel struct {
 	LangCode    string        `json:"lang_code"`
 	Region      string        `json:"region"`
 	SourceUrl   string        `json:"source_url"`
-	TelegramUrl string        `json:"telegram_url"`
+	ExternalUrl string        `json:"external_url"`
+	IsPrivate   bool          `json:"is_private"`
+	Description string        `json:"description"`
 	CreatedAt   time.Time     `json:"created_at"`
 	CreatedBy   PublicUserId  `json:"created_by"`
 	UpdatedBy   PublicUserId  `json:"updated_by"`
