@@ -214,7 +214,7 @@ func listen(config *wotoConfig.Config, t *testing.T) {
 		t.Errorf("failed to start a new db session: %v", err)
 	}
 
-	go entryPoints.Listen(ln)
+	go entryPoints.Listen(ln, false)
 }
 
 func closeListener(t *testing.T) {

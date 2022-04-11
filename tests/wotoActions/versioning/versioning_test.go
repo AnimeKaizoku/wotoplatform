@@ -235,7 +235,7 @@ func listen(config *wotoConfig.Config, t *testing.T) {
 		return
 	}
 
-	go entryPoints.Listen(ln)
+	go entryPoints.Listen(ln, false)
 }
 
 func writeMe(conn net.Conn, b []byte) (int, error) {

@@ -156,6 +156,13 @@ func UseSqlite() bool {
 	return false
 }
 
+func UseCrypto() bool {
+	if WConfig != nil {
+		return WConfig.UseCrypto
+	}
+	return false
+}
+
 func GetDbPath() string {
 	if WConfig != nil {
 		return WConfig.DatabaseName + ".db"

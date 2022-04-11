@@ -10,19 +10,22 @@ import (
 
 //---------------------------------------------------------
 
-var ErrCantAccept = errors.New("woto listener: can't accept any new connections")
-var ErrCantReadOrWrite = errors.New("woto connection: can't read or write from this connection")
-var ErrCouldNotWriteFirstBytes = errors.New("woto connection: couldn't write the first bytes")
-var ErrValueNil = errors.New("woto connection: interface value cannot be nil")
-var ErrValueEmpty = errors.New("woto connection: received value was empty")
-var ErrNotContainer = errors.New("woto connection: received value is not a key container")
-var ErrInvalidRealLength = errors.New("woto connection: wotokey's real length is invalid")
+var (
+	ErrCantAccept              = errors.New("woto listener: can't accept any new connections")
+	ErrCantReadOrWrite         = errors.New("woto connection: can't read or write from this connection")
+	ErrCouldNotWriteFirstBytes = errors.New("woto connection: couldn't write the first bytes")
+	ErrValueNil                = errors.New("woto connection: interface value cannot be nil")
+	ErrValueEmpty              = errors.New("woto connection: received value was empty")
+	ErrNotContainer            = errors.New("woto connection: received value is not a key container")
+	ErrInvalidRealLength       = errors.New("woto connection: wotokey's real length is invalid")
+)
 
 //---------------------------------------------------------
 
 var (
-	SESSION      *gorm.DB
-	SessionMutex = &sync.Mutex{}
+	SESSION           *gorm.DB
+	SessionMutex      = &sync.Mutex{}
+	encryptionEnabled = true
 )
 
 var (

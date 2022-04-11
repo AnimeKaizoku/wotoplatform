@@ -10,7 +10,12 @@ import (
 	wcr "github.com/TheGolangHub/wotoCrypto/wotoCrypto"
 )
 
-func InitKeys() error {
+func InitKeys(useCrypto bool) error {
+	if !useCrypto {
+		encryptionEnabled = useCrypto
+		return nil
+	}
+
 	for keyIndex, current := range _initialKeys {
 		if current == nil {
 			continue

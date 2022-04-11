@@ -27,7 +27,8 @@ import (
 
 // Listen function will listen for incoming connections
 // using the specified listener argument.
-func Listen(ln net.Listener) error {
+func Listen(ln net.Listener, useCrypto bool) error {
+	encryptionEnabled = useCrypto
 	if ln == nil {
 		return ErrListenerNil
 	}
@@ -68,18 +69,14 @@ func Listen(ln net.Listener) error {
 			} else if opErr == nil {
 				logging.Debug("an unexpected error happened during accpeting "+
 					"a new incoming connection from client", err)
-				//log.Println("an unexpected error happened during accpeting "+
-				//	"a new incoming connection from client", err)
 				return err
 			}
 
 			if isListenerClosed(opErr) {
 				logging.Info("listener is closed, returning")
-				//log.Println("listener is closed, returning")
 				break
 			} else {
 				logging.Error(err)
-				//go errorHandling.HandleError(err)
 				err = nil
 				continue
 			}

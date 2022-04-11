@@ -154,6 +154,10 @@ func (c *WotoConnection) ReadJson(v interface{}) error {
 }
 
 func (c *WotoConnection) _decryptData(data []byte) []byte {
+	if !encryptionEnabled {
+		return data
+	}
+
 	if c.keys == nil {
 		/* first time receiving a request */
 		myStr := string(data)
@@ -180,6 +184,10 @@ func (c *WotoConnection) _decryptData(data []byte) []byte {
 	return myData
 }
 func (c *WotoConnection) _encryptData(data []byte) []byte {
+	if !encryptionEnabled {
+		return data
+	}
+
 	return c.keys._presentKey.Encrypt(data)
 }
 

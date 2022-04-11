@@ -62,7 +62,7 @@ func runServer() error {
 		return err
 	}
 
-	entryPoints.Listen(ln)
+	entryPoints.Listen(ln, wotoConfig.UseCrypto())
 
 	return nil
 }
