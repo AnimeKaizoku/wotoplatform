@@ -21,14 +21,13 @@ import (
 	"net"
 	"time"
 	"wp-server/wotoPacks/core/utils/logging"
-	"wp-server/wotoPacks/core/wotoValues"
+	wv "wp-server/wotoPacks/core/wotoValues"
 	"wp-server/wotoPacks/wotoActions"
 )
 
 // Listen function will listen for incoming connections
 // using the specified listener argument.
 func Listen(ln net.Listener, useCrypto bool) error {
-	encryptionEnabled = useCrypto
 	if ln == nil {
 		return ErrListenerNil
 	}
@@ -38,14 +37,14 @@ func Listen(ln net.Listener, useCrypto bool) error {
 		go checkRegistration()
 	}
 
-	err := wotoValues.InitKeys()
+	err := wv.InitKeys(useCrypto)
 	if err != nil {
 		return err
 	}
 
 	logging.Info("started to listening on: ", ln.Addr().String())
 
-	MainListener = wotoValues.GetWotoListener(ln)
+	MainListener = wv.GetWotoListener(ln)
 
 	defer func() {
 		if MainListener != nil {
@@ -53,7 +52,7 @@ func Listen(ln net.Listener, useCrypto bool) error {
 		}
 	}()
 
-	var conn *wotoValues.WotoConnection
+	var conn *wv.WotoConnection
 	for MainListener.CanAccept() {
 		conn, err = MainListener.Accept(registerConnection)
 
@@ -100,7 +99,7 @@ func Listen(ln net.Listener, useCrypto bool) error {
 
 // checkEntry checks the incoming connection and will do read and
 // write operations on them.
-func checkEntry(conn *wotoValues.WotoConnection) error {
+func checkEntry(conn *wv.WotoConnection) error {
 	var req = new(RequestEntry)
 
 	err := conn.ReadJson(req)
@@ -143,7 +142,7 @@ func checkEntry(conn *wotoValues.WotoConnection) error {
 // safeCheckEntry will start a loop for reading the data incoming
 // from the client and will execute the batch execution's specified
 // handler.
-func safeCheckEntry(conn *wotoValues.WotoConnection) {
+func safeCheckEntry(conn *wv.WotoConnection) {
 	var err error
 
 	// set the dead line of connection to zero
