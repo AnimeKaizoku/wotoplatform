@@ -18,6 +18,7 @@
 package groupsDatabase
 
 import (
+	"sync"
 	wv "wp-server/wotoPacks/core/wotoValues"
 )
 
@@ -26,4 +27,6 @@ type groupQueueManager struct {
 	// this field here ensures that we are pointing to a valid group
 	// registered at database.
 	groupInfo *wv.GroupInfo
+	mut       *sync.Mutex
+	mediaList []wv.MediaModelId
 }

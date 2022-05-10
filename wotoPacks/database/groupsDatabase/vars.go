@@ -28,6 +28,9 @@ var (
 )
 
 var (
-	groupsInfo  = ssg.NewSafeMap[wv.PublicGroupId, wv.GroupInfo]()
-	groupsQueue = ssg.NewSafeMap[wv.PublicGroupId, groupQueueManager]()
+	groupsInfo                   = ssg.NewSafeMap[wv.PublicGroupId, wv.GroupInfo]()
+	groupsInfoByUsername         = ssg.NewSafeMap[string, wv.GroupInfo]()
+	groupsInfoByTelegramUsername = ssg.NewSafeMap[string, wv.GroupInfo]()
+	groupsInfoByTelegramId       = ssg.NewSafeMap[int64, wv.GroupInfo]()
+	groupsQueue                  = ssg.NewSafeMap[wv.PublicGroupId, groupQueueManager]()
 )

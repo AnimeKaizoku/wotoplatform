@@ -17,7 +17,41 @@
 
 package groupsDatabase
 
+import (
+	"wp-server/wotoPacks/core/wotoConfig"
+	wv "wp-server/wotoPacks/core/wotoValues"
+)
+
 func LoadGroupsDatabase() error {
+	var allGroups []*wv.GroupInfo
+
+	lockDatabase()
+	wv.SESSION.Find(&allGroups)
+	unlockDatabase()
+
+	for _, group := range allGroups {
+		groupsInfo.Add(group.GroupId, group)
+
+		if group.HasUsername() {
+			groupsInfoByUsername.Add(group.GroupUsername, group)
+		}
+
+		if group.HasTelegramId() {
+			groupsInfoByTelegramId.Add(group.TelegramId, group)
+		}
+	}
 
 	return nil
+}
+
+func lockDatabase() {
+	if wotoConfig.UseSqlite() {
+		wv.SessionMutex.Lock()
+	}
+}
+
+func unlockDatabase() {
+	if wotoConfig.UseSqlite() {
+		wv.SessionMutex.Unlock()
+	}
 }

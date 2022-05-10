@@ -71,6 +71,20 @@ func (u *UserInfo) GetMeta() MetaDataProvider {
 
 //---------------------------------------------------------
 
+func (g *GroupInfo) HasUsername() bool {
+	return g.GroupUsername != ""
+}
+
+func (g *GroupInfo) HasTelegramId() bool {
+	return g.TelegramId != 0
+}
+
+func (g *GroupInfo) HasTelegramUsername() bool {
+	return g.TelegramUsername != ""
+}
+
+//---------------------------------------------------------
+
 func (i PublicUserId) IsZero() bool {
 	return i == 0
 }
