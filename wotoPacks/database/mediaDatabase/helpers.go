@@ -17,11 +17,37 @@
 
 package mediaDatabase
 
+import (
+	"wp-server/wotoPacks/core/wotoConfig"
+	wv "wp-server/wotoPacks/core/wotoValues"
+)
+
 func LoadMediaDatabase() error {
+	var allMedias []*wv.MediaModel
+
+	lockDatabase()
+	wv.SESSION.Find(&allMedias)
+	unlockDatabase()
+
+	for _, media := range allMedias {
+		mediaModels.Add(media.ModelId, media)
+	}
 
 	return nil
 }
 
 func SaveNewMedia(m *NewMediaData) {
 
+}
+
+func lockDatabase() {
+	if wotoConfig.UseSqlite() {
+		wv.SessionMutex.Lock()
+	}
+}
+
+func unlockDatabase() {
+	if wotoConfig.UseSqlite() {
+		wv.SessionMutex.Unlock()
+	}
 }
