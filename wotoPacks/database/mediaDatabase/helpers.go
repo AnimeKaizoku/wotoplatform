@@ -17,11 +17,83 @@
 
 package mediaDatabase
 
+import (
+	"wp-server/wotoPacks/core/wotoConfig"
+	wv "wp-server/wotoPacks/core/wotoValues"
+)
+
 func LoadMediaDatabase() error {
+	var allMedias []*wv.MediaModel
+
+	lockDatabase()
+	wv.SESSION.Find(&allMedias)
+	unlockDatabase()
+
+	for _, media := range allMedias {
+		mediaModels.Add(media.ModelId, media)
+	}
 
 	return nil
 }
 
-func SaveNewMedia(m *NewMediaData) {
+func SaveNewMedia(m *NewMediaData) *wv.MediaModel {
+	model := &wv.MediaModel{
+		Genre:       m.Genre,
+		Company:     m.Company,
+		Author:      m.Author,
+		Episode:     m.Episode,
+		MediaType:   m.MediaType,
+		Title:       m.Title,
+		Duration:    m.Duration,
+		Artist:      m.Artist,
+		Album:       m.Album,
+		Year:        m.Year,
+		Cover:       m.Cover,
+		File:        m.File,
+		Thumbnail:   m.Thumbnail,
+		Lyrics:      m.Lyrics,
+		Lang:        m.Lang,
+		LangCode:    m.LangCode,
+		Region:      m.Region,
+		SourceUrl:   m.SourceUrl,
+		ExternalUrl: m.ExternalUrl,
+		IsPrivate:   m.IsPrivate,
+		Description: m.Description,
+	}
 
+	SaveMediaModel(model, true)
+	return model
+}
+
+func GetMediaByTitle(title string) *wv.MediaModel {
+	return mediaModelsByTitle.Get(title)
+}
+
+func GetMediaById(id wv.MediaModelId) *wv.MediaModel {
+	return mediaModels.Get(id)
+}
+
+func SaveMediaModel(media *wv.MediaModel, cache bool) {
+	lockDatabase()
+	tx := wv.SESSION.Begin()
+	tx.Save(media)
+	tx.Commit()
+	unlockDatabase()
+
+	if cache {
+		mediaModels.Add(media.ModelId, media)
+		mediaModelsByTitle.Add(media.Title, media)
+	}
+}
+
+func lockDatabase() {
+	if wotoConfig.UseSqlite() {
+		wv.SessionMutex.Lock()
+	}
+}
+
+func unlockDatabase() {
+	if wotoConfig.UseSqlite() {
+		wv.SessionMutex.Unlock()
+	}
 }

@@ -3,7 +3,7 @@ package wotoRaw
 import (
 	"time"
 
-	ws "github.com/ALiwoto/StrongStringGo/strongStringGo"
+	ws "github.com/AnimeKaizoku/ssg/ssg"
 )
 
 //---------------------------------------------------------
@@ -61,6 +61,38 @@ func (u *UserInfo) IsInvalid() bool {
 	return u == nil || u.UserId.IsZero()
 }
 
+func (u *UserInfo) SetAsMeta(meta MetaDataProvider) {
+	u.metaProvider = meta
+}
+
+func (u *UserInfo) GetMeta() MetaDataProvider {
+	return u.metaProvider
+}
+
+//---------------------------------------------------------
+
+func (m *MediaModel) SetAsMeta(meta MetaDataProvider) {
+	m.mediaMetaData = meta
+}
+
+func (m *MediaModel) GetMeta() MetaDataProvider {
+	return m.mediaMetaData
+}
+
+//---------------------------------------------------------
+
+func (g *GroupInfo) HasUsername() bool {
+	return g.GroupUsername != ""
+}
+
+func (g *GroupInfo) HasTelegramId() bool {
+	return g.TelegramId != 0
+}
+
+func (g *GroupInfo) HasTelegramUsername() bool {
+	return g.TelegramUsername != ""
+}
+
 //---------------------------------------------------------
 
 func (i PublicUserId) IsZero() bool {
@@ -95,6 +127,12 @@ func (i PublicUserId) ToBase30() string {
 
 func (f *FavoriteValue) IsInvalid() bool {
 	return f == nil || f.UserId.IsZero() || f.FavoriteKey == ""
+}
+
+//---------------------------------------------------------
+
+func (i MediaModelId) IsInvalid() bool {
+	return i == ""
 }
 
 //---------------------------------------------------------

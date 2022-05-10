@@ -15,16 +15,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package wotoMedia
+package groupsDatabase
 
 import (
+	"sync"
 	wv "wp-server/wotoPacks/core/wotoValues"
-	wa "wp-server/wotoPacks/wotoActions"
 )
 
-var (
-	_batchHandlers = map[wa.BatchExecution]wv.ReqHandler{
-		BATCH_REGISTER_MEDIA:  batchRegisterMedia,
-		BATCH_GET_MEDIA_BY_ID: batchGetMediaById,
-	}
-)
+type CreateNewGroupData struct {
+	GroupRegion      string `json:"group_region"`
+	GroupUsername    string `json:"group_username"`
+	TelegramId       int64  `json:"telegram_id"`
+	TelegramUsername string `json:"telegram_username"`
+}
+
+type groupQueueManager struct {
+	// groupInfo is the info holder of the target group,
+	// this field here ensures that we are pointing to a valid group
+	// registered at database.
+	groupInfo *wv.GroupInfo
+	mut       *sync.Mutex
+	mediaList []wv.MediaModelId
+}

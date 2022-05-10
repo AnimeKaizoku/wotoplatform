@@ -5,7 +5,7 @@ import (
 	"time"
 	wv "wp-server/wotoPacks/core/wotoValues"
 
-	ws "github.com/ALiwoto/StrongStringGo/strongStringGo"
+	ws "github.com/AnimeKaizoku/ssg/ssg"
 )
 
 //---------------------------------------------------------

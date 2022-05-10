@@ -51,6 +51,9 @@ const (
 	ErrLikedListElementAlreadyExists
 	ErrTooManyLikedList
 	ErrInvalidUniqueId
+	ErrMediaNotFound
+	ErrInvalidMediaId
+	ErrMediaTitleAlreadyExists
 )
 
 const (

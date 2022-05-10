@@ -16,3 +16,18 @@
  */
 
 package mediaDatabase
+
+import (
+	wv "wp-server/wotoPacks/core/wotoValues"
+
+	"github.com/AnimeKaizoku/ssg/ssg"
+)
+
+var (
+	ModelMediaModel *wv.MediaModel = &wv.MediaModel{}
+)
+
+var (
+	mediaModels        = ssg.NewSafeMap[wv.MediaModelId, wv.MediaModel]()
+	mediaModelsByTitle = ssg.NewSafeMap[string, wv.MediaModel]()
+)

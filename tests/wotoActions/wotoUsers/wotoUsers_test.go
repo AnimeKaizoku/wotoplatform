@@ -7,7 +7,7 @@ import (
 	"wp-server/wotoPacks/core/wotoValues"
 	"wp-server/wotoPacks/wotoActions/wotoUsers"
 
-	ws "github.com/ALiwoto/StrongStringGo/strongStringGo"
+	ws "github.com/AnimeKaizoku/ssg/ssg"
 )
 
 func TestGetUserLikedListResult(t *testing.T) {

@@ -17,8 +17,32 @@
 
 package wotoMedia
 
-import "wp-server/wotoPacks/interfaces"
+import (
+	"wp-server/wotoPacks/interfaces"
+	wa "wp-server/wotoPacks/wotoActions"
+)
 
 func ParseBatchExecute(b interfaces.ReqBase) error {
+	arr, err := wa.ParseBatchExecute(b.GetBatchExecute())
+	if err != nil {
+		return err
+	}
+
+	if len(arr) == 0 || !batchValuesValid(arr) {
+		return wa.ErrBatchParseFailed
+	}
+
+	b.SetBatchValues(arr)
+
 	return nil
+}
+
+func batchValuesValid(e []wa.BatchExecution) bool {
+	for _, b := range e {
+		if _batchHandlers[b] == nil {
+			return false
+		}
+	}
+
+	return true
 }

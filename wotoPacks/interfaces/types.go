@@ -25,6 +25,11 @@ import (
 	wcr "github.com/TheGolangHub/wotoCrypto/wotoCrypto"
 )
 
+// UserInfo is an alias for wotoRaw.UserInfo and is equivalent to
+// wotoRaw.UserInfo in all ways. this package can't import wotoValues,
+// because wotoValues package itself is importing this package, which is
+// why this type is (and will) point to wotoRaw package. (wotoValues itself is
+// using wotoRaw as well).
 type UserInfo = wotoRaw.UserInfo
 
 type ReqBase interface {
@@ -47,7 +52,7 @@ type ReqBase interface {
 	WriteString(str string) (n int, err error)
 	ParseJsonData(v any) error
 	ReadData() (n []byte, err error)
-	ReadJson(value interface{}) error
+	ReadJson(value any) error
 
 	// ReadString will read the incoming bytes from the tcp
 	// connection and will return it as a string value.

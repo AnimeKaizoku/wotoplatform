@@ -15,16 +15,29 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package wotoMedia
+package groupsDatabase
 
 import (
+	"errors"
 	wv "wp-server/wotoPacks/core/wotoValues"
-	wa "wp-server/wotoPacks/wotoActions"
+
+	"github.com/AnimeKaizoku/ssg/ssg"
 )
 
 var (
-	_batchHandlers = map[wa.BatchExecution]wv.ReqHandler{
-		BATCH_REGISTER_MEDIA:  batchRegisterMedia,
-		BATCH_GET_MEDIA_BY_ID: batchGetMediaById,
-	}
+	ModelGroupInfo *wv.GroupInfo = &wv.GroupInfo{}
+)
+
+var (
+	groupsInfo                   = ssg.NewSafeMap[wv.PublicGroupId, wv.GroupInfo]()
+	groupsInfoByUsername         = ssg.NewSafeMap[string, wv.GroupInfo]()
+	groupsInfoByTelegramUsername = ssg.NewSafeMap[string, wv.GroupInfo]()
+	groupsInfoByTelegramId       = ssg.NewSafeMap[int64, wv.GroupInfo]()
+	groupsQueue                  = ssg.NewSafeMap[wv.PublicGroupId, groupQueueManager]()
+)
+
+// error variables
+var (
+	ErrGroupCallNotFound = errors.New("group call not found")
+	ErrGroupHasNoQueue   = errors.New("group has no queue")
 )

@@ -13,6 +13,22 @@ type (
 	ProfilePictureModelId string
 )
 
+// TODO: move this type to ssg package
+type MetaDataProvider interface {
+	Get(key string) (string, error)
+	GetInt(key string) (int, error)
+	GetInt8(key string) (int8, error)
+	GetInt16(key string) (int16, error)
+	GetInt32(key string) (int32, error)
+	GetInt64(key string) (int64, error)
+	GetUInt(key string) (uint, error)
+	GetUInt8(key string) (uint8, error)
+	GetUInt16(key string) (uint16, error)
+	GetUInt32(key string) (uint32, error)
+	GetUInt64(key string) (uint64, error)
+	GetBool(key string) (bool, error)
+}
+
 // UserInfo struct in wotoRaw is a low level struct.
 // It shouldn't be used directly in any package.
 // Instead, use the UserInfo struct in `wotoValues` package.
@@ -44,6 +60,17 @@ type UserInfo struct {
 	IsVirtual      bool           `json:"is_virtual"`
 	CreatedBy      PublicUserId   `json:"created_by"`
 	cachedTime     time.Time      `json:"-" gorm:"-" sql:"-"`
+
+	metaProvider MetaDataProvider `json:"-" gorm:"-" sql:"-"`
+}
+
+type GroupInfo struct {
+	GroupId          PublicGroupId `json:"group_id" gorm:"primaryKey"`
+	GroupRegion      string        `json:"group_region"`
+	GroupUsername    string        `json:"group_username"`
+	TelegramId       int64         `json:"telegram_id"`
+	TelegramUsername string        `json:"telegram_username"`
+	CurrentPlaying   MediaModelId  `json:"current_playing"`
 }
 
 type FavoriteValue struct {
@@ -62,4 +89,34 @@ type LikedListElement struct {
 	SourceUrl    string       `json:"source_url"`
 	ReferenceUrl string       `json:"reference_url"`
 	UpdatedAt    time.Time    `json:"-"`
+}
+
+type MediaModel struct {
+	ModelId     MediaModelId  `json:"model_id" gorm:"primaryKey"`
+	Genre       GenreId       `json:"genre"`
+	Company     CompanyId     `json:"company"`
+	Author      AuthorId      `json:"author"`
+	Episode     int           `json:"episode"`
+	MediaType   string        `json:"media_type"`
+	Title       string        `json:"title"`
+	Duration    time.Duration `json:"duration"`
+	Artist      string        `json:"artist"`
+	Album       string        `json:"album"`
+	Year        int           `json:"year"`
+	Cover       string        `json:"cover"`
+	File        string        `json:"file"`
+	Thumbnail   string        `json:"thumbnail"`
+	Lyrics      string        `json:"lyrics"`
+	Lang        string        `json:"lang"`
+	LangCode    string        `json:"lang_code"`
+	Region      string        `json:"region"`
+	SourceUrl   string        `json:"source_url"`
+	ExternalUrl string        `json:"external_url"`
+	IsPrivate   bool          `json:"is_private"`
+	Description string        `json:"description"`
+	CreatedAt   time.Time     `json:"created_at"`
+	CreatedBy   PublicUserId  `json:"created_by"`
+	UpdatedBy   PublicUserId  `json:"updated_by"`
+
+	mediaMetaData MetaDataProvider
 }

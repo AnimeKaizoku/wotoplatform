@@ -30,5 +30,8 @@ const (
 	MessageTooManyFavorites              = "User already has too many favorites."
 	MessageLikedListElementAlreadyExists = "This item already exists in user's liked list."
 	MessageTooManyLikedList              = "User already has too many liked list keys."
-	MessageInvalidUniqueId               = "Invalid unique ID entered."
+	MessageInvalidUniqueId               = "Invalid unique ID provided."
+	MessageMediaNotFound                 = "Media not found."
+	MessageInvalidMediaId                = "Invalid media ID provided."
+	MessageMediaTitleAlreadyExists       = "Media title already exists."
 )
