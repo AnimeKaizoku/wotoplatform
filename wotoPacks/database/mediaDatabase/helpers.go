@@ -36,8 +36,33 @@ func LoadMediaDatabase() error {
 	return nil
 }
 
-func SaveNewMedia(m *NewMediaData) {
+func SaveNewMedia(m *NewMediaData) *wv.MediaModel {
+	model := &wv.MediaModel{
+		Genre:       m.Genre,
+		Company:     m.Company,
+		Author:      m.Author,
+		Episode:     m.Episode,
+		MediaType:   m.MediaType,
+		Title:       m.Title,
+		Duration:    m.Duration,
+		Artist:      m.Artist,
+		Album:       m.Album,
+		Year:        m.Year,
+		Cover:       m.Cover,
+		File:        m.File,
+		Thumbnail:   m.Thumbnail,
+		Lyrics:      m.Lyrics,
+		Lang:        m.Lang,
+		LangCode:    m.LangCode,
+		Region:      m.Region,
+		SourceUrl:   m.SourceUrl,
+		ExternalUrl: m.ExternalUrl,
+		IsPrivate:   m.IsPrivate,
+		Description: m.Description,
+	}
 
+	SaveMediaModel(model, true)
+	return model
 }
 
 func SaveMediaModel(media *wv.MediaModel, cache bool) {
