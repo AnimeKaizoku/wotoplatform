@@ -17,5 +17,13 @@
 
 package groupsDatabase
 
+import (
+	wv "wp-server/wotoPacks/core/wotoValues"
+)
+
 type groupQueueManager struct {
+	// groupInfo is the info holder of the target group,
+	// this field here ensures that we are pointing to a valid group
+	// registered at database.
+	groupInfo *wv.GroupInfo
 }

@@ -28,5 +28,6 @@ var (
 )
 
 var (
+	groupsInfo  = ssg.NewSafeMap[wv.PublicGroupId, wv.GroupInfo]()
 	groupsQueue = ssg.NewSafeMap[wv.PublicGroupId, groupQueueManager]()
 )
