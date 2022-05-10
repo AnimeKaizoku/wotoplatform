@@ -6,7 +6,6 @@ import (
 	"net"
 	"strconv"
 
-	_ "github.com/ALiwoto/StrongStringGo/strongStringGo"
 	wcr "github.com/TheGolangHub/wotoCrypto/wotoCrypto"
 )
 

@@ -3,7 +3,7 @@ package wotoRaw
 import (
 	"time"
 
-	ws "github.com/ALiwoto/StrongStringGo/strongStringGo"
+	ws "github.com/AnimeKaizoku/ssg/ssg"
 )
 
 //---------------------------------------------------------
