@@ -16,3 +16,11 @@
  */
 
 package mediaDatabase
+
+import (
+	wv "wp-server/wotoPacks/core/wotoValues"
+)
+
+var (
+	ModelMediaModel *wv.MediaModel = &wv.MediaModel{}
+)

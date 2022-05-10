@@ -65,9 +65,13 @@ func StartDatabase() error {
 
 	// create tables if they don't exist
 	err = SESSION.AutoMigrate(
+		// models in usersDatabase:
 		usersDatabase.ModelUserInfo,
 		usersDatabase.ModelUserFavorite,
 		usersDatabase.ModelLikedListElement,
+
+		// models in mediaDatabase:
+		mediaDatabase.ModelMediaModel,
 	)
 	if err != nil {
 		return err
