@@ -24,7 +24,7 @@ import (
 )
 
 var (
-	ModelGroupId *wv.GroupInfo = &wv.GroupInfo{}
+	ModelGroupInfo *wv.GroupInfo = &wv.GroupInfo{}
 )
 
 var (
