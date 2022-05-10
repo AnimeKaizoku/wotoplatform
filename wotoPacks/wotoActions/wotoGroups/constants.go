@@ -11,3 +11,15 @@ const (
 	BATCH_ADD_TO_QUEUE           = "add_to_queue"
 	BATCH_ADD_MEDIA_TO_QUEUE     = "add_media_to_queue"
 )
+
+// origin constants
+const (
+	OriginGetGroupCallInfo    = "GetGroupCallInfo"
+	OriginCreateGroupCall     = "CreateGroupCall"
+	OriginDeleteGroupCall     = "DeleteGroupCall"
+	OriginGetGroupCallQueue   = "GetGroupCallQueue"
+	OriginGetGroupMediaQueue  = "GetGroupMediaQueue"
+	OriginGetGroupCallHistory = "GetGroupCallHistory"
+	OriginAddToQueue          = "AddToQueue"
+	OriginAddMediaToQueue     = "AddMediaToQueue"
+)

@@ -1,6 +1,10 @@
 package wotoGroups
 
-import "wp-server/wotoPacks/interfaces"
+import (
+	wv "wp-server/wotoPacks/core/wotoValues"
+	"wp-server/wotoPacks/interfaces"
+	wa "wp-server/wotoPacks/wotoActions"
+)
 
 func HandleGroupsAction(req interfaces.ReqBase) error {
 	batchValues := req.GetBatchValues()
