@@ -23,6 +23,10 @@ import (
 )
 
 type CreateNewGroupData struct {
+	GroupRegion      string `json:"group_region"`
+	GroupUsername    string `json:"group_username"`
+	TelegramId       int64  `json:"telegram_id"`
+	TelegramUsername string `json:"telegram_username"`
 }
 
 type groupQueueManager struct {

@@ -44,6 +44,44 @@ func LoadGroupsDatabase() error {
 	return nil
 }
 
+// CreateNewGroup function creates a new group and saves it to db
+// and caches the value (it generates and new unique group-id).
+// this function doesn't validate any value, it's completely up to
+// the caller to check and see if the group-username, telegram-id, etc
+// already exists in the db or not.
+func CreateNewGroup(data *CreateNewGroupData) *wv.GroupInfo {
+	group := &wv.GroupInfo{
+		GroupId:          generateGroupId(),
+		GroupRegion:      data.GroupRegion,
+		GroupUsername:    data.GroupUsername,
+		TelegramId:       data.TelegramId,
+		TelegramUsername: data.TelegramUsername,
+	}
+
+	SaveGroup(group, true)
+	return group
+}
+
+func SaveGroup(group *wv.GroupInfo, cache bool) {
+	lockDatabase()
+	tx := wv.SESSION.Begin()
+	tx.Save(group)
+	tx.Commit()
+	unlockDatabase()
+
+	if cache {
+		groupsInfo.Add(group.GroupId, group)
+
+		if group.HasUsername() {
+			groupsInfoByUsername.Add(group.GroupUsername, group)
+		}
+
+		if group.HasTelegramId() {
+			groupsInfoByTelegramId.Add(group.TelegramId, group)
+		}
+	}
+}
+
 func GetGroupInfo(id wv.PublicGroupId) *wv.GroupInfo {
 	return groupsInfo.Get(id)
 }
@@ -59,6 +97,10 @@ func GetGroupQueue(id wv.PublicGroupId) ([]wv.MediaModelId, error) {
 	}
 
 	return queue.mediaList, nil
+}
+
+func generateGroupId() wv.PublicGroupId {
+	return ""
 }
 
 func lockDatabase() {
