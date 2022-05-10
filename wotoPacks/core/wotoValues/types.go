@@ -85,6 +85,7 @@ type MediaTag struct {
 }
 
 type UserInfo = wotoRaw.UserInfo
+type GroupInfo = wotoRaw.GroupInfo
 type FavoriteInfo = wotoRaw.FavoriteValue
 type LikedListElement = wotoRaw.LikedListElement
 

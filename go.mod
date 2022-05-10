@@ -4,7 +4,6 @@ go 1.18
 
 require (
 	github.com/AnimeKaizoku/ssg v1.1.8
-	github.com/ALiwoto/StrongStringGo v1.0.19
 	github.com/TheGolangHub/wotoCrypto v1.0.3
 	go.uber.org/zap v1.21.0
 	gorm.io/driver/postgres v1.3.4
@@ -13,6 +12,7 @@ require (
 )
 
 require (
+	github.com/ALiwoto/StrongStringGo v1.0.12 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgconn v1.11.0 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect

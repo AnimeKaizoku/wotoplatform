@@ -18,11 +18,15 @@
 package groupsDatabase
 
 import (
-	"wp-server/wotoPacks/core/wotoValues"
+	wv "wp-server/wotoPacks/core/wotoValues"
 
 	"github.com/AnimeKaizoku/ssg/ssg"
 )
 
 var (
-	groupsQueue = ssg.NewSafeMap[wotoValues.PublicGroupId, groupQueueManager]()
+	ModelGroupId *wv.GroupInfo = &wv.GroupInfo{}
+)
+
+var (
+	groupsQueue = ssg.NewSafeMap[wv.PublicGroupId, groupQueueManager]()
 )

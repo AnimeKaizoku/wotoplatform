@@ -72,6 +72,9 @@ func StartDatabase() error {
 
 		// models in mediaDatabase:
 		mediaDatabase.ModelMediaModel,
+
+		// models in groupsDatabase:
+		groupsDatabase.ModelGroupId,
 	)
 	if err != nil {
 		return err
