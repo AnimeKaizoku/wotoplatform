@@ -20,6 +20,7 @@ package wotoMedia
 import (
 	we "wp-server/wotoPacks/core/wotoErrors"
 	wv "wp-server/wotoPacks/core/wotoValues"
+	"wp-server/wotoPacks/database/mediaDatabase"
 	"wp-server/wotoPacks/interfaces"
 	wa "wp-server/wotoPacks/wotoActions"
 )
@@ -54,6 +55,8 @@ func batchRegisterMedia(req interfaces.ReqBase) error {
 	if err != nil {
 		return err
 	}
+
+	mediaDatabase.SaveNewMedia(entryData.ToNewMediaData())
 
 	return we.SendMethodNotImplemented(req, OriginRegisterMedia)
 }

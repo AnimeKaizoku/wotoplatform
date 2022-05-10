@@ -28,3 +28,7 @@ type RegisterMediaData struct {
 	IsPrivate   bool          `json:"is_private"`
 	Description string        `json:"description"`
 }
+
+type RegisterMediaResult struct {
+	MediaId wv.MediaModelId `json:"model_id"`
+}

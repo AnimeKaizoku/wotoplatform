@@ -47,7 +47,7 @@ type ReqBase interface {
 	WriteString(str string) (n int, err error)
 	ParseJsonData(v any) error
 	ReadData() (n []byte, err error)
-	ReadJson(value interface{}) error
+	ReadJson(value any) error
 
 	// ReadString will read the incoming bytes from the tcp
 	// connection and will return it as a string value.

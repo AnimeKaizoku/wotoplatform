@@ -66,15 +66,6 @@ type MediaModel struct {
 	UpdatedBy   PublicUserId  `json:"updated_by"`
 }
 
-type GroupInfo struct {
-	GroupId          PublicGroupId `json:"group_id" gorm:"primaryKey"`
-	GroupRegion      string        `json:"group_region"`
-	GroupUsername    string        `json:"group_username"`
-	TelegramId       int64         `json:"telegram_id"`
-	TelegramUsername string        `json:"telegram_username"`
-	CurrentPlaying   MediaModelId  `json:"current_playing"`
-}
-
 type UserMediaHistoryElement struct {
 	UserId    PublicUserId  `json:"user_id" gorm:"primaryKey"`
 	AtGroupId PublicGroupId `json:"at_group_id"`

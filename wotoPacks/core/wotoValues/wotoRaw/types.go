@@ -46,6 +46,15 @@ type UserInfo struct {
 	cachedTime     time.Time      `json:"-" gorm:"-" sql:"-"`
 }
 
+type GroupInfo struct {
+	GroupId          PublicGroupId `json:"group_id" gorm:"primaryKey"`
+	GroupRegion      string        `json:"group_region"`
+	GroupUsername    string        `json:"group_username"`
+	TelegramId       int64         `json:"telegram_id"`
+	TelegramUsername string        `json:"telegram_username"`
+	CurrentPlaying   MediaModelId  `json:"current_playing"`
+}
+
 type FavoriteValue struct {
 	UserId      PublicUserId `json:"user_id" gorm:"primaryKey"`
 	FavoriteKey string       `json:"favorite_key"`
