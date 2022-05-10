@@ -24,6 +24,7 @@ import (
 
 var (
 	_batchHandlers = map[wa.BatchExecution]wv.ReqHandler{
-		BATCH_REGISTER_MEDIA: batchRegisterMedia,
+		BATCH_REGISTER_MEDIA:  batchRegisterMedia,
+		BATCH_GET_MEDIA_BY_ID: batchGetMediaById,
 	}
 )

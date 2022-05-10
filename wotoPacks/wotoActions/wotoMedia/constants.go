@@ -28,4 +28,5 @@ const (
 // origin constants
 const (
 	OriginRegisterMedia = "RegisterMedia"
+	OriginGetMediaById  = "GetMediaById"
 )

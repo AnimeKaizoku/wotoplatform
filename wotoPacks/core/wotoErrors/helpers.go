@@ -274,3 +274,30 @@ func SendInvalidUniqueId(req inf.ReqBase, origin string) error {
 	})
 	return err
 }
+
+func SendMediaNotFound(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrMediaNotFound,
+		Message: MessageMediaNotFound,
+		Origin:  origin,
+	})
+	return err
+}
+
+func SendInvalidMediaId(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrInvalidMediaId,
+		Message: MessageInvalidMediaId,
+		Origin:  origin,
+	})
+	return err
+}
+
+func SendMediaTitleAlreadyExists(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrMediaTitleAlreadyExists,
+		Message: MessageMediaTitleAlreadyExists,
+		Origin:  origin,
+	})
+	return err
+}

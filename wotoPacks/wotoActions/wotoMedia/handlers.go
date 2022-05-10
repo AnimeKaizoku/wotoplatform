@@ -56,7 +56,38 @@ func batchRegisterMedia(req interfaces.ReqBase) error {
 		return err
 	}
 
-	mediaDatabase.SaveNewMedia(entryData.ToNewMediaData())
+	media := mediaDatabase.GetMediaByTitle(entryData.Title)
+	if media != nil {
+		return we.SendMediaTitleAlreadyExists(req, OriginRegisterMedia)
+	}
 
-	return we.SendMethodNotImplemented(req, OriginRegisterMedia)
+	// TODO: add more checkers here to check for already-existing values.
+	media = mediaDatabase.SaveNewMedia(entryData.ToNewMediaData())
+
+	return req.SendResult(&RegisterMediaResult{
+		MediaId: media.ModelId,
+	})
+}
+
+func batchGetMediaById(req interfaces.ReqBase) error {
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginGetMediaById)
+	}
+
+	var entryData = new(GetMediaByIdData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		return err
+	}
+
+	if entryData.MediaId.IsInvalid() {
+		return we.SendInvalidMediaId(req, OriginGetMediaById)
+	}
+
+	media := mediaDatabase.GetMediaById(entryData.MediaId)
+	if media == nil {
+		return we.SendMediaNotFound(req, OriginGetMediaById)
+	}
+
+	return req.SendResult(media)
 }

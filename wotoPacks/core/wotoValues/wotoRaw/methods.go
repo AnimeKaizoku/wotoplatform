@@ -131,6 +131,12 @@ func (f *FavoriteValue) IsInvalid() bool {
 
 //---------------------------------------------------------
 
+func (i MediaModelId) IsInvalid() bool {
+	return i == ""
+}
+
+//---------------------------------------------------------
+
 func (e *LikedListElement) IsInvalid() bool {
 	return e == nil || e.OwnerId.IsZero() || e.LikedKey == ""
 }
