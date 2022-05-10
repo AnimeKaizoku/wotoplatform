@@ -18,6 +18,7 @@
 package groupsDatabase
 
 import (
+	"errors"
 	wv "wp-server/wotoPacks/core/wotoValues"
 
 	"github.com/AnimeKaizoku/ssg/ssg"
@@ -33,4 +34,10 @@ var (
 	groupsInfoByTelegramUsername = ssg.NewSafeMap[string, wv.GroupInfo]()
 	groupsInfoByTelegramId       = ssg.NewSafeMap[int64, wv.GroupInfo]()
 	groupsQueue                  = ssg.NewSafeMap[wv.PublicGroupId, groupQueueManager]()
+)
+
+// error variables
+var (
+	ErrGroupCallNotFound = errors.New("group call not found")
+	ErrGroupHasNoQueue   = errors.New("group has no queue")
 )

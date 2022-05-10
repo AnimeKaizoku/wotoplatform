@@ -44,6 +44,19 @@ func LoadGroupsDatabase() error {
 	return nil
 }
 
+func GetGroupQueue(id wv.PublicGroupId) ([]wv.MediaModelId, error) {
+	if !groupsQueue.Exists(id) {
+		return nil, ErrGroupCallNotFound
+	}
+
+	queue := groupsQueue.Get(id)
+	if queue == nil {
+		return nil, ErrGroupHasNoQueue
+	}
+
+	return queue.mediaList, nil
+}
+
 func lockDatabase() {
 	if wotoConfig.UseSqlite() {
 		wv.SessionMutex.Lock()
