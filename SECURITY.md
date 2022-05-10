@@ -6,7 +6,7 @@ We only support the latest stable version for security issues. See the releases 
 ## Reporting a Vulnerability
 
 We ask that you report vulnerabilities privately, by contacting a core developer, to give us time to fix them. You can do that by emailing one of the following addresses:
-- aminnimaj@gmail.com
+- woto@kaizoku.cyou
 
 Depending on severity, we will either create a private issue for the vulnerability and release a patch version of Minetest, or give you permission to file the issue publicly.
 
