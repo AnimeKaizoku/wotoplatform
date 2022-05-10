@@ -44,6 +44,10 @@ func LoadGroupsDatabase() error {
 	return nil
 }
 
+func GetGroupInfo(id wv.PublicGroupId) *wv.GroupInfo {
+	return groupsInfo.Get(id)
+}
+
 func GetGroupQueue(id wv.PublicGroupId) ([]wv.MediaModelId, error) {
 	if !groupsQueue.Exists(id) {
 		return nil, ErrGroupCallNotFound
