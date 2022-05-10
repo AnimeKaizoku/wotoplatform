@@ -71,6 +71,16 @@ func (u *UserInfo) GetMeta() MetaDataProvider {
 
 //---------------------------------------------------------
 
+func (m *MediaModel) SetAsMeta(meta MetaDataProvider) {
+	m.mediaMetaData = meta
+}
+
+func (m *MediaModel) GetMeta() MetaDataProvider {
+	return m.mediaMetaData
+}
+
+//---------------------------------------------------------
+
 func (g *GroupInfo) HasUsername() bool {
 	return g.GroupUsername != ""
 }

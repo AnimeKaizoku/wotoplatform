@@ -90,3 +90,33 @@ type LikedListElement struct {
 	ReferenceUrl string       `json:"reference_url"`
 	UpdatedAt    time.Time    `json:"-"`
 }
+
+type MediaModel struct {
+	ModelId     MediaModelId  `json:"model_id" gorm:"primaryKey"`
+	Genre       GenreId       `json:"genre"`
+	Company     CompanyId     `json:"company"`
+	Author      AuthorId      `json:"author"`
+	Episode     int           `json:"episode"`
+	MediaType   string        `json:"media_type"`
+	Title       string        `json:"title"`
+	Duration    time.Duration `json:"duration"`
+	Artist      string        `json:"artist"`
+	Album       string        `json:"album"`
+	Year        int           `json:"year"`
+	Cover       string        `json:"cover"`
+	File        string        `json:"file"`
+	Thumbnail   string        `json:"thumbnail"`
+	Lyrics      string        `json:"lyrics"`
+	Lang        string        `json:"lang"`
+	LangCode    string        `json:"lang_code"`
+	Region      string        `json:"region"`
+	SourceUrl   string        `json:"source_url"`
+	ExternalUrl string        `json:"external_url"`
+	IsPrivate   bool          `json:"is_private"`
+	Description string        `json:"description"`
+	CreatedAt   time.Time     `json:"created_at"`
+	CreatedBy   PublicUserId  `json:"created_by"`
+	UpdatedBy   PublicUserId  `json:"updated_by"`
+
+	mediaMetaData MetaDataProvider
+}

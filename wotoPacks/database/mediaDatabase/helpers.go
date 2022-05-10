@@ -40,6 +40,18 @@ func SaveNewMedia(m *NewMediaData) {
 
 }
 
+func SaveMediaModel(media *wv.MediaModel, cache bool) {
+	lockDatabase()
+	tx := wv.SESSION.Begin()
+	tx.Save(media)
+	tx.Commit()
+	unlockDatabase()
+
+	if cache {
+		mediaModels.Add(media.ModelId, media)
+	}
+}
+
 func lockDatabase() {
 	if wotoConfig.UseSqlite() {
 		wv.SessionMutex.Lock()
