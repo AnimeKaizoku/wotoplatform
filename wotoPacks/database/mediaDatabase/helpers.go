@@ -65,6 +65,10 @@ func SaveNewMedia(m *NewMediaData) *wv.MediaModel {
 	return model
 }
 
+func GetMediaByTitle(title string) *wv.MediaModel {
+	return mediaModelsByTitle.Get(title)
+}
+
 func SaveMediaModel(media *wv.MediaModel, cache bool) {
 	lockDatabase()
 	tx := wv.SESSION.Begin()
@@ -74,6 +78,7 @@ func SaveMediaModel(media *wv.MediaModel, cache bool) {
 
 	if cache {
 		mediaModels.Add(media.ModelId, media)
+		mediaModelsByTitle.Add(media.Title, media)
 	}
 }
 

@@ -28,5 +28,6 @@ var (
 )
 
 var (
-	mediaModels = ssg.NewSafeMap[wv.MediaModelId, wv.MediaModel]()
+	mediaModels        = ssg.NewSafeMap[wv.MediaModelId, wv.MediaModel]()
+	mediaModelsByTitle = ssg.NewSafeMap[string, wv.MediaModel]()
 )
