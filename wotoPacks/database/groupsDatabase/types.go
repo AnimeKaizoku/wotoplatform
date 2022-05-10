@@ -16,3 +16,6 @@
  */
 
 package groupsDatabase
+
+type groupQueueManager struct {
+}

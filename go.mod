@@ -3,6 +3,7 @@ module wp-server
 go 1.18
 
 require (
+	github.com/AnimeKaizoku/ssg v1.1.8
 	github.com/ALiwoto/StrongStringGo v1.0.19
 	github.com/TheGolangHub/wotoCrypto v1.0.3
 	go.uber.org/zap v1.21.0
