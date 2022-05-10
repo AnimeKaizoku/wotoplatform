@@ -61,6 +61,14 @@ func (u *UserInfo) IsInvalid() bool {
 	return u == nil || u.UserId.IsZero()
 }
 
+func (u *UserInfo) SetAsMeta(meta MetaDataProvider) {
+	u.metaProvider = meta
+}
+
+func (u *UserInfo) GetMeta() MetaDataProvider {
+	return u.metaProvider
+}
+
 //---------------------------------------------------------
 
 func (i PublicUserId) IsZero() bool {

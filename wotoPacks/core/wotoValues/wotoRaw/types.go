@@ -13,6 +13,22 @@ type (
 	ProfilePictureModelId string
 )
 
+// TODO: move this type to ssg package
+type MetaDataProvider interface {
+	Get(key string) (string, error)
+	GetInt(key string) (int, error)
+	GetInt8(key string) (int8, error)
+	GetInt16(key string) (int16, error)
+	GetInt32(key string) (int32, error)
+	GetInt64(key string) (int64, error)
+	GetUInt(key string) (uint, error)
+	GetUInt8(key string) (uint8, error)
+	GetUInt16(key string) (uint16, error)
+	GetUInt32(key string) (uint32, error)
+	GetUInt64(key string) (uint64, error)
+	GetBool(key string) (bool, error)
+}
+
 // UserInfo struct in wotoRaw is a low level struct.
 // It shouldn't be used directly in any package.
 // Instead, use the UserInfo struct in `wotoValues` package.
@@ -44,6 +60,8 @@ type UserInfo struct {
 	IsVirtual      bool           `json:"is_virtual"`
 	CreatedBy      PublicUserId   `json:"created_by"`
 	cachedTime     time.Time      `json:"-" gorm:"-" sql:"-"`
+
+	metaProvider MetaDataProvider `json:"-" gorm:"-" sql:"-"`
 }
 
 type GroupInfo struct {
