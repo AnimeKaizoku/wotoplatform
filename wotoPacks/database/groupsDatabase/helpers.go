@@ -62,6 +62,18 @@ func CreateNewGroup(data *CreateNewGroupData) *wv.GroupInfo {
 	return group
 }
 
+func GetGroupInfoByUsername(username string) *wv.GroupInfo {
+	return groupsInfoByUsername.Get(username)
+}
+
+func GetGroupInfoByTelegramUsername(username string) *wv.GroupInfo {
+	return groupsInfoByTelegramUsername.Get(username)
+}
+
+func GetGroupInfoByTelegramId(id int64) *wv.GroupInfo {
+	return groupsInfoByTelegramId.Get(id)
+}
+
 func SaveGroup(group *wv.GroupInfo, cache bool) {
 	lockDatabase()
 	tx := wv.SESSION.Begin()
