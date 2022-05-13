@@ -74,14 +74,14 @@ func GetGroupInfoByTelegramId(id int64) *wv.GroupInfo {
 	return groupsInfoByTelegramId.Get(id)
 }
 
-func SaveGroup(group *wv.GroupInfo, cache bool) {
+func SaveGroup(group *wv.GroupInfo, cacheValue bool) {
 	lockDatabase()
 	tx := wv.SESSION.Begin()
 	tx.Save(group)
 	tx.Commit()
 	unlockDatabase()
 
-	if cache {
+	if cacheValue {
 		groupsInfo.Add(group.GroupId, group)
 
 		if group.HasUsername() {

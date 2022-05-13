@@ -27,7 +27,7 @@ import (
 
 // Listen function will listen for incoming connections
 // using the specified listener argument.
-func Listen(ln net.Listener, useCrypto bool) error {
+func Listen(ln net.Listener, cryptoEnabled bool) error {
 	if ln == nil {
 		return ErrListenerNil
 	}
@@ -37,7 +37,7 @@ func Listen(ln net.Listener, useCrypto bool) error {
 		go checkRegistration()
 	}
 
-	err := wv.InitKeys(useCrypto)
+	err := wv.InitKeys(cryptoEnabled)
 	if err != nil {
 		return err
 	}

@@ -182,14 +182,14 @@ func DeleteUserFavorite(id wv.PublicUserId, key string) {
 	unlockDatabase()
 }
 
-func SaveUser(user *wv.UserInfo, cache bool) {
+func SaveUser(user *wv.UserInfo, cacheValue bool) {
 	lockDatabase()
 	tx := wv.SESSION.Begin()
 	tx.Save(user)
 	tx.Commit()
 	unlockDatabase()
 
-	if cache {
+	if cacheValue {
 		usersMapByIdMutex.Lock()
 		usersMapById[user.UserId] = user
 		usersMapByIdMutex.Unlock()

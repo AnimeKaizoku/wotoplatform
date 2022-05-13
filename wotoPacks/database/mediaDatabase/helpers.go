@@ -81,14 +81,14 @@ func GetGenreInfoByTitle(title string) *wv.MediaGenreInfo {
 	return mediaGenreInfosByTitle.Get(title)
 }
 
-func SaveMediaModel(media *wv.MediaModel, cache bool) {
+func SaveMediaModel(media *wv.MediaModel, cacheValue bool) {
 	lockDatabase()
 	tx := wv.SESSION.Begin()
 	tx.Save(media)
 	tx.Commit()
 	unlockDatabase()
 
-	if cache {
+	if cacheValue {
 		mediaModels.Add(media.ModelId, media)
 		mediaModelsByTitle.Add(media.Title, media)
 	}

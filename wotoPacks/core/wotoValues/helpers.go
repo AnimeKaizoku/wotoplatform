@@ -9,9 +9,9 @@ import (
 	wcr "github.com/TheGolangHub/wotoCrypto/wotoCrypto"
 )
 
-func InitKeys(useCrypto bool) error {
-	if !useCrypto {
-		encryptionEnabled = useCrypto
+func InitKeys(cryptoEnabled bool) error {
+	if !cryptoEnabled {
+		encryptionEnabled = cryptoEnabled
 		return nil
 	}
 
