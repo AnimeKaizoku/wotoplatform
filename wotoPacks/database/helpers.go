@@ -36,9 +36,8 @@ var SESSION *gorm.DB
 func StartDatabase() error {
 	var err error
 	var db *gorm.DB
-
+	// skipcq
 	gConfig := &gorm.Config{
-		// skipcq: GO-W1004
 		SkipDefaultTransaction: wotoConfig.SkipDefaultTransaction(),
 	}
 
