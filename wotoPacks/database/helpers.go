@@ -37,21 +37,21 @@ func StartDatabase() error {
 	var err error
 	var db *gorm.DB
 
+	gConfig := &gorm.Config{
+		SkipDefaultTransaction: wotoConfig.SkipDefaultTransaction(),
+	}
+
+	if wotoConfig.IsDebug() {
+		gConfig.Logger = logger.Default.LogMode(logger.Info)
+	} else {
+		gConfig.Logger = logger.Default.LogMode(logger.Error)
+	}
+
 	if wotoConfig.UseSqlite() {
-		db, err = gorm.Open(
-			sqlite.Open(wotoConfig.GetDbPath()),
-			&gorm.Config{
-				Logger: logger.Default.LogMode(logger.Error),
-			},
-		)
+		db, err = gorm.Open(sqlite.Open(wotoConfig.GetDbPath()), gConfig)
 	} else {
 		url := wotoConfig.GetDatabaseURL()
-		db, err = gorm.Open(
-			postgres.Open(url),
-			&gorm.Config{
-				Logger: logger.Default.LogMode(logger.Error),
-			},
-		)
+		db, err = gorm.Open(postgres.Open(url), gConfig)
 	}
 
 	if err != nil {

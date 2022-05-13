@@ -171,7 +171,24 @@ func GetDbPath() string {
 }
 
 func GetDatabaseURL() string {
+	if WConfig == nil {
+		return ""
+	}
 	return WConfig.DatabaseUrl
+}
+
+func SkipDefaultTransaction() bool {
+	if WConfig == nil {
+		return false
+	}
+	return WConfig.SkipDefaultTransaction
+}
+
+func IsDebug() bool {
+	if WConfig == nil {
+		return true
+	}
+	return WConfig.IsDebug || WConfig.IsDefault
 }
 
 func GetOwners() []WotoOwner {

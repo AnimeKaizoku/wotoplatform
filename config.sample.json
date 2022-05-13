@@ -5,6 +5,7 @@
     "name": "woto-platform",
     "description": "online media platform",
     "use_crypto": true,
+    "skip_default_transaction": false,
     "owners": [
         {
             "username": "aliwoto",
