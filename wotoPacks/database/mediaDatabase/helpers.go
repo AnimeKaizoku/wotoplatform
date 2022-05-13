@@ -61,7 +61,7 @@ func SaveNewMedia(m *NewMediaData) *wv.MediaModel {
 		Description: m.Description,
 	}
 
-	SaveMediaModel(model, true)
+	SaveMediaModel(model)
 	return model
 }
 
@@ -81,17 +81,19 @@ func GetGenreInfoByTitle(title string) *wv.MediaGenreInfo {
 	return mediaGenreInfosByTitle.Get(title)
 }
 
-func SaveMediaModel(media *wv.MediaModel, cacheValue bool) {
+func SaveMediaModel(media *wv.MediaModel) {
+	SaveMediaModelNoCache(media)
+
+	mediaModels.Add(media.ModelId, media)
+	mediaModelsByTitle.Add(media.Title, media)
+}
+
+func SaveMediaModelNoCache(media *wv.MediaModel) {
 	lockDatabase()
 	tx := wv.SESSION.Begin()
 	tx.Save(media)
 	tx.Commit()
 	unlockDatabase()
-
-	if cacheValue {
-		mediaModels.Add(media.ModelId, media)
-		mediaModelsByTitle.Add(media.Title, media)
-	}
 }
 
 func lockDatabase() {

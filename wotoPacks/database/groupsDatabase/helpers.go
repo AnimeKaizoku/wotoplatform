@@ -58,7 +58,7 @@ func CreateNewGroup(data *CreateNewGroupData) *wv.GroupInfo {
 		TelegramUsername: data.TelegramUsername,
 	}
 
-	SaveGroup(group, true)
+	SaveGroup(group)
 	return group
 }
 
@@ -74,24 +74,25 @@ func GetGroupInfoByTelegramId(id int64) *wv.GroupInfo {
 	return groupsInfoByTelegramId.Get(id)
 }
 
-func SaveGroup(group *wv.GroupInfo, cacheValue bool) {
+func SaveGroup(group *wv.GroupInfo) {
+	SaveGroupNoCache(group)
+	groupsInfo.Add(group.GroupId, group)
+
+	if group.HasUsername() {
+		groupsInfoByUsername.Add(group.GroupUsername, group)
+	}
+
+	if group.HasTelegramId() {
+		groupsInfoByTelegramId.Add(group.TelegramId, group)
+	}
+}
+
+func SaveGroupNoCache(group *wv.GroupInfo) {
 	lockDatabase()
 	tx := wv.SESSION.Begin()
 	tx.Save(group)
 	tx.Commit()
 	unlockDatabase()
-
-	if cacheValue {
-		groupsInfo.Add(group.GroupId, group)
-
-		if group.HasUsername() {
-			groupsInfoByUsername.Add(group.GroupUsername, group)
-		}
-
-		if group.HasTelegramId() {
-			groupsInfoByTelegramId.Add(group.TelegramId, group)
-		}
-	}
 }
 
 func GetGroupInfo(id wv.PublicGroupId) *wv.GroupInfo {

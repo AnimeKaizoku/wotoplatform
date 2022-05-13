@@ -9,6 +9,8 @@ import (
 	wcr "github.com/TheGolangHub/wotoCrypto/wotoCrypto"
 )
 
+// InitKeys will initialize the internal keys.
+// skipcq
 func InitKeys(cryptoEnabled bool) error {
 	if !cryptoEnabled {
 		encryptionEnabled = cryptoEnabled
