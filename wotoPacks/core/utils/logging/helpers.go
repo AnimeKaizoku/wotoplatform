@@ -104,6 +104,7 @@ func Fatal(args ...interface{}) {
 	if SUGARED != nil {
 		SUGARED.Fatal(args...)
 	} else {
+		// skipcq: RVV-A0003
 		log.Fatal(args...)
 	}
 }
