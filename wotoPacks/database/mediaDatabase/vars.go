@@ -24,10 +24,13 @@ import (
 )
 
 var (
-	ModelMediaModel *wv.MediaModel = &wv.MediaModel{}
+	ModelMediaModel     *wv.MediaModel     = &wv.MediaModel{}
+	ModelMediaGenreInfo *wv.MediaGenreInfo = &wv.MediaGenreInfo{}
 )
 
 var (
-	mediaModels        = ssg.NewSafeMap[wv.MediaModelId, wv.MediaModel]()
-	mediaModelsByTitle = ssg.NewSafeMap[string, wv.MediaModel]()
+	mediaModels            = ssg.NewSafeMap[wv.MediaModelId, wv.MediaModel]()
+	mediaModelsByTitle     = ssg.NewSafeMap[string, wv.MediaModel]()
+	mediaGenreInfos        = ssg.NewSafeMap[wv.GenreId, wv.MediaGenreInfo]()
+	mediaGenreInfosByTitle = ssg.NewSafeMap[string, wv.MediaGenreInfo]()
 )

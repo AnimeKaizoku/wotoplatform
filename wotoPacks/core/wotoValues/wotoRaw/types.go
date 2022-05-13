@@ -7,6 +7,7 @@ type (
 	UserPermission        int
 	PublicGroupId         string
 	MediaModelId          string
+	StringRange           string
 	GenreId               uint32
 	CompanyId             uint32
 	AuthorId              uint32
@@ -89,6 +90,16 @@ type LikedListElement struct {
 	SourceUrl    string       `json:"source_url"`
 	ReferenceUrl string       `json:"reference_url"`
 	UpdatedAt    time.Time    `json:"-"`
+}
+
+type MediaGenreInfo struct {
+	GenreId          GenreId      `json:"genre_id" gorm:"primaryKey"`
+	GenreTitle       string       `json:"genre_title"`
+	GenreDescription string       `json:"genre_description"`
+	AgeRange         StringRange  `json:"age_range"`
+	CreatedAt        time.Time    `json:"created_at"`
+	CreatedBy        PublicUserId `json:"created_by"`
+	UpdatedBy        PublicUserId `json:"updated_by"`
 }
 
 type MediaModel struct {

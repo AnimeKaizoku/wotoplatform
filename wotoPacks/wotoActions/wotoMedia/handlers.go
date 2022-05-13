@@ -91,3 +91,26 @@ func batchGetMediaById(req interfaces.ReqBase) error {
 
 	return req.SendResult(media)
 }
+
+func batchChangeMediaGenre(req interfaces.ReqBase) error {
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginGetMediaById)
+	}
+
+	var entryData = new(ChangeMediaGenreData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		return err
+	}
+
+	if entryData.MediaId.IsInvalid() {
+		return we.SendInvalidMediaId(req, OriginGetMediaById)
+	}
+
+	media := mediaDatabase.GetMediaById(entryData.MediaId)
+	if media == nil {
+		return we.SendMediaNotFound(req, OriginGetMediaById)
+	}
+
+	return req.SendResult(media)
+}

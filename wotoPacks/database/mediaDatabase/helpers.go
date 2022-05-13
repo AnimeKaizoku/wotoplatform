@@ -73,6 +73,14 @@ func GetMediaById(id wv.MediaModelId) *wv.MediaModel {
 	return mediaModels.Get(id)
 }
 
+func GetGenreInfoById(id wv.GenreId) *wv.MediaGenreInfo {
+	return mediaGenreInfos.Get(id)
+}
+
+func GetGenreInfoByTitle(title string) *wv.MediaGenreInfo {
+	return mediaGenreInfosByTitle.Get(title)
+}
+
 func SaveMediaModel(media *wv.MediaModel, cache bool) {
 	lockDatabase()
 	tx := wv.SESSION.Begin()

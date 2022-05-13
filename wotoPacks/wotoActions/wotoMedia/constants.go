@@ -19,14 +19,16 @@ package wotoMedia
 
 // batch execution values
 const (
-	BATCH_REGISTER_MEDIA  = "register_media"
-	BATCH_GET_MEDIA_BY_ID = "get_media_by_id"
-	BATCH_SEARCH_MEDIA    = "search_media"
-	BATCH_DELETE_MEDIA    = "delete_media"
+	BATCH_REGISTER_MEDIA     = "register_media"
+	BATCH_GET_MEDIA_BY_ID    = "get_media_by_id"
+	BATCH_CHANGE_MEDIA_GENRE = "change_media_genre"
+	BATCH_SEARCH_MEDIA       = "search_media"
+	BATCH_DELETE_MEDIA       = "delete_media"
 )
 
 // origin constants
 const (
-	OriginRegisterMedia = "RegisterMedia"
-	OriginGetMediaById  = "GetMediaById"
+	OriginRegisterMedia    = "RegisterMedia"
+	OriginGetMediaById     = "GetMediaById"
+	OriginChangeMediaGenre = "ChangeMediaGenre"
 )

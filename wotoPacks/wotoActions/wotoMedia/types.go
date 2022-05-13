@@ -36,3 +36,8 @@ type RegisterMediaResult struct {
 type GetMediaByIdData struct {
 	MediaId wv.MediaModelId `json:"model_id"`
 }
+
+type ChangeMediaGenreData struct {
+	MediaId    wv.MediaModelId `json:"model_id"`
+	MediaGenre wv.GenreId      `json:"genre_id"`
+}
