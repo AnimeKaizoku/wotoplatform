@@ -130,6 +130,7 @@ func OldTestWorkerPoolWithSort01(t *testing.T) {
 			results <- p
 		}
 	}
+
 	ports := make(chan int, 100)
 	results := make(chan int)
 	var openPorts []int
@@ -151,7 +152,7 @@ func OldTestWorkerPoolWithSort01(t *testing.T) {
 	close(results)
 	sort.Ints(openPorts)
 	for _, port := range openPorts {
-		fmt.Printf("%d open\n", port)
+		t.Logf("%d open\n", port)
 	}
 }
 

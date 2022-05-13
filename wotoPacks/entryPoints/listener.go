@@ -74,11 +74,14 @@ func Listen(ln net.Listener, useCrypto bool) error {
 			if isListenerClosed(opErr) {
 				logging.Info("listener is closed, returning")
 				break
-			} else {
-				logging.Error(err)
-				err = nil
-				continue
 			}
+
+			// logging this error should be limited in the future,
+			// since attackers might try to send large amount of connection
+			// request, and we will be only spamming output with logging them all.
+			logging.Error(err)
+			err = nil
+			continue
 		}
 
 		// it's not duty of this loop,
