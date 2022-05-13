@@ -15,14 +15,17 @@ func IsCorrectUsernameFormat(username string) bool {
 
 func isCorrectUsername(username string) bool {
 	for i, c := range username {
-		if (c < 'a' && c > 'z') || (c < 'A' && c > 'Z') {
-			if i == 0 || i == len(username)-1 {
-				return false
-			}
+		if IsEnglish(c) {
+			// a valid english letter, let it pass
+			continue
+		}
 
-			if !allowedUsernameChars[c] {
-				return false
-			}
+		if i == 0 || i == len(username)-1 {
+			return false
+		}
+
+		if !allowedUsernameChars[c] {
+			return false
 		}
 	}
 
