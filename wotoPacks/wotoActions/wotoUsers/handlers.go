@@ -196,7 +196,9 @@ func batchChangeUserBio(req interfaces.ReqBase) error {
 
 	user.Bio = entryData.Bio
 	user.SetCachedTime()
-	usersDatabase.SaveUser(user, false)
+	// better not to cache the user again, since it already
+	// exists there and locking-unlocking will just waste our time.
+	usersDatabase.SaveUserNoCache(user)
 
 	return req.SendResult(true)
 }
@@ -235,7 +237,7 @@ func batchChangeNames(req interfaces.ReqBase) error {
 	user.FirstName = entryData.FirstName
 	user.LastName = entryData.LastName
 	user.SetCachedTime()
-	usersDatabase.SaveUser(user, false)
+	usersDatabase.SaveUserNoCache(user)
 
 	return req.SendResult(true)
 }
@@ -365,7 +367,7 @@ func batchChangeUserPermission(req interfaces.ReqBase) error {
 
 	last := target.Permission
 	target.Permission = entryData.Permission
-	usersDatabase.SaveUser(target, false)
+	usersDatabase.SaveUserNoCache(target)
 
 	return req.SendResult(&ChangeUserPermissionResult{
 		UserId:             target.UserId,

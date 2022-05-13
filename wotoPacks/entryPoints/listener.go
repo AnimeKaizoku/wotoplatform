@@ -27,7 +27,7 @@ import (
 
 // Listen function will listen for incoming connections
 // using the specified listener argument.
-func Listen(ln net.Listener, useCrypto bool) error {
+func Listen(ln net.Listener, cryptoEnabled bool) error {
 	if ln == nil {
 		return ErrListenerNil
 	}
@@ -37,7 +37,7 @@ func Listen(ln net.Listener, useCrypto bool) error {
 		go checkRegistration()
 	}
 
-	err := wv.InitKeys(useCrypto)
+	err := wv.InitKeys(cryptoEnabled)
 	if err != nil {
 		return err
 	}
@@ -74,11 +74,14 @@ func Listen(ln net.Listener, useCrypto bool) error {
 			if isListenerClosed(opErr) {
 				logging.Info("listener is closed, returning")
 				break
-			} else {
-				logging.Error(err)
-				err = nil
-				continue
 			}
+
+			// logging this error should be limited in the future,
+			// since attackers might try to send large amount of connection
+			// request, and we will be only spamming output with logging them all.
+			logging.Error(err)
+			err = nil
+			continue
 		}
 
 		// it's not duty of this loop,

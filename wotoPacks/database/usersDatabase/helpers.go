@@ -182,36 +182,37 @@ func DeleteUserFavorite(id wv.PublicUserId, key string) {
 	unlockDatabase()
 }
 
-func SaveUser(user *wv.UserInfo, cache bool) {
+func SaveUser(user *wv.UserInfo) {
+	SaveUserNoCache(user)
+	usersMapByIdMutex.Lock()
+	usersMapById[user.UserId] = user
+	usersMapByIdMutex.Unlock()
+
+	if user.HasUsername() {
+		usersMapByUsernameMutex.Lock()
+		usersMapByUsername[strings.ToLower(user.Username)] = user
+		usersMapByUsernameMutex.Unlock()
+	}
+
+	if user.HasTelegramId() {
+		usersMapByTelegramIdMutex.Lock()
+		usersMapByTelegramId[user.TelegramId] = user
+		usersMapByTelegramIdMutex.Unlock()
+	}
+
+	if user.HasEmail() {
+		usersMapByEmailMutex.Lock()
+		usersMapByEmail[strings.ToLower(user.Email)] = user
+		usersMapByEmailMutex.Unlock()
+	}
+}
+
+func SaveUserNoCache(user *wv.UserInfo) {
 	lockDatabase()
 	tx := wv.SESSION.Begin()
 	tx.Save(user)
 	tx.Commit()
 	unlockDatabase()
-
-	if cache {
-		usersMapByIdMutex.Lock()
-		usersMapById[user.UserId] = user
-		usersMapByIdMutex.Unlock()
-
-		if user.HasUsername() {
-			usersMapByUsernameMutex.Lock()
-			usersMapByUsername[strings.ToLower(user.Username)] = user
-			usersMapByUsernameMutex.Unlock()
-		}
-
-		if user.HasTelegramId() {
-			usersMapByTelegramIdMutex.Lock()
-			usersMapByTelegramId[user.TelegramId] = user
-			usersMapByTelegramIdMutex.Unlock()
-		}
-
-		if user.HasEmail() {
-			usersMapByEmailMutex.Lock()
-			usersMapByEmail[strings.ToLower(user.Email)] = user
-			usersMapByEmailMutex.Unlock()
-		}
-	}
 }
 
 // CreateNewUser creates a new user and saves it to the database.
@@ -232,7 +233,7 @@ func CreateNewUser(data *NewUserData) *wv.UserInfo {
 		Birthday:   data.Birthday,
 		IsVirtual:  data.Username == "",
 	}
-	SaveUser(u, true)
+	SaveUser(u)
 	return u
 }
 
@@ -261,7 +262,8 @@ func migrateOwners() {
 
 		currentUser.Permission = wv.PermissionOwner
 		currentUser.Password = current.Password
-		SaveUser(currentUser, false)
+		// save the user in the db, don't let it cache to save more time.
+		SaveUserNoCache(currentUser)
 	}
 }
 

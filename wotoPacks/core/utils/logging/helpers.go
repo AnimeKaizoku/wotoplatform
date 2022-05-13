@@ -14,9 +14,9 @@ import (
 
 var SUGARED *zap.SugaredLogger
 
-func InitZapLog(debug bool) *zap.Logger {
+func InitZapLog(debugMode bool) *zap.Logger {
 	var config zap.Config
-	if debug {
+	if debugMode {
 		config = zap.NewDevelopmentConfig()
 	} else {
 		config = zap.NewProductionConfig()
@@ -28,11 +28,11 @@ func InitZapLog(debug bool) *zap.Logger {
 	return logger
 }
 
-func LoadLogger(debug bool) func() {
+func LoadLogger(debugMode bool) func() {
 	if SUGARED != nil {
 		return nil
 	}
-	loggerMgr := InitZapLog(debug)
+	loggerMgr := InitZapLog(debugMode)
 	zap.ReplaceGlobals(loggerMgr)
 	SUGARED = loggerMgr.Sugar()
 
@@ -104,6 +104,7 @@ func Fatal(args ...interface{}) {
 	if SUGARED != nil {
 		SUGARED.Fatal(args...)
 	} else {
+		// skipcq: RVV-A0003
 		log.Fatal(args...)
 	}
 }
