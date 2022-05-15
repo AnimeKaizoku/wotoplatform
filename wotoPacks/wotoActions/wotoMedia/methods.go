@@ -4,7 +4,6 @@ import mdb "wp-server/wotoPacks/database/mediaDatabase"
 
 func (d *RegisterMediaData) ToNewMediaData() *mdb.NewMediaData {
 	return &mdb.NewMediaData{
-		Genre:       d.Genre,
 		Company:     d.Company,
 		Author:      d.Author,
 		Episode:     d.Episode,

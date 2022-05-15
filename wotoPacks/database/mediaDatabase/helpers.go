@@ -38,7 +38,6 @@ func LoadMediaDatabase() error {
 
 func SaveNewMedia(m *NewMediaData) *wv.MediaModel {
 	model := &wv.MediaModel{
-		Genre:       m.Genre,
 		Company:     m.Company,
 		Author:      m.Author,
 		Episode:     m.Episode,

@@ -6,7 +6,6 @@ import (
 )
 
 type RegisterMediaData struct {
-	Genre       wv.GenreId    `json:"genre"`
 	Company     wv.CompanyId  `json:"company"`
 	Author      wv.AuthorId   `json:"author"`
 	Episode     int           `json:"episode"`
