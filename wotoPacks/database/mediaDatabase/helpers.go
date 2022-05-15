@@ -22,6 +22,7 @@ import (
 	wv "wp-server/wotoPacks/core/wotoValues"
 )
 
+// LoadMediaDatabase
 func LoadMediaDatabase() error {
 	var allMedias []*wv.MediaModel
 	var allGenreElements []*wv.MediaGenreElement
@@ -68,6 +69,7 @@ func LoadMediaDatabase() error {
 	return nil
 }
 
+// SaveNewMedia
 func SaveNewMedia(m *NewMediaData) *wv.MediaModel {
 	model := &wv.MediaModel{
 		Company:     m.Company,
@@ -96,22 +98,70 @@ func SaveNewMedia(m *NewMediaData) *wv.MediaModel {
 	return model
 }
 
+// GetMediaByTitle
 func GetMediaByTitle(title string) *wv.MediaModel {
 	return mediaModelsByTitle.Get(title)
 }
 
+// GetMediaById
 func GetMediaById(id wv.MediaModelId) *wv.MediaModel {
 	return mediaModels.Get(id)
 }
 
+// GetGenreInfoById
 func GetGenreInfoById(id wv.GenreId) *wv.MediaGenreInfo {
 	return mediaGenreInfos.Get(id)
 }
 
+// GetGenreInfoByTitle
 func GetGenreInfoByTitle(title string) *wv.MediaGenreInfo {
 	return mediaGenreInfosByTitle.Get(title)
 }
 
+// AddMediaGenre adds a specific genre (using its genre-id) to a
+// media-model.
+// this function does not validate the genre-id value passed to it;
+// the caller has to make sure both media-model and genre-id are valid
+// before using this function.
+func AddMediaGenre(media wv.MediaModel, id wv.GenreId) {
+	element := &wv.MediaGenreElement{
+		MediaId: media.ModelId,
+		Genre:   id,
+	}
+
+	AddMediaGenreElement(media, element)
+}
+
+// AddMediaGenreElement adds the target element to the database and caches
+// it in memory.
+func AddMediaGenreElement(media wv.MediaModel, element *wv.MediaGenreElement) {
+	SaveNewMediaGenreElementNoCache(element)
+
+	genreInfo := mediaGenreInfos.Get(element.Genre)
+	elements := mediaGenreElements.GetValue(element.MediaId)
+	elements = append(elements, element)
+	mediaGenreElements.Set(element.MediaId, elements)
+
+	elements = mediaGenreElementsByGenreId.GetValue(element.Genre)
+	elements = append(elements, element)
+	mediaGenreElementsByGenreId.Set(element.Genre, elements)
+
+	media.Genres = append(media.Genres, genreInfo)
+}
+
+// SaveNewMediaGenreElementNoCache tries to generate a new unique-id for
+// the passed element and save it to the database.
+// this function doesn't cache the element.
+func SaveNewMediaGenreElementNoCache(element *wv.MediaGenreElement) {
+	element.GenerateNewUniqueId()
+	lockDatabase()
+	tx := wv.SESSION.Begin()
+	tx.Save(element)
+	tx.Commit()
+	unlockDatabase()
+}
+
+// SaveMediaModel
 func SaveMediaModel(media *wv.MediaModel) {
 	SaveMediaModelNoCache(media)
 
@@ -119,6 +169,8 @@ func SaveMediaModel(media *wv.MediaModel) {
 	mediaModelsByTitle.Add(media.Title, media)
 }
 
+// SaveMediaModelNoCache saves the target media-model in the database.
+// this function doesn't cache the media-model into memory.
 func SaveMediaModelNoCache(media *wv.MediaModel) {
 	lockDatabase()
 	tx := wv.SESSION.Begin()
@@ -127,22 +179,26 @@ func SaveMediaModelNoCache(media *wv.MediaModel) {
 	unlockDatabase()
 }
 
+// DeleteMediaGenreElement
 func DeleteMediaGenreElement(element *wv.MediaGenreElement) {
 	lockDatabase()
 	deleteMediaGenreElement(element)
 	unlockDatabase()
 }
 
+// deleteMediaGenreElement
 func deleteMediaGenreElement(element *wv.MediaGenreElement) {
 	wv.SESSION.Delete(element)
 }
 
+// lockDatabase
 func lockDatabase() {
 	if wotoConfig.UseSqlite() {
 		wv.SessionMutex.Lock()
 	}
 }
 
+// unlockDatabase
 func unlockDatabase() {
 	if wotoConfig.UseSqlite() {
 		wv.SessionMutex.Unlock()
