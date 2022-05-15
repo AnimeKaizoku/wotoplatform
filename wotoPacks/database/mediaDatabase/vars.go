@@ -24,8 +24,9 @@ import (
 )
 
 var (
-	ModelMediaModel     *wv.MediaModel     = &wv.MediaModel{}
-	ModelMediaGenreInfo *wv.MediaGenreInfo = &wv.MediaGenreInfo{}
+	ModelMediaModel        *wv.MediaModel        = &wv.MediaModel{}
+	ModelMediaGenreInfo    *wv.MediaGenreInfo    = &wv.MediaGenreInfo{}
+	ModelMediaGenreElement *wv.MediaGenreElement = &wv.MediaGenreElement{}
 )
 
 var (

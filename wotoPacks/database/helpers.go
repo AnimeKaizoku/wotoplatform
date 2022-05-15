@@ -73,6 +73,7 @@ func StartDatabase() error {
 		// models in mediaDatabase:
 		mediaDatabase.ModelMediaModel,
 		mediaDatabase.ModelMediaGenreInfo,
+		mediaDatabase.ModelMediaGenreElement,
 
 		// models in groupsDatabase:
 		groupsDatabase.ModelGroupInfo,
