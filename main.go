@@ -47,8 +47,7 @@ func runServer() error {
 		return err
 	}
 
-	whole := cfg.Bind + ":" + cfg.Port
-	ln, err := net.Listen(cfg.Network, whole)
+	ln, err := net.Listen(cfg.Network, net.JoinHostPort(cfg.Bind, cfg.Port))
 	if err != nil {
 		return err
 	}
