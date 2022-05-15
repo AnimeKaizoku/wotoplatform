@@ -3,6 +3,7 @@ package wotoRaw
 import (
 	"time"
 
+	"github.com/AnimeKaizoku/ssg/ssg"
 	ws "github.com/AnimeKaizoku/ssg/ssg"
 )
 
@@ -143,6 +144,26 @@ func (e *LikedListElement) IsInvalid() bool {
 
 func (e *LikedListElement) CompareWith(title string, media MediaModelId) bool {
 	return e.Title == title || e.MediaId == media
+}
+
+//---------------------------------------------------------
+
+func (e *MediaGenreElement) GenerateUniqueId() {
+	e.UniqueId = MediaGenreElementPrefix + ssg.ToBase32(time.Now().Unix())
+}
+
+func (e *MediaGenreElement) GenerateNewUniqueId() {
+	if e.UniqueId != "" {
+		return
+	}
+	e.UniqueId = MediaGenreElementPrefix + e.Genre.ToString() +
+		UniqueIdInnerSeparator + ssg.ToBase32(time.Now().Unix())
+}
+
+//---------------------------------------------------------
+
+func (e GenreId) ToString() string {
+	return ssg.ToBase10(int64(e))
 }
 
 //---------------------------------------------------------

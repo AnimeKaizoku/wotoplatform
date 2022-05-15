@@ -32,6 +32,7 @@ type PublicGroupId = wotoRaw.PublicGroupId
 type MediaModelId = wotoRaw.MediaModelId
 type GenreId = wotoRaw.GenreId
 type MediaGenreInfo = wotoRaw.MediaGenreInfo
+type MediaGenreElement = wotoRaw.MediaGenreElement
 type CompanyId = wotoRaw.CompanyId
 type AuthorId = wotoRaw.AuthorId
 type ProfilePictureModelId = wotoRaw.ProfilePictureModelId

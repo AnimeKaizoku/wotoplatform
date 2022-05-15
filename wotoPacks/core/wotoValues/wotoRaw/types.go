@@ -105,11 +105,23 @@ type MediaGenreInfo struct {
 // MediaGenreElement struct contains information about a
 // media-model that has a genre. this struct makes us able to add
 // multiple genres to a single media-model.
+// this struct has a model in mediaDatabase and is inserted in that
+// package, look at helpers.go file in that package for more information
+// about how we are inserting them in db.
 // See also: https://github.com/AnimeKaizoku/wotoplatform/issues/21
 type MediaGenreElement struct {
-	UniqueId string       `json:"unique_id" gorm:"primaryKey"`
-	MediaId  MediaModelId `json:"media_id"`
-	Genre    GenreId      `json:"genre"`
+	// UniqueId field specifies the unique-id of this element used to
+	// distinguish the element in database. for generating a new
+	// unique-id for an instance of this struct, you have to call
+	// `GenerateUniqueId` method on this variable.
+	UniqueId string `json:"unique_id" gorm:"primaryKey"`
+
+	// MediaId field is the media-model id that this element is
+	// referring to.
+	MediaId MediaModelId `json:"media_id"`
+
+	// Genre is the genre-id that this element is referring to.
+	Genre GenreId `json:"genre"`
 }
 
 // MediaModel struct contains information about a specified media-model.
