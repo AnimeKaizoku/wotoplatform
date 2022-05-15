@@ -30,8 +30,10 @@ var (
 )
 
 var (
-	mediaModels            = ssg.NewSafeMap[wv.MediaModelId, wv.MediaModel]()
-	mediaModelsByTitle     = ssg.NewSafeMap[string, wv.MediaModel]()
-	mediaGenreInfos        = ssg.NewSafeMap[wv.GenreId, wv.MediaGenreInfo]()
-	mediaGenreInfosByTitle = ssg.NewSafeMap[string, wv.MediaGenreInfo]()
+	mediaModels                 = ssg.NewSafeMap[wv.MediaModelId, wv.MediaModel]()
+	mediaModelsByTitle          = ssg.NewSafeMap[string, wv.MediaModel]()
+	mediaGenreInfos             = ssg.NewSafeMap[wv.GenreId, wv.MediaGenreInfo]()
+	mediaGenreInfosByTitle      = ssg.NewSafeMap[string, wv.MediaGenreInfo]()
+	mediaGenreElements          = ssg.NewSafeMap[wv.MediaModelId, []*wv.MediaGenreElement]()
+	mediaGenreElementsByGenreId = ssg.NewSafeMap[wv.GenreId, []*wv.MediaGenreElement]()
 )

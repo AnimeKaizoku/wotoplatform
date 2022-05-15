@@ -61,7 +61,7 @@ func StartDatabase() error {
 	SESSION = db
 	wv.SESSION = SESSION
 
-	logging.Info("Database connected ")
+	logging.Info("Database connected")
 
 	// create tables if they don't exist
 	err = SESSION.AutoMigrate(

@@ -24,13 +24,45 @@ import (
 
 func LoadMediaDatabase() error {
 	var allMedias []*wv.MediaModel
+	var allGenreElements []*wv.MediaGenreElement
+	var allGenreInfo []*wv.MediaGenreInfo
 
 	lockDatabase()
 	wv.SESSION.Find(&allMedias)
+	wv.SESSION.Find(&allGenreElements)
+	wv.SESSION.Find(&allGenreInfo)
 	unlockDatabase()
 
 	for _, media := range allMedias {
 		mediaModels.Add(media.ModelId, media)
+	}
+
+	for _, info := range allGenreInfo {
+		mediaGenreInfos.Add(info.GenreId, info)
+		mediaGenreInfosByTitle.Add(info.GenreTitle, info)
+	}
+
+	for _, element := range allGenreElements {
+		media := mediaModels.Get(element.MediaId)
+		genreInfo := mediaGenreInfos.Get(element.Genre)
+		if media == nil || genreInfo == nil {
+			// the genre-element belongs to a media-model that's already
+			// deleted from the database OR the genre info which this genre-element
+			// is reffering to is invalid (perhaps has been removed
+			// from the database), remove the genre-element.
+			deleteMediaGenreElement(element)
+			continue
+		}
+
+		elements := mediaGenreElements.GetValue(element.MediaId)
+		elements = append(elements, element)
+		mediaGenreElements.Set(element.MediaId, elements)
+
+		elements = mediaGenreElementsByGenreId.GetValue(element.Genre)
+		elements = append(elements, element)
+		mediaGenreElementsByGenreId.Set(element.Genre, elements)
+
+		media.Genres = append(media.Genres, genreInfo)
 	}
 
 	return nil
@@ -93,6 +125,16 @@ func SaveMediaModelNoCache(media *wv.MediaModel) {
 	tx.Save(media)
 	tx.Commit()
 	unlockDatabase()
+}
+
+func DeleteMediaGenreElement(element *wv.MediaGenreElement) {
+	lockDatabase()
+	deleteMediaGenreElement(element)
+	unlockDatabase()
+}
+
+func deleteMediaGenreElement(element *wv.MediaGenreElement) {
+	wv.SESSION.Delete(element)
 }
 
 func lockDatabase() {
