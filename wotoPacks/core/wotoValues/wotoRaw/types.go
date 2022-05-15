@@ -102,6 +102,20 @@ type MediaGenreInfo struct {
 	UpdatedBy        PublicUserId `json:"updated_by"`
 }
 
+// MediaGenreElement struct contains information about a
+// media-model that has a genre. this struct makes us able to add
+// multiple genres to a single media-model.
+// See also: https://github.com/AnimeKaizoku/wotoplatform/issues/21
+type MediaGenreElement struct {
+	UniqueId string       `json:"unique_id" gorm:"primaryKey"`
+	MediaId  MediaModelId `json:"media_id"`
+	Genre    GenreId      `json:"genre"`
+}
+
+// MediaModel struct contains information about a specified media-model.
+// users are able to interact with media-models (create, modify, delete),
+// add them to their different lists (such as playlists) or add them to
+// their schedule.
 type MediaModel struct {
 	ModelId     MediaModelId  `json:"model_id" gorm:"primaryKey"`
 	Genre       GenreId       `json:"genre"`
