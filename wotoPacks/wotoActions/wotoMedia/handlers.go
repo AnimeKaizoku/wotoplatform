@@ -46,7 +46,7 @@ func HandleMediaAction(req interfaces.ReqBase) error {
 	return req.LetExit()
 }
 
-//
+// batchRegisterMedia handler registers a new media-model.
 func batchRegisterMedia(req interfaces.ReqBase) error {
 	if !req.IsAuthorized() {
 		return we.SendNotAuthorized(req, OriginRegisterMedia)
@@ -71,7 +71,8 @@ func batchRegisterMedia(req interfaces.ReqBase) error {
 	})
 }
 
-//
+// batchGetMediaById handler returns a GetMediaByIdResult variable to
+// the client.
 func batchGetMediaById(req interfaces.ReqBase) error {
 	if !req.IsAuthorized() {
 		return we.SendNotAuthorized(req, OriginGetMediaById)
@@ -92,10 +93,10 @@ func batchGetMediaById(req interfaces.ReqBase) error {
 		return we.SendMediaNotFound(req, OriginGetMediaById)
 	}
 
-	return req.SendResult(media)
+	return req.SendResult(toGetMediaByIdResult(media))
 }
 
-//
+// batchCreateNewGenre handler creates a new genre.
 func batchCreateNewGenre(req interfaces.ReqBase) error {
 	if !req.IsAuthorized() {
 		return we.SendNotAuthorized(req, OriginCreateNewGenre)
@@ -104,7 +105,8 @@ func batchCreateNewGenre(req interfaces.ReqBase) error {
 	return we.SendMethodNotImplemented(req, OriginCreateNewGenre)
 }
 
-//
+// batchDeleteGenre handler deletes the specified genre-info
+// (client has to pass the genre-id) from db.
 func batchDeleteGenre(req interfaces.ReqBase) error {
 	if !req.IsAuthorized() {
 		return we.SendNotAuthorized(req, OriginDeleteGenre)
@@ -113,7 +115,8 @@ func batchDeleteGenre(req interfaces.ReqBase) error {
 	return we.SendMethodNotImplemented(req, OriginDeleteGenre)
 }
 
-//
+// batchAddMediaGenre handler adds the specified genre-info to the
+// target media-model.
 func batchAddMediaGenre(req interfaces.ReqBase) error {
 	if !req.IsAuthorized() {
 		return we.SendNotAuthorized(req, OriginAddMediaGenre)
@@ -142,7 +145,8 @@ func batchAddMediaGenre(req interfaces.ReqBase) error {
 	})
 }
 
-//
+// batchRemoveMediaGenre handler removes the specified genre-info
+// from the target media-model.
 func batchRemoveMediaGenre(req interfaces.ReqBase) error {
 	if !req.IsAuthorized() {
 		return we.SendNotAuthorized(req, OriginRemoveMediaGenre)
@@ -151,7 +155,8 @@ func batchRemoveMediaGenre(req interfaces.ReqBase) error {
 	return we.SendMethodNotImplemented(req, OriginRemoveMediaGenre)
 }
 
-//
+// batchGetMediaGenres handler returns all genre-infos that the target
+// media-model contains.
 func batchGetMediaGenres(req interfaces.ReqBase) error {
 	if !req.IsAuthorized() {
 		return we.SendNotAuthorized(req, OriginGetMediaGenres)
@@ -160,7 +165,8 @@ func batchGetMediaGenres(req interfaces.ReqBase) error {
 	return we.SendMethodNotImplemented(req, OriginGetMediaGenres)
 }
 
-//
+// batchSearchGenre handler searches the given title in database
+// and finds most suitable results to return to the client.
 func batchSearchGenre(req interfaces.ReqBase) error {
 	if !req.IsAuthorized() {
 		return we.SendNotAuthorized(req, OriginSearchGenre)
@@ -169,7 +175,10 @@ func batchSearchGenre(req interfaces.ReqBase) error {
 	return we.SendMethodNotImplemented(req, OriginSearchGenre)
 }
 
-//
+// batchDeleteMedia handler will delete the target media-model
+// from the database. this handler will return error if the user is not
+// the creator of the media-model (administrators can delete any media, even if
+// they are not the creator of the media-model).
 func batchDeleteMedia(req interfaces.ReqBase) error {
 	if !req.IsAuthorized() {
 		return we.SendNotAuthorized(req, OriginDeleteMedia)

@@ -18,6 +18,7 @@
 package wotoMedia
 
 import (
+	wv "wp-server/wotoPacks/core/wotoValues"
 	"wp-server/wotoPacks/interfaces"
 	wa "wp-server/wotoPacks/wotoActions"
 )
@@ -45,4 +46,34 @@ func batchValuesValid(e []wa.BatchExecution) bool {
 	}
 
 	return true
+}
+
+func toGetMediaByIdResult(media *wv.MediaModel) *GetMediaByIdResult {
+	return &GetMediaByIdResult{
+		ModelId:     media.ModelId,
+		Genres:      media.Genres,
+		Company:     media.Company,
+		Author:      media.Author,
+		Episode:     media.Episode,
+		MediaType:   media.MediaType,
+		Title:       media.Title,
+		Duration:    media.Duration,
+		Artist:      media.Artist,
+		Album:       media.Album,
+		Year:        media.Year,
+		Cover:       media.Cover,
+		File:        media.File,
+		Thumbnail:   media.Thumbnail,
+		Lyrics:      media.Lyrics,
+		Lang:        media.Lang,
+		LangCode:    media.LangCode,
+		Region:      media.Region,
+		SourceUrl:   media.SourceUrl,
+		ExternalUrl: media.ExternalUrl,
+		IsPrivate:   media.IsPrivate,
+		Description: media.Description,
+		CreatedAt:   media.CreatedAt,
+		CreatedBy:   media.CreatedBy,
+		UpdatedBy:   media.UpdatedBy,
+	}
 }
