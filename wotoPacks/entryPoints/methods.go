@@ -133,8 +133,9 @@ func (e *RequestEntry) SendError(err *serverErrors.EndPointError) (int, error) {
 
 func (e *RequestEntry) WriteResult(result interface{}) (int, error) {
 	return e.WriteJson(&wotoActions.ActionResp{
-		Success: true,
-		Result:  result,
+		Success:  true,
+		UniqueId: e.UniqueId,
+		Result:   result,
 	})
 }
 
@@ -229,6 +230,14 @@ func (e *RequestEntry) GetMe() *wv.UserInfo {
 
 func (e *RequestEntry) IsAuthorized() bool {
 	return e.Connection.GetMe() != nil
+}
+
+func (e *RequestEntry) GetUniqueId() string {
+	return e.UniqueId
+}
+
+func (e *RequestEntry) SetAsUniqueId(value string) {
+	e.UniqueId = value
 }
 
 //---------------------------------------------------------

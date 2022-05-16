@@ -183,6 +183,7 @@ func (c *WotoConnection) _decryptData(data []byte) []byte {
 
 	return myData
 }
+
 func (c *WotoConnection) _encryptData(data []byte) []byte {
 	if !encryptionEnabled {
 		return data
