@@ -21,7 +21,11 @@ package wotoMedia
 const (
 	BATCH_REGISTER_MEDIA     = "register_media"
 	BATCH_GET_MEDIA_BY_ID    = "get_media_by_id"
-	BATCH_CHANGE_MEDIA_GENRE = "change_media_genre"
+	BATCH_CREATE_NEW_GENRE   = "create_new_genre"
+	BATCH_DELETE_GENRE       = "delete_genre"
+	BATCH_ADD_MEDIA_GENRE    = "add_media_genre"
+	BATCH_REMOVE_MEDIA_GENRE = "remove_media_genre"
+	BATCH_GET_MEDIA_GENRES   = "get_media_genres"
 	BATCH_SEARCH_MEDIA       = "search_media"
 	BATCH_DELETE_MEDIA       = "delete_media"
 )

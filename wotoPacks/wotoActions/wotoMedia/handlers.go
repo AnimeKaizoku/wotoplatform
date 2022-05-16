@@ -25,6 +25,7 @@ import (
 	wa "wp-server/wotoPacks/wotoActions"
 )
 
+// HandleMediaAction handles the media-action.
 func HandleMediaAction(req interfaces.ReqBase) error {
 	batchValues := req.GetBatchValues()
 	var err error
@@ -45,6 +46,7 @@ func HandleMediaAction(req interfaces.ReqBase) error {
 	return req.LetExit()
 }
 
+//
 func batchRegisterMedia(req interfaces.ReqBase) error {
 	if !req.IsAuthorized() {
 		return we.SendNotAuthorized(req, OriginRegisterMedia)
@@ -69,6 +71,7 @@ func batchRegisterMedia(req interfaces.ReqBase) error {
 	})
 }
 
+//
 func batchGetMediaById(req interfaces.ReqBase) error {
 	if !req.IsAuthorized() {
 		return we.SendNotAuthorized(req, OriginGetMediaById)
@@ -92,6 +95,7 @@ func batchGetMediaById(req interfaces.ReqBase) error {
 	return req.SendResult(media)
 }
 
+//
 func batchChangeMediaGenre(req interfaces.ReqBase) error {
 	if !req.IsAuthorized() {
 		return we.SendNotAuthorized(req, OriginGetMediaById)
@@ -113,4 +117,39 @@ func batchChangeMediaGenre(req interfaces.ReqBase) error {
 	}
 
 	return req.SendResult(media)
+}
+
+//
+func batchCreateNewGenre(req interfaces.ReqBase) error {
+	return we.SendMethodNotImplemented(req, "")
+}
+
+//
+func batchDeleteGenre(req interfaces.ReqBase) error {
+	return we.SendMethodNotImplemented(req, "")
+}
+
+//
+func batchAddMediaGenre(req interfaces.ReqBase) error {
+	return we.SendMethodNotImplemented(req, "")
+}
+
+//
+func batchRemoveMediaGenre(req interfaces.ReqBase) error {
+	return we.SendMethodNotImplemented(req, "")
+}
+
+//
+func batchGetMediaGenres(req interfaces.ReqBase) error {
+	return we.SendMethodNotImplemented(req, "")
+}
+
+//
+func batchSearchGenre(req interfaces.ReqBase) error {
+	return we.SendMethodNotImplemented(req, "")
+}
+
+//
+func batchDeleteMedia(req interfaces.ReqBase) error {
+	return we.SendMethodNotImplemented(req, "")
 }
