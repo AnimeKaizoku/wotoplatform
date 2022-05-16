@@ -28,6 +28,19 @@ type MetaDataProvider interface {
 	GetUInt32(key string) (uint32, error)
 	GetUInt64(key string) (uint64, error)
 	GetBool(key string) (bool, error)
+
+	GetNoErr(key string) string
+	GetIntNoErr(key string) int
+	GetInt8NoErr(key string) int8
+	GetInt16NoErr(key string) int16
+	GetInt32NoErr(key string) int32
+	GetInt64NoErr(key string) int64
+	GetUIntNoErr(key string) uint
+	GetUInt8NoErr(key string) uint8
+	GetUInt16NoErr(key string) uint16
+	GetUInt32NoErr(key string) uint32
+	GetUInt64NoErr(key string) uint64
+	GetBoolNoErr(key string) bool
 }
 
 // UserInfo struct in wotoRaw is a low level struct.

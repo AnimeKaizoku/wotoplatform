@@ -52,6 +52,11 @@ func batchRegisterMedia(req interfaces.ReqBase) error {
 		return we.SendNotAuthorized(req, OriginRegisterMedia)
 	}
 
+	meta := req.GetMe().GetMeta()
+	if meta != nil && !meta.GetBoolNoErr("can_create_media_model") {
+		return we.SendPermissionDenied(req, OriginRegisterMedia)
+	}
+
 	var entryData = new(RegisterMediaData)
 	err := req.ParseJsonData(entryData)
 	if err != nil {
