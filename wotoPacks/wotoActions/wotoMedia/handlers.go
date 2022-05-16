@@ -96,30 +96,6 @@ func batchGetMediaById(req interfaces.ReqBase) error {
 }
 
 //
-func batchChangeMediaGenre(req interfaces.ReqBase) error {
-	if !req.IsAuthorized() {
-		return we.SendNotAuthorized(req, OriginGetMediaById)
-	}
-
-	var entryData = new(ChangeMediaGenreData)
-	err := req.ParseJsonData(entryData)
-	if err != nil {
-		return err
-	}
-
-	if entryData.MediaId.IsInvalid() {
-		return we.SendInvalidMediaId(req, OriginGetMediaById)
-	}
-
-	media := mediaDatabase.GetMediaById(entryData.MediaId)
-	if media == nil {
-		return we.SendMediaNotFound(req, OriginGetMediaById)
-	}
-
-	return req.SendResult(media)
-}
-
-//
 func batchCreateNewGenre(req interfaces.ReqBase) error {
 	if !req.IsAuthorized() {
 		return we.SendNotAuthorized(req, OriginCreateNewGenre)
@@ -143,7 +119,27 @@ func batchAddMediaGenre(req interfaces.ReqBase) error {
 		return we.SendNotAuthorized(req, OriginAddMediaGenre)
 	}
 
-	return we.SendMethodNotImplemented(req, OriginAddMediaGenre)
+	var entryData = new(AddMediaGenreData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		return err
+	}
+
+	if entryData.MediaId.IsInvalid() {
+		return we.SendInvalidMediaId(req, OriginAddMediaGenre)
+	}
+
+	media := mediaDatabase.GetMediaById(entryData.MediaId)
+	if media == nil {
+		return we.SendMediaNotFound(req, OriginAddMediaGenre)
+	}
+
+	mediaDatabase.AddMediaGenre(media, entryData.MediaGenre)
+
+	return req.SendResult(&AddMediaGenreResult{
+		MediaId:     media.ModelId,
+		MediaGenres: media.GetGenreIDs(),
+	})
 }
 
 //

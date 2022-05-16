@@ -36,7 +36,39 @@ type GetMediaByIdData struct {
 	MediaId wv.MediaModelId `json:"model_id"`
 }
 
-type ChangeMediaGenreData struct {
+type CreateNewGenreData struct {
+}
+
+type CreateNewGenreResult struct {
+}
+
+type DeleteGenreData struct {
+}
+
+type AddMediaGenreData struct {
 	MediaId    wv.MediaModelId `json:"model_id"`
 	MediaGenre wv.GenreId      `json:"genre_id"`
+}
+
+type AddMediaGenreResult struct {
+	MediaId     wv.MediaModelId `json:"model_id"`
+	MediaGenres []wv.GenreId    `json:"media_genres"`
+}
+
+type RemoveMediaGenreData struct {
+}
+
+type GetMediaGenresData struct {
+}
+
+type GetMediaGenresResult struct {
+}
+
+type SearchGenreData struct {
+}
+
+type SearchGenreResult struct {
+}
+
+type DeleteMediaData struct {
 }

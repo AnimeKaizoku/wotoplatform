@@ -80,6 +80,19 @@ func (m *MediaModel) GetMeta() MetaDataProvider {
 	return m.mediaMetaData
 }
 
+func (m *MediaModel) GetGenreIDs() []GenreId {
+	if len(m.Genres) == 0 {
+		return nil
+	}
+
+	var result []GenreId
+	for _, current := range m.Genres {
+		result = append(result, current.GenreId)
+	}
+
+	return result
+}
+
 //---------------------------------------------------------
 
 func (g *GroupInfo) HasUsername() bool {

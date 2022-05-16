@@ -123,7 +123,7 @@ func GetGenreInfoByTitle(title string) *wv.MediaGenreInfo {
 // this function does not validate the genre-id value passed to it;
 // the caller has to make sure both media-model and genre-id are valid
 // before using this function.
-func AddMediaGenre(media wv.MediaModel, id wv.GenreId) {
+func AddMediaGenre(media *wv.MediaModel, id wv.GenreId) {
 	element := &wv.MediaGenreElement{
 		MediaId: media.ModelId,
 		Genre:   id,
@@ -134,7 +134,7 @@ func AddMediaGenre(media wv.MediaModel, id wv.GenreId) {
 
 // AddMediaGenreElement adds the target element to the database and caches
 // it in memory.
-func AddMediaGenreElement(media wv.MediaModel, element *wv.MediaGenreElement) {
+func AddMediaGenreElement(media *wv.MediaModel, element *wv.MediaGenreElement) {
 	SaveNewMediaGenreElementNoCache(element)
 
 	genreInfo := mediaGenreInfos.Get(element.Genre)
