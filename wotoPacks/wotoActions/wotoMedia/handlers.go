@@ -121,35 +121,63 @@ func batchChangeMediaGenre(req interfaces.ReqBase) error {
 
 //
 func batchCreateNewGenre(req interfaces.ReqBase) error {
-	return we.SendMethodNotImplemented(req, "")
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginCreateNewGenre)
+	}
+
+	return we.SendMethodNotImplemented(req, OriginCreateNewGenre)
 }
 
 //
 func batchDeleteGenre(req interfaces.ReqBase) error {
-	return we.SendMethodNotImplemented(req, "")
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginDeleteGenre)
+	}
+
+	return we.SendMethodNotImplemented(req, OriginDeleteGenre)
 }
 
 //
 func batchAddMediaGenre(req interfaces.ReqBase) error {
-	return we.SendMethodNotImplemented(req, "")
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginAddMediaGenre)
+	}
+
+	return we.SendMethodNotImplemented(req, OriginAddMediaGenre)
 }
 
 //
 func batchRemoveMediaGenre(req interfaces.ReqBase) error {
-	return we.SendMethodNotImplemented(req, "")
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginRemoveMediaGenre)
+	}
+
+	return we.SendMethodNotImplemented(req, OriginRemoveMediaGenre)
 }
 
 //
 func batchGetMediaGenres(req interfaces.ReqBase) error {
-	return we.SendMethodNotImplemented(req, "")
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginGetMediaGenres)
+	}
+
+	return we.SendMethodNotImplemented(req, OriginGetMediaGenres)
 }
 
 //
 func batchSearchGenre(req interfaces.ReqBase) error {
-	return we.SendMethodNotImplemented(req, "")
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginSearchGenre)
+	}
+
+	return we.SendMethodNotImplemented(req, OriginSearchGenre)
 }
 
 //
 func batchDeleteMedia(req interfaces.ReqBase) error {
-	return we.SendMethodNotImplemented(req, "")
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginDeleteMedia)
+	}
+
+	return we.SendMethodNotImplemented(req, OriginDeleteMedia)
 }

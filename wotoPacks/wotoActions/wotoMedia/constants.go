@@ -34,5 +34,11 @@ const (
 const (
 	OriginRegisterMedia    = "RegisterMedia"
 	OriginGetMediaById     = "GetMediaById"
-	OriginChangeMediaGenre = "ChangeMediaGenre"
+	OriginCreateNewGenre   = "CreateNewGenre"
+	OriginDeleteGenre      = "DeleteGenre"
+	OriginAddMediaGenre    = "AddMediaGenre"
+	OriginRemoveMediaGenre = "RemoveMediaGenre"
+	OriginGetMediaGenres   = "GetMediaGenres"
+	OriginSearchGenre      = "SearchGenre"
+	OriginDeleteMedia      = "DeleteMedia"
 )
