@@ -95,6 +95,50 @@ func (m *MediaModel) GetGenreIDs() []GenreId {
 	return result
 }
 
+func (m *MediaModel) HasGenreId(id GenreId) bool {
+	for _, current := range m.Genres {
+		if current != nil && current.GenreId == id {
+			return true
+		}
+	}
+
+	return false
+}
+
+// RemoveGenreElement removes the target genre-info and element from
+// the media-model and returns the removed element (it will return nil if not found).
+func (m *MediaModel) RemoveGenreElement(id GenreId) *MediaGenreElement {
+	var newArray []*MediaGenreElement
+	var target *MediaGenreElement
+	for _, current := range m.GenreElements {
+		if current != nil && current.Genre == id {
+			target = current
+			continue
+		}
+
+		newArray = append(newArray, current)
+	}
+
+	if target == nil {
+		// not found
+		return nil
+	}
+
+	m.GenreElements = newArray
+
+	var newGenres []*MediaGenreInfo
+	for _, current := range m.Genres {
+		if current != nil && current.GenreId == id {
+			continue
+		}
+
+		newGenres = append(newGenres, current)
+	}
+
+	m.Genres = newGenres
+	return target
+}
+
 //---------------------------------------------------------
 
 func (g *GroupInfo) HasUsername() bool {

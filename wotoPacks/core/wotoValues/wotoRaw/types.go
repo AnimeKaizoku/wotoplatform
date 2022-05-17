@@ -111,6 +111,10 @@ type MediaGenreElement struct {
 
 	// Genre is the genre-id that this element is referring to.
 	Genre GenreId `json:"genre"`
+
+	// CreatedBy field is the user-id of the person that created this
+	// element in the db.
+	CreatedBy PublicUserId `json:"created_by"`
 }
 
 // MediaModel struct contains information about a specified media-model.
@@ -127,30 +131,31 @@ type MediaModel struct {
 	// genres of this media-model. they shouldn't be repeated. this field is
 	// ignored by sql and gorm, database packages have to use MediaGenreElement
 	// to get this array.
-	Genres      []*MediaGenreInfo `json:"genres" gorm:"-" sql:"-"`
-	Company     CompanyId         `json:"company"`
-	Author      AuthorId          `json:"author"`
-	Episode     int               `json:"episode"`
-	MediaType   string            `json:"media_type"`
-	Title       string            `json:"title"`
-	Duration    time.Duration     `json:"duration"`
-	Artist      string            `json:"artist"`
-	Album       string            `json:"album"`
-	Year        int               `json:"year"`
-	Cover       string            `json:"cover"`
-	File        string            `json:"file"`
-	Thumbnail   string            `json:"thumbnail"`
-	Lyrics      string            `json:"lyrics"`
-	Lang        string            `json:"lang"`
-	LangCode    string            `json:"lang_code"`
-	Region      string            `json:"region"`
-	SourceUrl   string            `json:"source_url"`
-	ExternalUrl string            `json:"external_url"`
-	IsPrivate   bool              `json:"is_private"`
-	Description string            `json:"description"`
-	CreatedAt   time.Time         `json:"created_at"`
-	CreatedBy   PublicUserId      `json:"created_by"`
-	UpdatedBy   PublicUserId      `json:"updated_by"`
+	Genres        []*MediaGenreInfo    `json:"genres" gorm:"-" sql:"-"`
+	GenreElements []*MediaGenreElement `json:"-" gorm:"-" sql:"-"`
+	Company       CompanyId            `json:"company"`
+	Author        AuthorId             `json:"author"`
+	Episode       int                  `json:"episode"`
+	MediaType     string               `json:"media_type"`
+	Title         string               `json:"title"`
+	Duration      time.Duration        `json:"duration"`
+	Artist        string               `json:"artist"`
+	Album         string               `json:"album"`
+	Year          int                  `json:"year"`
+	Cover         string               `json:"cover"`
+	File          string               `json:"file"`
+	Thumbnail     string               `json:"thumbnail"`
+	Lyrics        string               `json:"lyrics"`
+	Lang          string               `json:"lang"`
+	LangCode      string               `json:"lang_code"`
+	Region        string               `json:"region"`
+	SourceUrl     string               `json:"source_url"`
+	ExternalUrl   string               `json:"external_url"`
+	IsPrivate     bool                 `json:"is_private"`
+	Description   string               `json:"description"`
+	CreatedAt     time.Time            `json:"created_at"`
+	CreatedBy     PublicUserId         `json:"created_by"`
+	UpdatedBy     PublicUserId         `json:"updated_by"`
 
 	mediaMetaData ssg.MetaDataProvider
 }

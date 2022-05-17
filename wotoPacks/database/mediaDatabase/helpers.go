@@ -64,6 +64,7 @@ func LoadMediaDatabase() error {
 		mediaGenreElementsByGenreId.Set(element.Genre, elements)
 
 		media.Genres = append(media.Genres, genreInfo)
+		media.GenreElements = append(media.GenreElements, element)
 	}
 
 	return nil
@@ -156,10 +157,11 @@ func SaveNewGenreInfoNoCache(info *wv.MediaGenreInfo) {
 // this function does not validate the genre-id value passed to it;
 // the caller has to make sure both media-model and genre-id are valid
 // before using this function.
-func AddMediaGenre(media *wv.MediaModel, id wv.GenreId) {
+func AddMediaGenre(media *wv.MediaModel, id wv.GenreId, by wv.PublicUserId) {
 	element := &wv.MediaGenreElement{
-		MediaId: media.ModelId,
-		Genre:   id,
+		MediaId:   media.ModelId,
+		Genre:     id,
+		CreatedBy: by,
 	}
 
 	AddMediaGenreElement(media, element)
@@ -180,6 +182,7 @@ func AddMediaGenreElement(media *wv.MediaModel, element *wv.MediaGenreElement) {
 	mediaGenreElementsByGenreId.Set(element.Genre, elements)
 
 	media.Genres = append(media.Genres, genreInfo)
+	media.GenreElements = append(media.GenreElements, element)
 }
 
 // SaveNewMediaGenreElementNoCache tries to generate a new unique-id for

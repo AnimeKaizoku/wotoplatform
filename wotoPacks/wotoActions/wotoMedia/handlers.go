@@ -232,6 +232,8 @@ func batchAddMediaGenre(req interfaces.ReqBase) error {
 		return we.SendNotAuthorized(req, OriginAddMediaGenre)
 	}
 
+	me := req.GetMe()
+
 	var entryData = new(AddMediaGenreData)
 	err := req.ParseJsonData(entryData)
 	if err != nil {
@@ -247,7 +249,9 @@ func batchAddMediaGenre(req interfaces.ReqBase) error {
 		return we.SendMediaNotFound(req, OriginAddMediaGenre)
 	}
 
-	mediaDatabase.AddMediaGenre(media, entryData.MediaGenre)
+	if !media.HasGenreId(entryData.MediaGenre) {
+		mediaDatabase.AddMediaGenre(media, entryData.MediaGenre, me.UserId)
+	}
 
 	return req.SendResult(&AddMediaGenreResult{
 		MediaId:     media.ModelId,
@@ -262,7 +266,34 @@ func batchRemoveMediaGenre(req interfaces.ReqBase) error {
 		return we.SendNotAuthorized(req, OriginRemoveMediaGenre)
 	}
 
-	return we.SendMethodNotImplemented(req, OriginRemoveMediaGenre)
+	var entryData = new(RemoveMediaGenreData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		return err
+	}
+
+	if entryData.MediaId.IsInvalid() {
+		return we.SendInvalidMediaId(req, OriginAddMediaGenre)
+	}
+
+	media := mediaDatabase.GetMediaById(entryData.MediaId)
+	if media == nil {
+		return we.SendMediaNotFound(req, OriginAddMediaGenre)
+	}
+
+	element := media.RemoveGenreElement(entryData.MediaGenre)
+	if element != nil {
+		// there is a possibility that media.RemoveGenreElement method
+		// returns a nil value; we won't return any error in that case,
+		// this checker here is to make sure we don't waste any resources
+		// in sending useless db queries.
+		mediaDatabase.DeleteMediaGenreElement(element)
+	}
+
+	return req.SendResult(&RemoveAddMediaGenreResult{
+		MediaId:     media.ModelId,
+		MediaGenres: media.GetGenreIDs(),
+	})
 }
 
 // batchGetMediaGenres handler returns all genre-infos that the target
