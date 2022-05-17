@@ -34,4 +34,6 @@ const (
 	MessageMediaNotFound                 = "Media not found."
 	MessageInvalidMediaId                = "Invalid media ID provided."
 	MessageMediaTitleAlreadyExists       = "Media title already exists."
+	MessageInvalidGenreId                = "Invalid genre ID provided."
+	MessageGenreInfoNotFound             = "Genre info not found."
 )

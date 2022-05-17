@@ -136,21 +136,51 @@ func batchCreateNewGenre(req interfaces.ReqBase) error {
 
 // batchDeleteGenre handler deletes the specified genre-info
 // (client has to pass the genre-id) from db.
-func batchDeleteGenre(req interfaces.ReqBase) error {
+func batchDeleteGenreInfo(req interfaces.ReqBase) error {
 	if !req.IsAuthorized() {
-		return we.SendNotAuthorized(req, OriginDeleteGenre)
+		return we.SendNotAuthorized(req, OriginDeleteGenreInfo)
 	}
 
-	return we.SendMethodNotImplemented(req, OriginDeleteGenre)
-} //
+	me := req.GetMe()
+	meta := me.GetMeta()
+	if meta != nil && !meta.GetBoolNoErr("can_delete_genre_info") {
+		return we.SendPermissionDenied(req, OriginCreateNewGenre)
+	}
+
+	var entryData = new(DeleteGenreInfoData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		return err
+	}
+
+	var info *wv.MediaGenreInfo
+
+	if entryData.GenreId.IsInvalid() {
+		if entryData.GenreTitle == "" {
+			return we.SendInvalidGenreId(req, OriginDeleteGenreInfo)
+		}
+
+		info = mediaDatabase.GetGenreInfoByTitle(entryData.GenreTitle)
+	} else {
+		info = mediaDatabase.GetGenreInfoById(entryData.GenreId)
+	}
+
+	if info == nil {
+		return we.SendGenreInfoNotFound(req, OriginDeleteGenreInfo)
+	}
+
+	mediaDatabase.DeleteGenreInfo(info)
+
+	return req.SendResult(true)
+}
 
 // batchEditGenreInfo handler edits the specified genre-info.
 func batchEditGenreInfo(req interfaces.ReqBase) error {
 	if !req.IsAuthorized() {
-		return we.SendNotAuthorized(req, OriginDeleteGenre)
+		return we.SendNotAuthorized(req, OriginEditGenreInfo)
 	}
 
-	return we.SendMethodNotImplemented(req, OriginDeleteGenre)
+	return we.SendMethodNotImplemented(req, OriginEditGenreInfo)
 }
 
 // batchAddMediaGenre handler adds the specified genre-info to the

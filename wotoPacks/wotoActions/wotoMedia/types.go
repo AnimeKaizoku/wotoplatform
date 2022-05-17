@@ -82,7 +82,9 @@ type CreateNewGenreResult struct {
 	GenreId wv.GenreId `json:"genre_id"`
 }
 
-type DeleteGenreData struct {
+type DeleteGenreInfoData struct {
+	GenreId    wv.GenreId `json:"genre_id"`
+	GenreTitle string     `json:"genre_title"`
 }
 
 type AddMediaGenreData struct {

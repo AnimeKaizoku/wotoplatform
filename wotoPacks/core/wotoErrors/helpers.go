@@ -301,3 +301,21 @@ func SendMediaTitleAlreadyExists(req inf.ReqBase, origin string) error {
 	})
 	return err
 }
+
+func SendInvalidGenreId(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrInvalidGenreId,
+		Message: MessageInvalidGenreId,
+		Origin:  origin,
+	})
+	return err
+}
+
+func SendGenreInfoNotFound(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrGenreInfoNotFound,
+		Message: MessageGenreInfoNotFound,
+		Origin:  origin,
+	})
+	return err
+}

@@ -207,11 +207,30 @@ func DeleteMediaGenreElement(element *wv.MediaGenreElement) {
 	lockDatabase()
 	deleteMediaGenreElement(element)
 	unlockDatabase()
+
+	mediaGenreElements.Delete(element.MediaId)
+	mediaGenreElementsByGenreId.Delete(element.Genre)
 }
 
 // deleteMediaGenreElement
 func deleteMediaGenreElement(element *wv.MediaGenreElement) {
 	wv.SESSION.Delete(element)
+}
+
+// DeleteGenreInfo deletes the specified genre-info.
+// this function doesn't check for existence of the passed info,
+// it's up to caller to validate the info.
+func DeleteGenreInfo(info *wv.MediaGenreInfo) {
+	lockDatabase()
+	deleteGenreInfo(info)
+	unlockDatabase()
+
+	mediaGenreInfos.Delete(info.GenreId)
+	mediaGenreInfosByTitle.Delete(info.GenreTitle)
+}
+
+func deleteGenreInfo(info *wv.MediaGenreInfo) {
+	wv.SESSION.Delete(info)
 }
 
 // lockDatabase
