@@ -36,4 +36,5 @@ const (
 	MessageMediaTitleAlreadyExists       = "Media title already exists."
 	MessageInvalidGenreId                = "Invalid genre ID provided."
 	MessageGenreInfoNotFound             = "Genre info not found."
+	MessageGenreTitleAlreadyExists       = "Genre title already exists."
 )

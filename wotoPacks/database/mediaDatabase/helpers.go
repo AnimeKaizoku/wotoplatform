@@ -127,6 +127,16 @@ func SaveNewGenreInfo(info *wv.MediaGenreInfo) {
 	mediaGenreInfosByTitle.Add(info.GenreTitle, info)
 }
 
+// UpdateGenreInfo updates the info in db and caches it in
+// the memory.
+func UpdateGenreInfo(info *wv.MediaGenreInfo) {
+	DeleteGenreInfoFromCache(info)
+	SaveNewGenreInfoNoCache(info)
+
+	mediaGenreInfos.Add(info.GenreId, info)
+	mediaGenreInfosByTitle.Add(info.GenreTitle, info)
+}
+
 // SaveNewGenreInfoNoCache saves the info into db only, this
 // function won't touch cache.
 func SaveNewGenreInfoNoCache(info *wv.MediaGenreInfo) {
@@ -225,6 +235,11 @@ func DeleteGenreInfo(info *wv.MediaGenreInfo) {
 	deleteGenreInfo(info)
 	unlockDatabase()
 
+	DeleteGenreInfoFromCache(info)
+}
+
+// DeleteGenreInfoFromCache will deletes the genre info only from memory cache.
+func DeleteGenreInfoFromCache(info *wv.MediaGenreInfo) {
 	mediaGenreInfos.Delete(info.GenreId)
 	mediaGenreInfosByTitle.Delete(info.GenreTitle)
 }

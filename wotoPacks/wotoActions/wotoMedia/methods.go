@@ -5,6 +5,8 @@ import (
 	mdb "wp-server/wotoPacks/database/mediaDatabase"
 )
 
+//---------------------------------------------------------
+
 func (d *RegisterMediaData) ToNewMediaData() *mdb.NewMediaData {
 	return &mdb.NewMediaData{
 		Company:     d.Company,
@@ -30,6 +32,8 @@ func (d *RegisterMediaData) ToNewMediaData() *mdb.NewMediaData {
 	}
 }
 
+//---------------------------------------------------------
+
 func (g *CreateNewGenreData) ToMediaGenreInfo(by wv.PublicUserId) *wv.MediaGenreInfo {
 	return &wv.MediaGenreInfo{
 		GenreTitle:       g.GenreTitle,
@@ -39,3 +43,14 @@ func (g *CreateNewGenreData) ToMediaGenreInfo(by wv.PublicUserId) *wv.MediaGenre
 		UpdatedBy:        by,
 	}
 }
+
+//---------------------------------------------------------
+
+func (e *EditGenreInfoData) UpdateGenreInfoFields(info *wv.MediaGenreInfo, by wv.PublicUserId) {
+	info.GenreTitle = e.GenreTitle
+	info.GenreDescription = e.GenreDescription
+	info.AgeRange = e.AgeRange
+	info.UpdatedBy = by
+}
+
+//---------------------------------------------------------

@@ -87,6 +87,17 @@ type DeleteGenreInfoData struct {
 	GenreTitle string     `json:"genre_title"`
 }
 
+type EditGenreInfoData struct {
+	GenreId          wv.GenreId     `json:"genre_id"`
+	GenreTitle       string         `json:"genre_title"`
+	GenreDescription string         `json:"genre_description"`
+	AgeRange         wv.StringRange `json:"age_range"`
+}
+
+type EditGenreInfoResult struct {
+	GenreInfo *wv.MediaGenreInfo `json:"genre_info"`
+}
+
 type AddMediaGenreData struct {
 	MediaId    wv.MediaModelId `json:"model_id"`
 	MediaGenre wv.GenreId      `json:"genre_id"`

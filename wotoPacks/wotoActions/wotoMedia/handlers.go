@@ -180,7 +180,49 @@ func batchEditGenreInfo(req interfaces.ReqBase) error {
 		return we.SendNotAuthorized(req, OriginEditGenreInfo)
 	}
 
-	return we.SendMethodNotImplemented(req, OriginEditGenreInfo)
+	me := req.GetMe()
+	meta := me.GetMeta()
+	if meta != nil && !meta.GetBoolNoErr("can_edit_genre_info") {
+		return we.SendPermissionDenied(req, OriginCreateNewGenre)
+	}
+
+	var entryData = new(EditGenreInfoData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		return err
+	}
+
+	entryData.GenreTitle = strings.TrimSpace(entryData.GenreTitle)
+
+	var info *wv.MediaGenreInfo
+
+	if entryData.GenreId.IsInvalid() {
+		if entryData.GenreTitle == "" {
+			return we.SendInvalidGenreId(req, OriginDeleteGenreInfo)
+		}
+
+		info = mediaDatabase.GetGenreInfoByTitle(entryData.GenreTitle)
+	} else {
+		info = mediaDatabase.GetGenreInfoById(entryData.GenreId)
+		if info != nil && entryData.GenreTitle != "" {
+			tmpInfo := mediaDatabase.GetGenreInfoByTitle(entryData.GenreTitle)
+			if tmpInfo != nil && tmpInfo.GenreTitle != info.GenreTitle {
+				// this title already exists in db, return error
+				return we.SendGenreTitleAlreadyExists(req, OriginEditGenreInfo)
+			}
+		}
+	}
+
+	if info == nil {
+		return we.SendGenreInfoNotFound(req, OriginDeleteGenreInfo)
+	}
+
+	entryData.UpdateGenreInfoFields(info, me.UserId)
+	mediaDatabase.SaveNewGenreInfo(info)
+
+	return req.SendResult(&EditGenreInfoResult{
+		GenreInfo: info,
+	})
 }
 
 // batchAddMediaGenre handler adds the specified genre-info to the

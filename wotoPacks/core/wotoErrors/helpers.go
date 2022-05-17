@@ -319,3 +319,12 @@ func SendGenreInfoNotFound(req inf.ReqBase, origin string) error {
 	})
 	return err
 }
+
+func SendGenreTitleAlreadyExists(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrGenreTitleAlreadyExists,
+		Message: MessageGenreTitleAlreadyExists,
+		Origin:  origin,
+	})
+	return err
+}
