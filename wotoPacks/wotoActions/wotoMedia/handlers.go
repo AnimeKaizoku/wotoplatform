@@ -142,6 +142,15 @@ func batchDeleteGenre(req interfaces.ReqBase) error {
 	}
 
 	return we.SendMethodNotImplemented(req, OriginDeleteGenre)
+} //
+
+// batchEditGenreInfo handler edits the specified genre-info.
+func batchEditGenreInfo(req interfaces.ReqBase) error {
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginDeleteGenre)
+	}
+
+	return we.SendMethodNotImplemented(req, OriginDeleteGenre)
 }
 
 // batchAddMediaGenre handler adds the specified genre-info to the

@@ -28,6 +28,7 @@ var (
 		BATCH_GET_MEDIA_BY_ID:    batchGetMediaById,
 		BATCH_CREATE_NEW_GENRE:   batchCreateNewGenre,
 		BATCH_DELETE_GENRE:       batchDeleteGenre,
+		BATCH_EDIT_GENRE_INFO:    batchEditGenreInfo,
 		BATCH_ADD_MEDIA_GENRE:    batchAddMediaGenre,
 		BATCH_REMOVE_MEDIA_GENRE: batchRemoveMediaGenre,
 		BATCH_GET_MEDIA_GENRES:   batchGetMediaGenres,
