@@ -62,21 +62,23 @@ func (u *UserInfo) IsInvalid() bool {
 	return u == nil || u.UserId.IsZero()
 }
 
-func (u *UserInfo) SetAsMeta(meta MetaDataProvider) {
+func (u *UserInfo) SetAsMeta(meta ssg.MetaDataProvider) {
 	u.metaProvider = meta
 }
 
-func (u *UserInfo) GetMeta() MetaDataProvider {
+func (u *UserInfo) GetMeta() ssg.MetaDataProvider {
 	return u.metaProvider
 }
 
 //---------------------------------------------------------
 
-func (m *MediaModel) SetAsMeta(meta MetaDataProvider) {
+//---------------------------------------------------------
+
+func (m *MediaModel) SetAsMeta(meta ssg.MetaDataProvider) {
 	m.mediaMetaData = meta
 }
 
-func (m *MediaModel) GetMeta() MetaDataProvider {
+func (m *MediaModel) GetMeta() ssg.MetaDataProvider {
 	return m.mediaMetaData
 }
 
@@ -177,6 +179,10 @@ func (e *MediaGenreElement) GenerateNewUniqueId() {
 
 func (e GenreId) ToString() string {
 	return ssg.ToBase10(int64(e))
+}
+
+func (e GenreId) IsInvalid() bool {
+	return e == 0
 }
 
 //---------------------------------------------------------

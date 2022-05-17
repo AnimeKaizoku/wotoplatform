@@ -73,9 +73,13 @@ type GetMediaByIdResult struct {
 }
 
 type CreateNewGenreData struct {
+	GenreTitle       string         `json:"genre_title"`
+	GenreDescription string         `json:"genre_description"`
+	AgeRange         wv.StringRange `json:"age_range"`
 }
 
 type CreateNewGenreResult struct {
+	GenreId wv.GenreId `json:"genre_id"`
 }
 
 type DeleteGenreData struct {

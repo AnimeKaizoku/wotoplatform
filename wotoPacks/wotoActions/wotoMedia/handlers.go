@@ -18,8 +18,10 @@
 package wotoMedia
 
 import (
+	"strings"
 	we "wp-server/wotoPacks/core/wotoErrors"
 	wv "wp-server/wotoPacks/core/wotoValues"
+	"wp-server/wotoPacks/core/wotoValues/wotoValidate"
 	"wp-server/wotoPacks/database/mediaDatabase"
 	"wp-server/wotoPacks/interfaces"
 	wa "wp-server/wotoPacks/wotoActions"
@@ -107,7 +109,29 @@ func batchCreateNewGenre(req interfaces.ReqBase) error {
 		return we.SendNotAuthorized(req, OriginCreateNewGenre)
 	}
 
-	return we.SendMethodNotImplemented(req, OriginCreateNewGenre)
+	me := req.GetMe()
+	meta := me.GetMeta()
+	if meta != nil && !meta.GetBoolNoErr("can_create_genre_info") {
+		return we.SendPermissionDenied(req, OriginCreateNewGenre)
+	}
+
+	var entryData = new(CreateNewGenreData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		return err
+	}
+
+	entryData.GenreTitle = strings.TrimSpace(entryData.GenreTitle)
+	if !wotoValidate.IsTitleValid(entryData.GenreTitle) {
+		return we.SendInvalidTitle(req, OriginCreateNewGenre)
+	}
+
+	info := entryData.ToMediaGenreInfo(me.UserId)
+	mediaDatabase.SaveNewGenreInfo(info)
+
+	return req.SendResult(&CreateNewGenreResult{
+		GenreId: info.GenreId,
+	})
 }
 
 // batchDeleteGenre handler deletes the specified genre-info

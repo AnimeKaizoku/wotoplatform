@@ -24,6 +24,10 @@ import (
 )
 
 var (
+	genreInfoIdGenerator = ssg.NewNumIdGenerator[wv.GenreId]()
+)
+
+var (
 	ModelMediaModel        *wv.MediaModel        = &wv.MediaModel{}
 	ModelMediaGenreInfo    *wv.MediaGenreInfo    = &wv.MediaGenreInfo{}
 	ModelMediaGenreElement *wv.MediaGenreElement = &wv.MediaGenreElement{}

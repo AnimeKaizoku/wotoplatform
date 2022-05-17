@@ -1,6 +1,10 @@
 package wotoRaw
 
-import "time"
+import (
+	"time"
+
+	"github.com/AnimeKaizoku/ssg/ssg"
+)
 
 type (
 	PublicUserId          int64
@@ -13,35 +17,6 @@ type (
 	AuthorId              uint32
 	ProfilePictureModelId string
 )
-
-// TODO: move this type to ssg package
-type MetaDataProvider interface {
-	Get(key string) (string, error)
-	GetInt(key string) (int, error)
-	GetInt8(key string) (int8, error)
-	GetInt16(key string) (int16, error)
-	GetInt32(key string) (int32, error)
-	GetInt64(key string) (int64, error)
-	GetUInt(key string) (uint, error)
-	GetUInt8(key string) (uint8, error)
-	GetUInt16(key string) (uint16, error)
-	GetUInt32(key string) (uint32, error)
-	GetUInt64(key string) (uint64, error)
-	GetBool(key string) (bool, error)
-
-	GetNoErr(key string) string
-	GetIntNoErr(key string) int
-	GetInt8NoErr(key string) int8
-	GetInt16NoErr(key string) int16
-	GetInt32NoErr(key string) int32
-	GetInt64NoErr(key string) int64
-	GetUIntNoErr(key string) uint
-	GetUInt8NoErr(key string) uint8
-	GetUInt16NoErr(key string) uint16
-	GetUInt32NoErr(key string) uint32
-	GetUInt64NoErr(key string) uint64
-	GetBoolNoErr(key string) bool
-}
 
 // UserInfo struct in wotoRaw is a low level struct.
 // It shouldn't be used directly in any package.
@@ -75,7 +50,7 @@ type UserInfo struct {
 	CreatedBy      PublicUserId   `json:"created_by"`
 	cachedTime     time.Time      `json:"-" gorm:"-" sql:"-"`
 
-	metaProvider MetaDataProvider `json:"-" gorm:"-" sql:"-"`
+	metaProvider ssg.MetaDataProvider `json:"-" gorm:"-" sql:"-"`
 }
 
 type GroupInfo struct {
@@ -105,6 +80,7 @@ type LikedListElement struct {
 	UpdatedAt    time.Time    `json:"-"`
 }
 
+//
 type MediaGenreInfo struct {
 	GenreId          GenreId      `json:"genre_id" gorm:"primaryKey"`
 	GenreTitle       string       `json:"genre_title"`
@@ -176,5 +152,5 @@ type MediaModel struct {
 	CreatedBy   PublicUserId      `json:"created_by"`
 	UpdatedBy   PublicUserId      `json:"updated_by"`
 
-	mediaMetaData MetaDataProvider
+	mediaMetaData ssg.MetaDataProvider
 }

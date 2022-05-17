@@ -36,6 +36,10 @@ func IsKeyValid(key string) bool {
 	return len(key) >= MinKeyLength && len(key) <= MaxKeyLength && isCorrectKey(key)
 }
 
+func IsTitleValid(title string) bool {
+	return len(title) >= MinTitleLength && len(title) <= MaxTitleLength
+}
+
 func isCorrectKey(key string) bool {
 	for i, c := range key {
 		if !IsEnglish(c) {

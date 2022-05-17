@@ -11,6 +11,8 @@ const (
 	MinKeyLength         = 3
 	MaxKeyLength         = 20
 	MaxUserFavoriteCount = 32
+	MinTitleLength       = 2
+	MaxTitleLength       = 64
 )
 
 const (

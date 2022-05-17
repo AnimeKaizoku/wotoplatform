@@ -603,7 +603,7 @@ func batchAppendUserLikedList(req interfaces.ReqBase) error {
 	}
 
 	entryData.Title = strings.TrimSpace(entryData.Title)
-	if entryData.Title == "" {
+	if !wotoValidate.IsTitleValid(entryData.Title) {
 		return we.SendInvalidTitle(req, OriginAppendUserLikedList)
 	}
 

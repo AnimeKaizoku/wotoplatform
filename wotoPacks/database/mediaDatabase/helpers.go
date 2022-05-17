@@ -118,6 +118,29 @@ func GetGenreInfoByTitle(title string) *wv.MediaGenreInfo {
 	return mediaGenreInfosByTitle.Get(title)
 }
 
+// SaveNewGenreInfo saves the info into db and caches it in
+// the memory.
+func SaveNewGenreInfo(info *wv.MediaGenreInfo) {
+	SaveNewGenreInfoNoCache(info)
+
+	mediaGenreInfos.Add(info.GenreId, info)
+	mediaGenreInfosByTitle.Add(info.GenreTitle, info)
+}
+
+// SaveNewGenreInfoNoCache saves the info into db only, this
+// function won't touch cache.
+func SaveNewGenreInfoNoCache(info *wv.MediaGenreInfo) {
+	if info.GenreId.IsInvalid() {
+		info.GenreId = genreInfoIdGenerator.Next()
+	}
+
+	lockDatabase()
+	tx := wv.SESSION.Begin()
+	tx.Save(info)
+	tx.Commit()
+	unlockDatabase()
+}
+
 // AddMediaGenre adds a specific genre (using its genre-id) to a
 // media-model.
 // this function does not validate the genre-id value passed to it;
