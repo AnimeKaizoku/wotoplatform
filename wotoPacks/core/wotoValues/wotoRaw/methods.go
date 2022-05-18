@@ -3,7 +3,6 @@ package wotoRaw
 import (
 	"time"
 
-	"github.com/AnimeKaizoku/ssg/ssg"
 	ws "github.com/AnimeKaizoku/ssg/ssg"
 )
 
@@ -62,11 +61,11 @@ func (u *UserInfo) IsInvalid() bool {
 	return u == nil || u.UserId.IsZero()
 }
 
-func (u *UserInfo) SetAsMeta(meta ssg.MetaDataProvider) {
+func (u *UserInfo) SetAsMeta(meta ws.MetaDataProvider) {
 	u.metaProvider = meta
 }
 
-func (u *UserInfo) GetMeta() ssg.MetaDataProvider {
+func (u *UserInfo) GetMeta() ws.MetaDataProvider {
 	return u.metaProvider
 }
 
@@ -74,11 +73,11 @@ func (u *UserInfo) GetMeta() ssg.MetaDataProvider {
 
 //---------------------------------------------------------
 
-func (m *MediaModel) SetAsMeta(meta ssg.MetaDataProvider) {
+func (m *MediaModel) SetAsMeta(meta ws.MetaDataProvider) {
 	m.mediaMetaData = meta
 }
 
-func (m *MediaModel) GetMeta() ssg.MetaDataProvider {
+func (m *MediaModel) GetMeta() ws.MetaDataProvider {
 	return m.mediaMetaData
 }
 
@@ -208,7 +207,7 @@ func (e *LikedListElement) CompareWith(title string, media MediaModelId) bool {
 //---------------------------------------------------------
 
 func (e *MediaGenreElement) GenerateUniqueId() {
-	e.UniqueId = MediaGenreElementPrefix + ssg.ToBase32(time.Now().Unix())
+	e.UniqueId = MediaGenreElementPrefix + ws.ToBase32(time.Now().Unix())
 }
 
 func (e *MediaGenreElement) GenerateNewUniqueId() {
@@ -216,13 +215,13 @@ func (e *MediaGenreElement) GenerateNewUniqueId() {
 		return
 	}
 	e.UniqueId = MediaGenreElementPrefix + e.Genre.ToString() +
-		UniqueIdInnerSeparator + ssg.ToBase32(time.Now().Unix())
+		UniqueIdInnerSeparator + ws.ToBase32(time.Now().Unix())
 }
 
 //---------------------------------------------------------
 
 func (e GenreId) ToString() string {
-	return ssg.ToBase10(int64(e))
+	return ws.ToBase10(int64(e))
 }
 
 func (e GenreId) IsInvalid() bool {
