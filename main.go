@@ -54,7 +54,9 @@ func runServer() error {
 		if err != nil {
 			log.Fatal(err)
 		}
-		config := &tls.Config{Certificates: []tls.Certificate{cer}}
+		config := &tls.Config{
+			Certificates: []tls.Certificate{cer},
+		}
 
 		ln, err = tls.Listen(cfg.Network, net.JoinHostPort(cfg.Bind, cfg.Port), config)
 		if err != nil {
