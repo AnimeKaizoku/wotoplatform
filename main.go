@@ -18,6 +18,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"log"
 	"net"
 
@@ -47,14 +48,27 @@ func runServer() error {
 		return err
 	}
 
-	ln, err := net.Listen(cfg.Network, net.JoinHostPort(cfg.Bind, cfg.Port))
-	if err != nil {
-		return err
-	}
+	var ln net.Listener
+	if cfg.UseTLS {
+		cer, err := tls.LoadX509KeyPair("server.pem", "server.key")
+		if err != nil {
+			return err
+		}
+		config := &tls.Config{
+			Certificates: []tls.Certificate{cer},
+			MinVersion:   tls.VersionTLS12,
+		}
 
-	// do NOT close the listener in this function.
-	// it should be done in `entryPoints.Listen` function.
-	//defer ln.Close()
+		ln, err = tls.Listen(cfg.Network, net.JoinHostPort(cfg.Bind, cfg.Port), config)
+		if err != nil {
+			return err
+		}
+	} else {
+		ln, err = net.Listen(cfg.Network, net.JoinHostPort(cfg.Bind, cfg.Port))
+		if err != nil {
+			return err
+		}
+	}
 
 	err = database.StartDatabase()
 	if err != nil {

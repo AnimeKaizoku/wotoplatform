@@ -28,6 +28,8 @@ import (
 
 // Listen function will listen for incoming connections
 // using the specified listener argument.
+// do NOT close the listener in any other functions.
+// it should be done in `entryPoints.Listen` function.
 func Listen(ln net.Listener) error {
 	if ln == nil {
 		return ErrListenerNil
@@ -185,7 +187,7 @@ func safeCheckEntry(conn *wv.WotoConnection) {
 // can be closed easily after that.
 func isListenerClosed(err *net.OpError) bool {
 	if err.Source == nil && err.Op == "accept" &&
-		err.Net == "tcp" {
+		err.Net == wotoConfig.GetNetwork() {
 		// the problem is in listener, return the function.
 		return true
 	}
