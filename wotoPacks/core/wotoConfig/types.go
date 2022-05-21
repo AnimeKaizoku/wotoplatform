@@ -27,6 +27,7 @@ type Config struct {
 	Owners                 []WotoOwner `json:"owners"`
 	ClientIDs              []string    `json:"client_ids"`
 	UseCrypto              bool        `json:"use_crypto"`
+	UseTLS                 bool        `json:"use_tls"`
 	DatabaseUrl            string      `json:"db_url"`
 	DatabaseName           string      `json:"db_name"`
 	UseSQLLite             bool        `json:"use_sql_lite"`

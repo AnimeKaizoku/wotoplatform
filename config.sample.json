@@ -4,8 +4,9 @@
     "port": "50100",
     "name": "woto-platform",
     "description": "online media platform",
-    "use_crypto": true,
+    "use_crypto": false,
     "skip_default_transaction": false,
+    "use_tls": false,
     "owners": [
         {
             "username": "aliwoto",
@@ -25,5 +26,5 @@
     ],
     "db_url": "postgresql://Username:Password@localhost:5432/DatabaseName",
     "db_name": "wp-database",
-    "use_sql_lite": true
+    "use_sqlite": true
 }

@@ -21,13 +21,14 @@ import (
 	"net"
 	"time"
 	"wp-server/wotoPacks/core/utils/logging"
+	"wp-server/wotoPacks/core/wotoConfig"
 	wv "wp-server/wotoPacks/core/wotoValues"
 	"wp-server/wotoPacks/wotoActions"
 )
 
 // Listen function will listen for incoming connections
 // using the specified listener argument.
-func Listen(ln net.Listener, cryptoEnabled bool) error {
+func Listen(ln net.Listener) error {
 	if ln == nil {
 		return ErrListenerNil
 	}
@@ -37,9 +38,15 @@ func Listen(ln net.Listener, cryptoEnabled bool) error {
 		go checkRegistration()
 	}
 
-	err := wv.InitKeys(cryptoEnabled)
-	if err != nil {
-		return err
+	useCrypto := wotoConfig.UseCrypto()
+	var err error
+	if useCrypto {
+		err = wv.InitKeys()
+		if err != nil {
+			return err
+		}
+	} else {
+		wv.DisableEncryption()
 	}
 
 	logging.Info("started to listening on: ", ln.Addr().String())

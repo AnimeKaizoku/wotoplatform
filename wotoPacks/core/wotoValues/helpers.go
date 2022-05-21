@@ -11,12 +11,7 @@ import (
 
 // InitKeys will initialize the internal keys.
 // skipcq
-func InitKeys(cryptoEnabled bool) error {
-	if !cryptoEnabled {
-		encryptionEnabled = cryptoEnabled
-		return nil
-	}
-
+func InitKeys() error {
 	for keyIndex, current := range _initialKeys {
 		if current == nil {
 			continue
@@ -34,6 +29,13 @@ func InitKeys(cryptoEnabled bool) error {
 	}
 
 	return nil
+}
+
+// DisableEncryption function will set the encryptionEnabled variable to
+// false, resulting in not using wotoCrpto package and not generating any
+// keys at all.
+func DisableEncryption() {
+	encryptionEnabled = false
 }
 
 // MakeSureNum will make sure that when you convert `i`
