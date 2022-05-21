@@ -197,3 +197,10 @@ func GetOwners() []WotoOwner {
 	}
 	return WConfig.Owners
 }
+
+func GetNetwork() string {
+	if WConfig == nil {
+		return "tcp"
+	}
+	return WConfig.Network
+}

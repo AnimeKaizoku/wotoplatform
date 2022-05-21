@@ -185,7 +185,7 @@ func safeCheckEntry(conn *wv.WotoConnection) {
 // can be closed easily after that.
 func isListenerClosed(err *net.OpError) bool {
 	if err.Source == nil && err.Op == "accept" &&
-		err.Net == "tcp" {
+		err.Net == wotoConfig.GetNetwork() {
 		// the problem is in listener, return the function.
 		return true
 	}
