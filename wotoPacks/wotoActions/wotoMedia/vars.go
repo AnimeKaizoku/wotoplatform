@@ -24,8 +24,16 @@ import (
 
 var (
 	_batchHandlers = map[wa.BatchExecution]wv.ReqHandler{
-		BATCH_REGISTER_MEDIA:     batchRegisterMedia,
-		BATCH_GET_MEDIA_BY_ID:    batchGetMediaById,
-		BATCH_CHANGE_MEDIA_GENRE: batchChangeMediaGenre,
+		BATCH_REGISTER_MEDIA:        batchRegisterMedia,
+		BATCH_GET_MEDIA_BY_ID:       batchGetMediaById,
+		BATCH_CREATE_NEW_GENRE:      batchCreateNewGenre,
+		BATCH_DELETE_GENRE_INFO:     batchDeleteGenreInfo,
+		BATCH_EDIT_GENRE_INFO:       batchEditGenreInfo,
+		BATCH_ADD_MEDIA_GENRE:       batchAddMediaGenre,
+		BATCH_REMOVE_MEDIA_GENRE:    batchRemoveMediaGenre,
+		BATCH_GET_MEDIA_GENRES:      batchGetMediaGenres,
+		BATCH_GET_MEDIA_GENRES_INFO: batchGetMediaGenresInfo,
+		BATCH_SEARCH_MEDIA:          batchSearchGenre,
+		BATCH_DELETE_MEDIA:          batchDeleteMedia,
 	}
 )

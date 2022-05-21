@@ -32,26 +32,63 @@ import (
 // using wotoRaw as well).
 type UserInfo = wotoRaw.UserInfo
 
+// ReqBase is the base interface of a request coming from a client.
+// it has all necessary methods that a handler needs to answer the request
+// from the same client.
 type ReqBase interface {
+	//
+	GetUniqueId() string
+
+	//
+	SetAsUniqueId(value string)
+
+	//
 	GetAction() wotoActions.RequestAction
+
+	//
 	GetBatchExecute() string
+
+	//
 	GetData() string
+
+	//
 	GetBatchValues() []wotoActions.BatchExecution
+
+	//
 	CanWrite() bool
+
+	//
 	SetBatchValues([]wotoActions.BatchExecution)
+
+	//
 	WriteData(b []byte) (n int, err error)
+
+	//
 	WriteJson(value wcr.KeysContainer) (n int, err error)
+
+	//
 	WriteError(errCode int, errMessage string) (int, error)
+
+	//
 	SendError(err *serverErrors.EndPointError) (int, error)
+
+	//
 	WriteResult(result any) (int, error)
 
 	// SendResult is a wrapper method for `WriteResult` which returns
 	// only error value.
 	SendResult(result any) error
 
+	//
 	WriteString(str string) (n int, err error)
+
+	//
 	ParseJsonData(v any) error
+
+	//
 	ReadData() (n []byte, err error)
+
+	//
 	ReadJson(value any) error
 
 	// ReadString will read the incoming bytes from the tcp

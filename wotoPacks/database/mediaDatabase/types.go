@@ -23,7 +23,6 @@ import (
 )
 
 type NewMediaData struct {
-	Genre       wv.GenreId
 	Company     wv.CompanyId
 	Author      wv.AuthorId
 	Episode     int

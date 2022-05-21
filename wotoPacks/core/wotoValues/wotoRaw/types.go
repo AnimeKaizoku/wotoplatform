@@ -1,6 +1,10 @@
 package wotoRaw
 
-import "time"
+import (
+	"time"
+
+	"github.com/AnimeKaizoku/ssg/ssg"
+)
 
 type (
 	PublicUserId          int64
@@ -13,22 +17,6 @@ type (
 	AuthorId              uint32
 	ProfilePictureModelId string
 )
-
-// TODO: move this type to ssg package
-type MetaDataProvider interface {
-	Get(key string) (string, error)
-	GetInt(key string) (int, error)
-	GetInt8(key string) (int8, error)
-	GetInt16(key string) (int16, error)
-	GetInt32(key string) (int32, error)
-	GetInt64(key string) (int64, error)
-	GetUInt(key string) (uint, error)
-	GetUInt8(key string) (uint8, error)
-	GetUInt16(key string) (uint16, error)
-	GetUInt32(key string) (uint32, error)
-	GetUInt64(key string) (uint64, error)
-	GetBool(key string) (bool, error)
-}
 
 // UserInfo struct in wotoRaw is a low level struct.
 // It shouldn't be used directly in any package.
@@ -62,7 +50,7 @@ type UserInfo struct {
 	CreatedBy      PublicUserId   `json:"created_by"`
 	cachedTime     time.Time      `json:"-" gorm:"-" sql:"-"`
 
-	metaProvider MetaDataProvider `json:"-" gorm:"-" sql:"-"`
+	metaProvider ssg.MetaDataProvider `json:"-" gorm:"-" sql:"-"`
 }
 
 type GroupInfo struct {
@@ -92,6 +80,7 @@ type LikedListElement struct {
 	UpdatedAt    time.Time    `json:"-"`
 }
 
+//
 type MediaGenreInfo struct {
 	GenreId          GenreId      `json:"genre_id" gorm:"primaryKey"`
 	GenreTitle       string       `json:"genre_title"`
@@ -102,32 +91,71 @@ type MediaGenreInfo struct {
 	UpdatedBy        PublicUserId `json:"updated_by"`
 }
 
-type MediaModel struct {
-	ModelId     MediaModelId  `json:"model_id" gorm:"primaryKey"`
-	Genre       GenreId       `json:"genre"`
-	Company     CompanyId     `json:"company"`
-	Author      AuthorId      `json:"author"`
-	Episode     int           `json:"episode"`
-	MediaType   string        `json:"media_type"`
-	Title       string        `json:"title"`
-	Duration    time.Duration `json:"duration"`
-	Artist      string        `json:"artist"`
-	Album       string        `json:"album"`
-	Year        int           `json:"year"`
-	Cover       string        `json:"cover"`
-	File        string        `json:"file"`
-	Thumbnail   string        `json:"thumbnail"`
-	Lyrics      string        `json:"lyrics"`
-	Lang        string        `json:"lang"`
-	LangCode    string        `json:"lang_code"`
-	Region      string        `json:"region"`
-	SourceUrl   string        `json:"source_url"`
-	ExternalUrl string        `json:"external_url"`
-	IsPrivate   bool          `json:"is_private"`
-	Description string        `json:"description"`
-	CreatedAt   time.Time     `json:"created_at"`
-	CreatedBy   PublicUserId  `json:"created_by"`
-	UpdatedBy   PublicUserId  `json:"updated_by"`
+// MediaGenreElement struct contains information about a
+// media-model that has a genre. this struct makes us able to add
+// multiple genres to a single media-model.
+// this struct has a model in mediaDatabase and is inserted in that
+// package, look at helpers.go file in that package for more information
+// about how we are inserting them in db.
+// See also: https://github.com/AnimeKaizoku/wotoplatform/issues/21
+type MediaGenreElement struct {
+	// UniqueId field specifies the unique-id of this element used to
+	// distinguish the element in database. for generating a new
+	// unique-id for an instance of this struct, you have to call
+	// `GenerateUniqueId` method on this variable.
+	UniqueId string `json:"unique_id" gorm:"primaryKey"`
 
-	mediaMetaData MetaDataProvider
+	// MediaId field is the media-model id that this element is
+	// referring to.
+	MediaId MediaModelId `json:"media_id"`
+
+	// Genre is the genre-id that this element is referring to.
+	Genre GenreId `json:"genre"`
+
+	// CreatedBy field is the user-id of the person that created this
+	// element in the db.
+	CreatedBy PublicUserId `json:"created_by"`
+}
+
+// MediaModel struct contains information about a specified media-model.
+// users are able to interact with media-models (create, modify, delete),
+// add them to their different lists (such as playlists) or add them to
+// their schedule.
+type MediaModel struct {
+	// ModelId is the unique id of this media-model. this field is used
+	// to identify this media-model to another media-models. clients have
+	// to use this id to interact with a media-model.
+	ModelId MediaModelId `json:"model_id" gorm:"primaryKey"`
+
+	// Genres field is an array of MediaGenreInfo type used to specify the
+	// genres of this media-model. they shouldn't be repeated. this field is
+	// ignored by sql and gorm, database packages have to use MediaGenreElement
+	// to get this array.
+	Genres        []*MediaGenreInfo    `json:"genres" gorm:"-" sql:"-"`
+	GenreElements []*MediaGenreElement `json:"-" gorm:"-" sql:"-"`
+	Company       CompanyId            `json:"company"`
+	Author        AuthorId             `json:"author"`
+	Episode       int                  `json:"episode"`
+	MediaType     string               `json:"media_type"`
+	Title         string               `json:"title"`
+	Duration      time.Duration        `json:"duration"`
+	Artist        string               `json:"artist"`
+	Album         string               `json:"album"`
+	Year          int                  `json:"year"`
+	Cover         string               `json:"cover"`
+	File          string               `json:"file"`
+	Thumbnail     string               `json:"thumbnail"`
+	Lyrics        string               `json:"lyrics"`
+	Lang          string               `json:"lang"`
+	LangCode      string               `json:"lang_code"`
+	Region        string               `json:"region"`
+	SourceUrl     string               `json:"source_url"`
+	ExternalUrl   string               `json:"external_url"`
+	IsPrivate     bool                 `json:"is_private"`
+	Description   string               `json:"description"`
+	CreatedAt     time.Time            `json:"created_at"`
+	CreatedBy     PublicUserId         `json:"created_by"`
+	UpdatedBy     PublicUserId         `json:"updated_by"`
+
+	mediaMetaData ssg.MetaDataProvider
 }

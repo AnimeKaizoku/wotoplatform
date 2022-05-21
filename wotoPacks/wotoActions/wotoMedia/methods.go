@@ -1,10 +1,14 @@
 package wotoMedia
 
-import mdb "wp-server/wotoPacks/database/mediaDatabase"
+import (
+	wv "wp-server/wotoPacks/core/wotoValues"
+	mdb "wp-server/wotoPacks/database/mediaDatabase"
+)
+
+//---------------------------------------------------------
 
 func (d *RegisterMediaData) ToNewMediaData() *mdb.NewMediaData {
 	return &mdb.NewMediaData{
-		Genre:       d.Genre,
 		Company:     d.Company,
 		Author:      d.Author,
 		Episode:     d.Episode,
@@ -27,3 +31,26 @@ func (d *RegisterMediaData) ToNewMediaData() *mdb.NewMediaData {
 		Description: d.Description,
 	}
 }
+
+//---------------------------------------------------------
+
+func (g *CreateNewGenreData) ToMediaGenreInfo(by wv.PublicUserId) *wv.MediaGenreInfo {
+	return &wv.MediaGenreInfo{
+		GenreTitle:       g.GenreTitle,
+		GenreDescription: g.GenreDescription,
+		AgeRange:         g.AgeRange,
+		CreatedBy:        by,
+		UpdatedBy:        by,
+	}
+}
+
+//---------------------------------------------------------
+
+func (e *EditGenreInfoData) UpdateGenreInfoFields(info *wv.MediaGenreInfo, by wv.PublicUserId) {
+	info.GenreTitle = e.GenreTitle
+	info.GenreDescription = e.GenreDescription
+	info.AgeRange = e.AgeRange
+	info.UpdatedBy = by
+}
+
+//---------------------------------------------------------

@@ -54,6 +54,9 @@ const (
 	ErrMediaNotFound
 	ErrInvalidMediaId
 	ErrMediaTitleAlreadyExists
+	ErrInvalidGenreId
+	ErrGenreInfoNotFound
+	ErrGenreTitleAlreadyExists
 )
 
 const (

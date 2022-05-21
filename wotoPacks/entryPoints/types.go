@@ -22,7 +22,19 @@ import (
 	"wp-server/wotoPacks/wotoActions"
 )
 
+// RequestEntry struct contains the data sent by clients
+// as a request. it contains a unique-id, used to identify which
+// data sent by user belongs to which request sent by client.
 type RequestEntry struct {
+	// UniqueId field is the unique-id of this request-entry, used
+	// to identify which data from the server belongs to which request
+	// sent by the client. this field needs to be sent by clients, server
+	// should re-send this field to client in the response to a request.
+	// (although, server has the right to validate this field by specified
+	// rules, and close the connection unexpectedly if the unique-id is in
+	// incorrect format).
+	UniqueId string `json:"unique_id"`
+
 	// Action is the request entry's request action.
 	Action wotoActions.RequestAction `json:"action"`
 

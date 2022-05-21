@@ -61,22 +61,81 @@ func (u *UserInfo) IsInvalid() bool {
 	return u == nil || u.UserId.IsZero()
 }
 
-func (u *UserInfo) SetAsMeta(meta MetaDataProvider) {
+func (u *UserInfo) SetAsMeta(meta ws.MetaDataProvider) {
 	u.metaProvider = meta
 }
 
-func (u *UserInfo) GetMeta() MetaDataProvider {
+func (u *UserInfo) GetMeta() ws.MetaDataProvider {
 	return u.metaProvider
 }
 
 //---------------------------------------------------------
 
-func (m *MediaModel) SetAsMeta(meta MetaDataProvider) {
+//---------------------------------------------------------
+
+func (m *MediaModel) SetAsMeta(meta ws.MetaDataProvider) {
 	m.mediaMetaData = meta
 }
 
-func (m *MediaModel) GetMeta() MetaDataProvider {
+func (m *MediaModel) GetMeta() ws.MetaDataProvider {
 	return m.mediaMetaData
+}
+
+func (m *MediaModel) GetGenreIDs() []GenreId {
+	if len(m.Genres) == 0 {
+		return nil
+	}
+
+	var result []GenreId
+	for _, current := range m.Genres {
+		result = append(result, current.GenreId)
+	}
+
+	return result
+}
+
+func (m *MediaModel) HasGenreId(id GenreId) bool {
+	for _, current := range m.Genres {
+		if current != nil && current.GenreId == id {
+			return true
+		}
+	}
+
+	return false
+}
+
+// RemoveGenreElement removes the target genre-info and element from
+// the media-model and returns the removed element (it will return nil if not found).
+func (m *MediaModel) RemoveGenreElement(id GenreId) *MediaGenreElement {
+	var newArray []*MediaGenreElement
+	var target *MediaGenreElement
+	for _, current := range m.GenreElements {
+		if current != nil && current.Genre == id {
+			target = current
+			continue
+		}
+
+		newArray = append(newArray, current)
+	}
+
+	if target == nil {
+		// not found
+		return nil
+	}
+
+	m.GenreElements = newArray
+
+	var newGenres []*MediaGenreInfo
+	for _, current := range m.Genres {
+		if current != nil && current.GenreId == id {
+			continue
+		}
+
+		newGenres = append(newGenres, current)
+	}
+
+	m.Genres = newGenres
+	return target
 }
 
 //---------------------------------------------------------
@@ -143,6 +202,30 @@ func (e *LikedListElement) IsInvalid() bool {
 
 func (e *LikedListElement) CompareWith(title string, media MediaModelId) bool {
 	return e.Title == title || e.MediaId == media
+}
+
+//---------------------------------------------------------
+
+func (e *MediaGenreElement) GenerateUniqueId() {
+	e.UniqueId = MediaGenreElementPrefix + ws.ToBase32(time.Now().Unix())
+}
+
+func (e *MediaGenreElement) GenerateNewUniqueId() {
+	if e.UniqueId != "" {
+		return
+	}
+	e.UniqueId = MediaGenreElementPrefix + e.Genre.ToString() +
+		UniqueIdInnerSeparator + ws.ToBase32(time.Now().Unix())
+}
+
+//---------------------------------------------------------
+
+func (e GenreId) ToString() string {
+	return ws.ToBase10(int64(e))
+}
+
+func (e GenreId) IsInvalid() bool {
+	return e == 0
 }
 
 //---------------------------------------------------------

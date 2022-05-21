@@ -61,7 +61,7 @@ func StartDatabase() error {
 	SESSION = db
 	wv.SESSION = SESSION
 
-	logging.Info("Database connected ")
+	logging.Info("Database connected")
 
 	// create tables if they don't exist
 	err = SESSION.AutoMigrate(
@@ -72,6 +72,8 @@ func StartDatabase() error {
 
 		// models in mediaDatabase:
 		mediaDatabase.ModelMediaModel,
+		mediaDatabase.ModelMediaGenreInfo,
+		mediaDatabase.ModelMediaGenreElement,
 
 		// models in groupsDatabase:
 		groupsDatabase.ModelGroupInfo,

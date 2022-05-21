@@ -27,8 +27,9 @@ type RequestAction uint
 type BatchExecution string
 
 type ActionResp struct {
-	Success bool                        `json:"success"`
-	Error   *serverErrors.EndPointError `json:"error"`
-	Result  interface{}                 `json:"result"`
-	Keys    wcr.KeyCollection           `json:"keys"`
+	Success  bool                        `json:"success"`
+	UniqueId string                      `json:"unique_id"`
+	Error    *serverErrors.EndPointError `json:"error"`
+	Result   interface{}                 `json:"result"`
+	Keys     wcr.KeyCollection           `json:"keys"`
 }
