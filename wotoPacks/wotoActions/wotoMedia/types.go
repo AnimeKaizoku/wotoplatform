@@ -119,11 +119,22 @@ type RemoveAddMediaGenreResult struct {
 }
 
 type GetMediaGenresData struct {
+	MediaId wv.MediaModelId `json:"model_id"`
 }
 
 type GetMediaGenresResult struct {
+	MediaId     wv.MediaModelId `json:"model_id"`
+	MediaGenres []wv.GenreId    `json:"media_genres"`
 }
 
+type GetMediaGenresInfoData struct {
+	MediaId wv.MediaModelId `json:"model_id"`
+}
+
+type GetMediaGenresInfoResult struct {
+	MediaId         wv.MediaModelId      `json:"model_id"`
+	MediaGenresInfo []*wv.MediaGenreInfo `json:"media_genres_info"`
+}
 type SearchGenreData struct {
 }
 
