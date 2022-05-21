@@ -51,7 +51,7 @@ func LoadMediaDatabase() error {
 			// deleted from the database OR the genre info which this genre-element
 			// is reffering to is invalid (perhaps has been removed
 			// from the database), remove the genre-element.
-			deleteMediaGenreElement(element)
+			deleteMediaGenreElementNoLock(element)
 			continue
 		}
 
