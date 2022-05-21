@@ -56,7 +56,7 @@ func runServer() error {
 		}
 		config := &tls.Config{
 			Certificates: []tls.Certificate{cer},
-			MinVersion:   tls.VersionTLS11,
+			MinVersion:   tls.VersionTLS12,
 		}
 
 		ln, err = tls.Listen(cfg.Network, net.JoinHostPort(cfg.Bind, cfg.Port), config)
@@ -69,10 +69,6 @@ func runServer() error {
 			return err
 		}
 	}
-
-	// do NOT close the listener in this function.
-	// it should be done in `entryPoints.Listen` function.
-	//defer ln.Close()
 
 	err = database.StartDatabase()
 	if err != nil {

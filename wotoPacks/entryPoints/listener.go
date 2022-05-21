@@ -28,6 +28,8 @@ import (
 
 // Listen function will listen for incoming connections
 // using the specified listener argument.
+// do NOT close the listener in any other functions.
+// it should be done in `entryPoints.Listen` function.
 func Listen(ln net.Listener) error {
 	if ln == nil {
 		return ErrListenerNil
