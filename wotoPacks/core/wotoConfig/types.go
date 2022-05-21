@@ -30,7 +30,7 @@ type Config struct {
 	UseTLS                 bool        `json:"use_tls"`
 	DatabaseUrl            string      `json:"db_url"`
 	DatabaseName           string      `json:"db_name"`
-	UseSQLLite             bool        `json:"use_sql_lite"`
+	UseSQLite              bool        `json:"use_sqlite"`
 	SkipDefaultTransaction bool        `json:"skip_default_transaction"`
 	IsDebug                bool        `json:"is_debug"`
 	IsDefault              bool        `json:"-"` // test purpose only

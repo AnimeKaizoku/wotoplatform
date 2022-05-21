@@ -141,7 +141,7 @@ func getDefaultConfig() *Config {
 
 	// use SQL-Lite by default, so we don't need any sql url and
 	// password.
-	WConfig.UseSQLLite = true
+	WConfig.UseSQLite = true
 
 	// WARNING: testing purpose only
 	WConfig.IsDefault = true
@@ -151,7 +151,7 @@ func getDefaultConfig() *Config {
 
 func UseSqlite() bool {
 	if WConfig != nil {
-		return WConfig.UseSQLLite
+		return WConfig.UseSQLite
 	}
 	return false
 }
