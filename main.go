@@ -56,6 +56,7 @@ func runServer() error {
 		}
 		config := &tls.Config{
 			Certificates: []tls.Certificate{cer},
+			MinVersion:   tls.VersionTLS11,
 		}
 
 		ln, err = tls.Listen(cfg.Network, net.JoinHostPort(cfg.Bind, cfg.Port), config)
