@@ -218,7 +218,7 @@ func SaveMediaModelNoCache(media *wv.MediaModel) {
 // DeleteMediaGenreElement
 func DeleteMediaGenreElement(element *wv.MediaGenreElement) {
 	lockDatabase()
-	deleteMediaGenreElement(element)
+	deleteMediaGenreElementNoLock(element)
 	unlockDatabase()
 
 	mediaGenreElements.Delete(element.MediaId)
@@ -226,7 +226,7 @@ func DeleteMediaGenreElement(element *wv.MediaGenreElement) {
 }
 
 // deleteMediaGenreElement
-func deleteMediaGenreElement(element *wv.MediaGenreElement) {
+func deleteMediaGenreElementNoLock(element *wv.MediaGenreElement) {
 	wv.SESSION.Delete(element)
 }
 
@@ -235,7 +235,7 @@ func deleteMediaGenreElement(element *wv.MediaGenreElement) {
 // it's up to caller to validate the info.
 func DeleteGenreInfo(info *wv.MediaGenreInfo) {
 	lockDatabase()
-	deleteGenreInfo(info)
+	deleteGenreInfoNoLock(info)
 	unlockDatabase()
 
 	DeleteGenreInfoFromCache(info)
@@ -247,7 +247,7 @@ func DeleteGenreInfoFromCache(info *wv.MediaGenreInfo) {
 	mediaGenreInfosByTitle.Delete(info.GenreTitle)
 }
 
-func deleteGenreInfo(info *wv.MediaGenreInfo) {
+func deleteGenreInfoNoLock(info *wv.MediaGenreInfo) {
 	wv.SESSION.Delete(info)
 }
 
