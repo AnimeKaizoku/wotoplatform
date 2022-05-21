@@ -52,7 +52,7 @@ func runServer() error {
 	if cfg.UseTLS {
 		cer, err := tls.LoadX509KeyPair("server.pem", "server.key")
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 		config := &tls.Config{
 			Certificates: []tls.Certificate{cer},
@@ -61,7 +61,7 @@ func runServer() error {
 
 		ln, err = tls.Listen(cfg.Network, net.JoinHostPort(cfg.Bind, cfg.Port), config)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 	} else {
 		ln, err = net.Listen(cfg.Network, net.JoinHostPort(cfg.Bind, cfg.Port))
