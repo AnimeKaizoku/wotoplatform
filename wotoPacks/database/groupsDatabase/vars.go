@@ -34,6 +34,7 @@ var (
 	groupsInfoByTelegramUsername = ssg.NewSafeMap[string, wv.GroupInfo]()
 	groupsInfoByTelegramId       = ssg.NewSafeMap[int64, wv.GroupInfo]()
 	groupsQueue                  = ssg.NewSafeMap[wv.PublicGroupId, groupQueueManager]()
+	groupIdGenerator             = ssg.NewNumIdGenerator[int64]()
 )
 
 // error variables

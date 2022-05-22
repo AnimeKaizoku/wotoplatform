@@ -18,8 +18,11 @@
 package groupsDatabase
 
 import (
+	"time"
 	"wp-server/wotoPacks/core/wotoConfig"
 	wv "wp-server/wotoPacks/core/wotoValues"
+
+	"github.com/AnimeKaizoku/ssg/ssg"
 )
 
 func LoadGroupsDatabase() error {
@@ -30,15 +33,7 @@ func LoadGroupsDatabase() error {
 	unlockDatabase()
 
 	for _, group := range allGroups {
-		groupsInfo.Add(group.GroupId, group)
-
-		if group.HasUsername() {
-			groupsInfoByUsername.Add(group.GroupUsername, group)
-		}
-
-		if group.HasTelegramId() {
-			groupsInfoByTelegramId.Add(group.TelegramId, group)
-		}
+		cacheGroupInfo(ssg.Clone(group))
 	}
 
 	return nil
@@ -62,6 +57,18 @@ func CreateNewGroup(data *CreateNewGroupData) *wv.GroupInfo {
 	return group
 }
 
+func cacheGroupInfo(group *wv.GroupInfo) {
+	groupsInfo.Add(group.GroupId, group)
+
+	if group.HasUsername() {
+		groupsInfoByUsername.Add(group.GroupUsername, group)
+	}
+
+	if group.HasTelegramId() {
+		groupsInfoByTelegramId.Add(group.TelegramId, group)
+	}
+}
+
 func GetGroupInfoByUsername(username string) *wv.GroupInfo {
 	return groupsInfoByUsername.Get(username)
 }
@@ -76,15 +83,7 @@ func GetGroupInfoByTelegramId(id int64) *wv.GroupInfo {
 
 func SaveGroup(group *wv.GroupInfo) {
 	SaveGroupNoCache(group)
-	groupsInfo.Add(group.GroupId, group)
-
-	if group.HasUsername() {
-		groupsInfoByUsername.Add(group.GroupUsername, group)
-	}
-
-	if group.HasTelegramId() {
-		groupsInfoByTelegramId.Add(group.TelegramId, group)
-	}
+	cacheGroupInfo(ssg.Clone(group))
 }
 
 func SaveGroupNoCache(group *wv.GroupInfo) {
@@ -113,7 +112,13 @@ func GetGroupQueue(id wv.PublicGroupId) ([]wv.MediaModelId, error) {
 }
 
 func generateGroupId() wv.PublicGroupId {
-	return ""
+	id := ssg.ToBase10(groupIdGenerator.Next())
+	tStr := ssg.ToBase32(time.Now().Unix())
+	return wv.PublicGroupId(GroupIdPrefix + id + tStr)
+}
+
+func GetNewGroupId() wv.PublicGroupId {
+	return generateGroupId()
 }
 
 func lockDatabase() {
