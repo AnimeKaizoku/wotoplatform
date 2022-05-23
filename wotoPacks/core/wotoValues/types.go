@@ -19,6 +19,7 @@ package wotoValues
 
 import (
 	"net"
+	"sync"
 	"time"
 	"wp-server/wotoPacks/core/wotoValues/wotoRaw"
 	"wp-server/wotoPacks/interfaces"
@@ -73,6 +74,7 @@ type WotoListener struct {
 
 type WotoConnection struct {
 	conn         net.Conn
+	mut          *sync.Mutex
 	origin       *WotoListener
 	isClosed     bool
 	isRegistered bool

@@ -45,10 +45,16 @@ func (l *WotoListener) Accept(r Registerer) (*WotoConnection, error) {
 //---------------------------------------------------------
 
 func (c *WotoConnection) IsClosed() bool {
+	c.mut.Lock()
+	defer c.mut.Unlock()
+
 	return c.isClosed
 }
 
 func (c *WotoConnection) Close() {
+	c.mut.Lock()
+	defer c.mut.Unlock()
+
 	if !c.isClosed && c.conn != nil {
 		c.isClosed = true
 		c.conn.Close()
@@ -56,6 +62,9 @@ func (c *WotoConnection) Close() {
 }
 
 func (c *WotoConnection) CanReadAndWrite() bool {
+	c.mut.Lock()
+	defer c.mut.Unlock()
+
 	return !c.isClosed && c.conn != nil
 }
 

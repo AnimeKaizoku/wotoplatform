@@ -328,3 +328,19 @@ func SendGenreTitleAlreadyExists(req inf.ReqBase, origin string) error {
 	})
 	return err
 }
+
+func SendBatchRequestNotFound(req inf.ReqBase) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrBatchRequestNotFound,
+		Message: MessageBatchRequestNotFound,
+	})
+	return err
+}
+
+func SendBatchRequestInvalid(req inf.ReqBase) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrBatchRequestInvalid,
+		Message: MessageBatchRequestInvalid,
+	})
+	return err
+}

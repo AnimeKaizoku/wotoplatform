@@ -37,4 +37,6 @@ const (
 	MessageInvalidGenreId                = "Invalid genre ID provided."
 	MessageGenreInfoNotFound             = "Genre info not found."
 	MessageGenreTitleAlreadyExists       = "Genre title already exists."
+	MessageBatchRequestNotFound          = "Batch request not found."
+	MessageBatchRequestInvalid           = "Batch request is invalid."
 )

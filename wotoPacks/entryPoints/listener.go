@@ -22,6 +22,7 @@ import (
 	"time"
 	"wp-server/wotoPacks/core/utils/logging"
 	"wp-server/wotoPacks/core/wotoConfig"
+	we "wp-server/wotoPacks/core/wotoErrors"
 	wv "wp-server/wotoPacks/core/wotoValues"
 	"wp-server/wotoPacks/wotoActions"
 )
@@ -134,21 +135,36 @@ func checkEntry(conn *wv.WotoConnection) error {
 		return ErrConnectionNotRegistered
 	}
 
+	go handleNewRequest(req)
+	return nil
+}
+
+func handleNewRequest(req *RequestEntry) {
 	handler := _handlersMap[req.Action]
 	parser := _parsersMap[req.Action]
 
 	if handler == nil || parser == nil {
 		logging.Debug("invalid action:", req.Action)
-		return ErrActionOrBatchInvalid
+		if we.SendBatchRequestNotFound(req) != nil {
+			req.Connection.Close()
+		}
+
+		return
 	}
 
-	err = parser(req)
+	err := parser(req)
 	if err != nil {
 		logging.Error(err)
-		return err
+		if we.SendBatchRequestInvalid(req) != nil {
+			req.Connection.Close()
+		}
+		return
 	}
 
-	return handler(req)
+	err = handler(req)
+	if err != nil {
+		req.Connection.Close()
+	}
 }
 
 // safeCheckEntry will start a loop for reading the data incoming

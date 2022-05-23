@@ -57,6 +57,8 @@ const (
 	ErrInvalidGenreId
 	ErrGenreInfoNotFound
 	ErrGenreTitleAlreadyExists
+	ErrBatchRequestNotFound
+	ErrBatchRequestInvalid
 )
 
 const (

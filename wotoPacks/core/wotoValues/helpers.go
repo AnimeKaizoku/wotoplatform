@@ -5,6 +5,7 @@ import (
 	"crypto/sha512"
 	"net"
 	"strconv"
+	"sync"
 
 	wcr "github.com/TheGolangHub/wotoCrypto/wotoCrypto"
 )
@@ -81,6 +82,7 @@ func MakeSureByte(b []byte, length int) []byte {
 func getWotoConnection(conn net.Conn, l *WotoListener, r Registerer) *WotoConnection {
 	return &WotoConnection{
 		conn:       conn,
+		mut:        &sync.Mutex{},
 		origin:     l,
 		registerer: r,
 	}
