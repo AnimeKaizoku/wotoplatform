@@ -27,6 +27,26 @@ func HandleGroupsAction(req interfaces.ReqBase) error {
 	return req.LetExit()
 }
 
+func batchGetGroupInfo(req interfaces.ReqBase) error {
+	if !req.IsAuthorized() {
+		return we.SendNotAuthorized(req, OriginGetGroupInfo)
+	}
+
+	// var entryData = new(SomethingData)
+	// err := req.ParseJsonData(entryData)
+	// if err != nil {
+	// return err
+	// }
+
+	// doer := req.GetMe()
+	// if doer != nil && !doer.CanCreateAccount() {
+	// return we.SendAlreadyAuthorized(req, OriginRegisterUser)
+	// }
+
+	// return req.SendResult(nil)
+	return we.SendMethodNotImplemented(req, OriginGetGroupInfo)
+}
+
 func batchGetGroupCallInfo(req interfaces.ReqBase) error {
 	if !req.IsAuthorized() {
 		return we.SendNotAuthorized(req, OriginGetGroupCallInfo)

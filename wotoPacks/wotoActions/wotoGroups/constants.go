@@ -2,6 +2,7 @@ package wotoGroups
 
 // batch execution values
 const (
+	BATCH_GET_GROUP_INFO         = "get_group_info"
 	BATCH_GET_GROUP_CALL_INFO    = "get_group_call_info"
 	BATCH_CREATE_GROUP_CALL      = "create_group_call"
 	BATCH_DELETE_GROUP_CALL      = "delete_group_call"
@@ -14,6 +15,7 @@ const (
 
 // origin constants
 const (
+	OriginGetGroupInfo        = "GetGroupCallInfo"
 	OriginGetGroupCallInfo    = "GetGroupCallInfo"
 	OriginCreateGroupCall     = "CreateGroupCall"
 	OriginDeleteGroupCall     = "DeleteGroupCall"
