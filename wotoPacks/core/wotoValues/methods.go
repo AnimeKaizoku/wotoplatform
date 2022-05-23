@@ -261,14 +261,23 @@ func (c *WotoConnection) GetMe() *UserInfo {
 }
 
 func (c *WotoConnection) IsRegistered() bool {
+	c.mut.Lock()
+	defer c.mut.Unlock()
+
 	return c.isRegistered
 }
 
 func (c *WotoConnection) SetRegisterer(r func(*WotoConnection)) {
+	c.mut.Lock()
+	defer c.mut.Unlock()
+
 	c.registerer = r
 }
 
 func (c *WotoConnection) Register() {
+	c.mut.Lock()
+	defer c.mut.Unlock()
+
 	if !c.isRegistered && c.registerer != nil {
 		c.registerer(c)
 		c.isRegistered = true
