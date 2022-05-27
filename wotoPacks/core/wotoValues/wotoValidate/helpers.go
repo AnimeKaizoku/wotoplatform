@@ -3,6 +3,8 @@ package wotoValidate
 import (
 	"regexp"
 	"strings"
+
+	"github.com/AnimeKaizoku/ssg/ssg"
 )
 
 func IsCorrectPasswordFormat(password string) bool {
@@ -20,7 +22,12 @@ func isCorrectUsername(username string) bool {
 			continue
 		}
 
-		if i == 0 || i == len(username)-1 {
+		if ssg.IsRuneNumber(c) && i != 0 {
+			// a valid number, let it pass
+			continue
+		} else if i == 0 {
+			// we only allow a-z at the beginning, but if we are
+			// at the end of the username, we allow numbers as well.
 			return false
 		}
 
