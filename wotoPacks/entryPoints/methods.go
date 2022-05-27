@@ -116,7 +116,8 @@ func (e *RequestEntry) WriteJson(v wcr.KeysContainer) (int, error) {
 
 func (e *RequestEntry) WriteError(errType int, message string) (int, error) {
 	return e.WriteJson(&wotoActions.ActionResp{
-		Success: false,
+		UniqueId: e.UniqueId,
+		Success:  false,
 		Error: &serverErrors.EndPointError{
 			Code:    serverErrors.ErrorCode(errType),
 			Message: message,
@@ -126,15 +127,16 @@ func (e *RequestEntry) WriteError(errType int, message string) (int, error) {
 
 func (e *RequestEntry) SendError(err *serverErrors.EndPointError) (int, error) {
 	return e.WriteJson(&wotoActions.ActionResp{
-		Success: false,
-		Error:   err,
+		UniqueId: e.UniqueId,
+		Success:  false,
+		Error:    err,
 	})
 }
 
 func (e *RequestEntry) WriteResult(result interface{}) (int, error) {
 	return e.WriteJson(&wotoActions.ActionResp{
-		Success:  true,
 		UniqueId: e.UniqueId,
+		Success:  true,
 		Result:   result,
 	})
 }
