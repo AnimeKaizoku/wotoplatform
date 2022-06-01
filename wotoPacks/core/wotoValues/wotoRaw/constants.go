@@ -12,5 +12,6 @@ const (
 // prefixes used to generate unique-id for different types.
 const (
 	MediaGenreElementPrefix = "gEl-"
+	GroupIdPrefix           = "GR-"
 	UniqueIdInnerSeparator  = "_"
 )

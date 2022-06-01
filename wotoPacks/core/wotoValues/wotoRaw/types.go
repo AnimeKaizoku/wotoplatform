@@ -59,7 +59,7 @@ type GroupInfo struct {
 	GroupUsername    string        `json:"group_username"`
 	TelegramId       int64         `json:"telegram_id"`
 	TelegramUsername string        `json:"telegram_username"`
-	CurrentPlaying   MediaModelId  `json:"current_playing"`
+	CurrentPlaying   MediaModelId  `json:"current_playing" gorm:"-" sql:"-"`
 }
 
 type FavoriteValue struct {

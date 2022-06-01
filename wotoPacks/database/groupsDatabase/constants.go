@@ -1,5 +1,7 @@
 package groupsDatabase
 
+import "wp-server/wotoPacks/core/wotoValues/wotoRaw"
+
 const (
-	GroupIdPrefix = "GR-"
+	GroupIdPrefix = wotoRaw.GroupIdPrefix
 )

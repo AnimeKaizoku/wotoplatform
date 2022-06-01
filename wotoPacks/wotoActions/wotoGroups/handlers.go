@@ -3,6 +3,7 @@ package wotoGroups
 import (
 	we "wp-server/wotoPacks/core/wotoErrors"
 	wv "wp-server/wotoPacks/core/wotoValues"
+	"wp-server/wotoPacks/database/groupsDatabase"
 	"wp-server/wotoPacks/interfaces"
 	wa "wp-server/wotoPacks/wotoActions"
 )
@@ -27,24 +28,33 @@ func HandleGroupsAction(req interfaces.ReqBase) error {
 	return req.LetExit()
 }
 
-func batchGetGroupInfo(req interfaces.ReqBase) error {
+func batchGetGroupInfoById(req interfaces.ReqBase) error {
 	if !req.IsAuthorized() {
-		return we.SendNotAuthorized(req, OriginGetGroupInfo)
+		return we.SendNotAuthorized(req, OriginGetGroupInfoById)
 	}
 
-	// var entryData = new(SomethingData)
-	// err := req.ParseJsonData(entryData)
-	// if err != nil {
-	// return err
-	// }
+	var entryData = new(GetGroupInfoData)
+	err := req.ParseJsonData(entryData)
+	if err != nil {
+		return err
+	}
 
-	// doer := req.GetMe()
-	// if doer != nil && !doer.CanCreateAccount() {
-	// return we.SendAlreadyAuthorized(req, OriginRegisterUser)
-	// }
+	meta := req.GetMe().GetMeta()
+	if meta != nil && !meta.GetBoolNoErr("can_get_group_info") {
+		return we.SendPermissionDenied(req, OriginGetGroupInfoById)
+	}
 
-	// return req.SendResult(nil)
-	return we.SendMethodNotImplemented(req, OriginGetGroupInfo)
+	if entryData.GroupId.IsInvalid() {
+		return we.SendInvalidGroupId(req, OriginGetGroupInfoById)
+	}
+
+	info := groupsDatabase.GetGroupInfo(entryData.GroupId)
+	if info == nil {
+		return we.SendGroupNotFound(req, OriginGetGroupInfoById)
+	}
+
+	return req.SendResult(toGetGroupInfoResult(info))
+	// return we.SendMethodNotImplemented(req, OriginGetGroupInfo)
 }
 
 func batchGetGroupCallInfo(req interfaces.ReqBase) error {

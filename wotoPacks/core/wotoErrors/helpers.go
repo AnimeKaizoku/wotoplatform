@@ -344,3 +344,21 @@ func SendBatchRequestInvalid(req inf.ReqBase) error {
 	})
 	return err
 }
+
+func SendInvalidGroupId(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrInvalidGroupId,
+		Message: MessageInvalidGroupId,
+		Origin:  origin,
+	})
+	return err
+}
+
+func SendGroupNotFound(req inf.ReqBase, origin string) error {
+	_, err := req.SendError(&serverErrors.EndPointError{
+		Code:    serverErrors.ErrGroupNotFound,
+		Message: MessageGroupNotFound,
+		Origin:  origin,
+	})
+	return err
+}

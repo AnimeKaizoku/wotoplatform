@@ -1,6 +1,7 @@
 package wotoRaw
 
 import (
+	"strings"
 	"time"
 
 	ws "github.com/AnimeKaizoku/ssg/ssg"
@@ -70,6 +71,10 @@ func (u *UserInfo) GetMeta() ws.MetaDataProvider {
 }
 
 //---------------------------------------------------------
+
+func (i PublicGroupId) IsInvalid() bool {
+	return len(i) > len(GroupIdPrefix)+2 && strings.HasPrefix(string(i), GroupIdPrefix)
+}
 
 //---------------------------------------------------------
 

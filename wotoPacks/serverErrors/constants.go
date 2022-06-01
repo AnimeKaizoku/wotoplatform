@@ -59,6 +59,8 @@ const (
 	ErrGenreTitleAlreadyExists
 	ErrBatchRequestNotFound
 	ErrBatchRequestInvalid
+	ErrInvalidGroupId
+	ErrGroupNotFound
 )
 
 const (

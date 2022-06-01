@@ -39,4 +39,6 @@ const (
 	MessageGenreTitleAlreadyExists       = "Genre title already exists."
 	MessageBatchRequestNotFound          = "Batch request not found."
 	MessageBatchRequestInvalid           = "Batch request is invalid."
+	MessageInvalidGroupId                = "Invalid group ID provided."
+	MessageGroupNotFound                 = "Group not found."
 )

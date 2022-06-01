@@ -18,6 +18,7 @@
 package groupsDatabase
 
 import (
+	"sync"
 	"time"
 	"wp-server/wotoPacks/core/wotoConfig"
 	wv "wp-server/wotoPacks/core/wotoValues"
@@ -109,6 +110,17 @@ func GetGroupQueue(id wv.PublicGroupId) ([]wv.MediaModelId, error) {
 	}
 
 	return queue.mediaList, nil
+}
+
+// CreateGroupCall creates a new group call. it does not validate the
+// passed info var as argument. it's up to the caller to check for that.
+func CreateGroupCall(info *wv.GroupInfo) {
+	manager := &groupQueueManager{
+		groupInfo: info,
+		mut:       &sync.Mutex{},
+	}
+
+	groupsQueue.Add(info.GroupId, manager)
 }
 
 func generateGroupId() wv.PublicGroupId {

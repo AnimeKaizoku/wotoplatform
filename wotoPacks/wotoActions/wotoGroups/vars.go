@@ -7,7 +7,7 @@ import (
 
 var (
 	_batchHandlers = map[wa.BatchExecution]wv.ReqHandler{
-		BATCH_GET_GROUP_INFO:         batchGetGroupInfo,
+		BATCH_GET_GROUP_INFO_BY_ID:   batchGetGroupInfoById,
 		BATCH_GET_GROUP_CALL_INFO:    batchGetGroupCallInfo,
 		BATCH_CREATE_GROUP_CALL:      batchCreateGroupCall,
 		BATCH_DELETE_GROUP_CALL:      batchDeleteGroupCall,

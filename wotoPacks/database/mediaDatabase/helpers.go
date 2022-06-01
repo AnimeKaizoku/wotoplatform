@@ -20,6 +20,8 @@ package mediaDatabase
 import (
 	"wp-server/wotoPacks/core/wotoConfig"
 	wv "wp-server/wotoPacks/core/wotoValues"
+
+	"github.com/AnimeKaizoku/ssg/ssg"
 )
 
 // LoadMediaDatabase
@@ -35,7 +37,7 @@ func LoadMediaDatabase() error {
 	unlockDatabase()
 
 	for _, media := range allMedias {
-		mediaModels.Add(media.ModelId, media)
+		mediaModels.Add(media.ModelId, ssg.Clone(media))
 	}
 
 	for _, info := range allGenreInfo {

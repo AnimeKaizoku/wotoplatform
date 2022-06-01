@@ -1,6 +1,7 @@
 package wotoGroups
 
 import (
+	wv "wp-server/wotoPacks/core/wotoValues"
 	"wp-server/wotoPacks/interfaces"
 	"wp-server/wotoPacks/wotoActions"
 )
@@ -28,4 +29,15 @@ func batchValuesValid(e []wotoActions.BatchExecution) bool {
 	}
 
 	return true
+}
+
+func toGetGroupInfoResult(info *wv.GroupInfo) *GetGroupInfoResult {
+	return &GetGroupInfoResult{
+		GroupId:          info.GroupId,
+		GroupRegion:      info.GroupRegion,
+		GroupUsername:    info.GroupUsername,
+		TelegramId:       info.TelegramId,
+		TelegramUsername: info.TelegramUsername,
+		CurrentPlaying:   info.CurrentPlaying,
+	}
 }
