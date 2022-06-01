@@ -114,13 +114,24 @@ func GetGroupQueue(id wv.PublicGroupId) ([]wv.MediaModelId, error) {
 
 // CreateGroupCall creates a new group call. it does not validate the
 // passed info var as argument. it's up to the caller to check for that.
-func CreateGroupCall(info *wv.GroupInfo) {
+func CreateGroupCall(info *wv.GroupInfo, statedBy wv.PublicUserId) {
 	manager := &groupQueueManager{
 		groupInfo: info,
+		callInfo:  generateCallInfo(info.GroupId, statedBy),
 		mut:       &sync.Mutex{},
 	}
 
 	groupsQueue.Add(info.GroupId, manager)
+}
+
+// generateCallInfo generates a new group-call info struct variable
+// and return it.
+func generateCallInfo(id wv.PublicGroupId, startedBy wv.PublicUserId) *wv.GroupCallInfo {
+	return &wv.GroupCallInfo{
+		GroupId:   id,
+		StartedBy: startedBy,
+		StartedAt: time.Now(),
+	}
 }
 
 func generateGroupId() wv.PublicGroupId {
