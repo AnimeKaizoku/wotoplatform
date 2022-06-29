@@ -7,7 +7,7 @@ require (
 	github.com/TheGolangHub/wotoCrypto v1.0.3
 	go.uber.org/zap v1.21.0
 	gorm.io/driver/postgres v1.3.7
-	gorm.io/driver/sqlite v1.3.2
+	gorm.io/driver/sqlite v1.3.5
 	gorm.io/gorm v1.23.5
 )
 
