@@ -33,7 +33,7 @@ func batchGetGroupInfoById(req interfaces.ReqBase) error {
 		return we.SendNotAuthorized(req, OriginGetGroupInfoById)
 	}
 
-	var entryData = new(GetGroupInfoData)
+	var entryData = new(GetGroupInfByIdoData)
 	err := req.ParseJsonData(entryData)
 	if err != nil {
 		return err
