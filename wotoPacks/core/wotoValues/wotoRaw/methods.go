@@ -73,6 +73,10 @@ func (u *UserInfo) GetMeta() ws.MetaDataProvider {
 //---------------------------------------------------------
 
 func (i PublicGroupId) IsInvalid() bool {
+	return !i.IsValid()
+}
+
+func (i PublicGroupId) IsValid() bool {
 	return len(i) > len(GroupIdPrefix)+2 && strings.HasPrefix(string(i), GroupIdPrefix)
 }
 

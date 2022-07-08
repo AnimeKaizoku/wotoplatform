@@ -8,6 +8,8 @@ var (
 	_actionsMap = map[RequestAction]bool{
 		ActionVersion: true,
 		ActionUser:    true,
+		ActionMedia:   true,
+		ActionGroups:  true,
 	}
 )
 

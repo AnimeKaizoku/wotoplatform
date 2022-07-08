@@ -2,12 +2,11 @@ package wotoGroups
 
 import wv "wp-server/wotoPacks/core/wotoValues"
 
-type GetGroupInfoData struct {
-	GroupId       wv.PublicGroupId `json:"group_id"`
-	GroupUsername string
+type GetGroupInfByIdoData struct {
+	GroupId wv.PublicGroupId `json:"group_id"`
 }
 
-type GetGroupInfoResult struct {
+type GetGroupInfoByIdResult struct {
 	GroupId          wv.PublicGroupId `json:"group_id"`
 	GroupRegion      string           `json:"group_region"`
 	GroupUsername    string           `json:"group_username"`

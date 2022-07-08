@@ -62,6 +62,12 @@ type GroupInfo struct {
 	CurrentPlaying   MediaModelId  `json:"current_playing" gorm:"-" sql:"-"`
 }
 
+type GroupCallInfo struct {
+	GroupId   PublicGroupId
+	StartedBy PublicUserId
+	StartedAt time.Time
+}
+
 type FavoriteValue struct {
 	UserId      PublicUserId `json:"user_id" gorm:"primaryKey"`
 	FavoriteKey string       `json:"favorite_key"`

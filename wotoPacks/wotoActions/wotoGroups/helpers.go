@@ -31,8 +31,8 @@ func batchValuesValid(e []wotoActions.BatchExecution) bool {
 	return true
 }
 
-func toGetGroupInfoResult(info *wv.GroupInfo) *GetGroupInfoResult {
-	return &GetGroupInfoResult{
+func toGetGroupInfoResult(info *wv.GroupInfo) *GetGroupInfoByIdResult {
+	return &GetGroupInfoByIdResult{
 		GroupId:          info.GroupId,
 		GroupRegion:      info.GroupRegion,
 		GroupUsername:    info.GroupUsername,

@@ -34,6 +34,7 @@ type groupQueueManager struct {
 	// this field here ensures that we are pointing to a valid group
 	// registered at database.
 	groupInfo *wv.GroupInfo
+	callInfo  *wv.GroupCallInfo
 	mut       *sync.Mutex
 	mediaList []wv.MediaModelId
 }
