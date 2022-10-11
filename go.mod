@@ -7,8 +7,8 @@ require (
 	github.com/TheGolangHub/wotoCrypto v1.0.3
 	go.uber.org/zap v1.21.0
 	gorm.io/driver/postgres v1.4.4
-	gorm.io/driver/sqlite v1.3.2
-	gorm.io/gorm v1.23.7
+	gorm.io/driver/sqlite v1.4.2
+	gorm.io/gorm v1.24.0
 )
 
 require (
@@ -23,7 +23,7 @@ require (
 	github.com/jackc/pgx/v4 v4.17.2 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
-	github.com/mattn/go-sqlite3 v1.14.12 // indirect
+	github.com/mattn/go-sqlite3 v1.14.15 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.7.0 // indirect
 	golang.org/x/crypto v0.0.0-20220722155217-630584e8d5aa // indirect
