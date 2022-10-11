@@ -10,3 +10,6 @@ updates:
       interval: daily
     reviewers:
       - "ALiwoto"
+    assignees:
+      - "ALiwoto"
+      - "wotobot"
