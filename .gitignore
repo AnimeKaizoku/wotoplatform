@@ -3,6 +3,8 @@
 bin/
 #vendor/
 wp-server
+*.exe
+*.exe.old
 *.old.go
 woto_files/
 labs/
@@ -11,6 +13,7 @@ labs/
 
 # ignore debug binary file
 __debug_bin
+__debug_bin.exe
 
 # ignore config files
 config.json
