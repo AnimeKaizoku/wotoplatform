@@ -35,33 +35,23 @@ func LoadUsersDatabase() error {
 	wv.SESSION.Find(&allLiked)
 	unlockDatabase()
 
-	usersMapByIdMutex.Lock()
-	usersMapByUsernameMutex.Lock()
-	usersMapByTelegramIdMutex.Lock()
-	usersMapByEmailMutex.Lock()
 	for _, user := range allUsers {
-		if user.UserId > lastUserId {
-			lastUserId = user.UserId
-		}
+		userIdGenerator.SafeSet(user.UserId)
 
-		usersMapById[user.UserId] = user
+		usersMapById.Add(user.UserId, user)
 
 		if user.HasUsername() {
-			usersMapByUsername[strings.ToLower(user.Username)] = user
+			usersMapByUsername.Add(user.Username, user)
 		}
 
 		if user.HasTelegramId() {
-			usersMapByTelegramId[user.TelegramId] = user
+			usersMapByTelegramId.Add(user.TelegramId, user)
 		}
 
 		if user.HasEmail() {
-			usersMapByEmail[strings.ToLower(user.Email)] = user
+			usersMapByEmail.Add(strings.ToLower(user.Email), user)
 		}
 	}
-	usersMapByIdMutex.Unlock()
-	usersMapByUsernameMutex.Unlock()
-	usersMapByTelegramIdMutex.Unlock()
-	usersMapByEmailMutex.Unlock()
 
 	usersFavoriteManager.LoadAllFavorites(allFavorites)
 	usersFavoriteManager.LoadAllLikedList(allLiked)
@@ -72,43 +62,23 @@ func LoadUsersDatabase() error {
 }
 
 func UsernameExists(username string) bool {
-	usersMapByUsernameMutex.Lock()
-	b := usersMapByUsername[strings.ToLower(username)] != nil
-	usersMapByUsernameMutex.Unlock()
-
-	return b
+	return usersMapByUsername.Exists(strings.ToLower(username))
 }
 
 func GetUserById(id wv.PublicUserId) *wv.UserInfo {
-	usersMapByIdMutex.Lock()
-	user := usersMapById[id]
-	usersMapByIdMutex.Unlock()
-
-	return user
+	return usersMapById.Get(id)
 }
 
 func GetUserByTelegramId(id int64) *wv.UserInfo {
-	usersMapByTelegramIdMutex.Lock()
-	user := usersMapByTelegramId[id]
-	usersMapByTelegramIdMutex.Unlock()
-
-	return user
+	return usersMapByTelegramId.Get(id)
 }
 
 func GetUserByEmail(email string) *wv.UserInfo {
-	usersMapByEmailMutex.Lock()
-	user := usersMapByEmail[email]
-	usersMapByEmailMutex.Unlock()
-
-	return user
+	return usersMapByEmail.Get(strings.ToLower(email))
 }
 
 func GetUserByUsername(username string) *wv.UserInfo {
-	usersMapByUsernameMutex.Lock()
-	user := usersMapByUsername[strings.ToLower(username)]
-	usersMapByUsernameMutex.Unlock()
-
-	return user
+	return usersMapByUsername.Get(strings.ToLower(username))
 }
 
 func GetUserFavorite(id wv.PublicUserId, key string) *wv.FavoriteInfo {
@@ -184,26 +154,18 @@ func DeleteUserFavorite(id wv.PublicUserId, key string) {
 
 func SaveUser(user *wv.UserInfo) {
 	SaveUserNoCache(user)
-	usersMapByIdMutex.Lock()
-	usersMapById[user.UserId] = user
-	usersMapByIdMutex.Unlock()
+	usersMapById.Add(user.UserId, user)
 
 	if user.HasUsername() {
-		usersMapByUsernameMutex.Lock()
-		usersMapByUsername[strings.ToLower(user.Username)] = user
-		usersMapByUsernameMutex.Unlock()
+		usersMapByUsername.Add(strings.ToLower(user.Username), user)
 	}
 
 	if user.HasTelegramId() {
-		usersMapByTelegramIdMutex.Lock()
-		usersMapByTelegramId[user.TelegramId] = user
-		usersMapByTelegramIdMutex.Unlock()
+		usersMapByTelegramId.Add(user.TelegramId, user)
 	}
 
 	if user.HasEmail() {
-		usersMapByEmailMutex.Lock()
-		usersMapByEmail[strings.ToLower(user.Email)] = user
-		usersMapByEmailMutex.Unlock()
+		usersMapByEmail.Add(strings.ToLower(user.Email), user)
 	}
 }
 
@@ -268,11 +230,7 @@ func migrateOwners() {
 }
 
 func generateUserId() wv.PublicUserId {
-	userIdGeneratorMutex.Lock()
-	lastUserId++
-	userIdGeneratorMutex.Unlock()
-
-	return lastUserId
+	return userIdGenerator.Next()
 }
 
 func lockDatabase() {

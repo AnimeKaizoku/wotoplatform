@@ -1,8 +1,9 @@
 package usersDatabase
 
 import (
-	"sync"
 	wv "wp-server/wotoPacks/core/wotoValues"
+
+	"github.com/AnimeKaizoku/ssg/ssg"
 )
 
 // database models
@@ -14,15 +15,10 @@ var (
 
 // cache values and mutexes.
 var (
-	usersMapById              = make(map[wv.PublicUserId]*wv.UserInfo)
-	usersMapByIdMutex         = &sync.Mutex{}
-	usersMapByUsername        = make(map[string]*wv.UserInfo)
-	usersMapByUsernameMutex   = &sync.Mutex{}
-	usersMapByTelegramId      = make(map[int64]*wv.UserInfo)
-	usersMapByTelegramIdMutex = &sync.Mutex{}
-	usersMapByEmail           = make(map[string]*wv.UserInfo)
-	usersMapByEmailMutex      = &sync.Mutex{}
-	lastUserId                = wv.BaseUserId
-	userIdGeneratorMutex      = &sync.Mutex{}
-	usersFavoriteManager      = _getFavoriteManager()
+	usersMapById         = ssg.NewSafeMap[wv.PublicUserId, wv.UserInfo]()
+	usersMapByUsername   = ssg.NewSafeMap[string, wv.UserInfo]()
+	usersMapByTelegramId = ssg.NewSafeMap[int64, wv.UserInfo]()
+	usersMapByEmail      = ssg.NewSafeMap[string, wv.UserInfo]()
+	userIdGenerator      = ssg.NewNumIdGenerator[wv.PublicUserId]()
+	usersFavoriteManager = _getFavoriteManager()
 )
