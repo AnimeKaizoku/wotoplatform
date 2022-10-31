@@ -3,8 +3,11 @@ package wotoRaw
 import (
 	"strings"
 	"time"
+	"wp-server/wotoPacks/core/wotoValues/wotoValidate"
 
 	ws "github.com/AnimeKaizoku/ssg/ssg"
+	"github.com/TheGolangHub/wotoCrypto/wotoCrypto"
+	"golang.org/x/crypto/bcrypt"
 )
 
 //---------------------------------------------------------
@@ -29,9 +32,23 @@ func (u *UserInfo) IsCacheExpired(d time.Duration) bool {
 	return time.Since(u.cachedTime) > d
 }
 
-func (u *UserInfo) IsPasswordCorrect(password string) bool {
-	// TODO: encrypt the password
-	return u.Password == password
+func (u *UserInfo) IsPasswordCorrect(password *wotoCrypto.PasswordContainer256) bool {
+	return u.IsRawPasswordCorrect(wotoValidate.GetPassAsBytes(password))
+}
+
+func (u *UserInfo) IsRawPasswordCorrect(password []byte) bool {
+	if u.Password == string(password) {
+		if u.RegenerateSaltedPassword != nil {
+			u.RegenerateSaltedPassword(u)
+			// no return here, because CompareHashAndPassword should run again
+			// at the end.
+		} else {
+			// no other choice here
+			return true
+		}
+	}
+
+	return bcrypt.CompareHashAndPassword([]byte(u.Password), password) == nil
 }
 
 func (u *UserInfo) GetPublicId() PublicUserId {

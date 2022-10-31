@@ -5,10 +5,55 @@ import (
 	"strings"
 
 	"github.com/AnimeKaizoku/ssg/ssg"
+	"github.com/TheGolangHub/wotoCrypto/wotoCrypto"
 )
 
-func IsCorrectPasswordFormat(password string) bool {
-	return len(password) >= MinPasswordLength && len(password) <= MaxPasswordLength
+func IsCorrectPasswordFormat(password *wotoCrypto.PasswordContainer256) bool {
+	if password.Hash256 == "" || !password.HasSignature() {
+		return false
+	}
+
+	headers := ssg.Split(password.Header, _passHeaderStrs...)
+	signatures := ssg.Split(password.Signature, _passSignatureStrs...)
+
+	if len(headers) != PassHeadersLen {
+		return false
+	}
+
+	charsLen := int(ssg.ToInt32(headers[0x00]))
+	sigPayloadLen := int(ssg.ToInt8(headers[0x01]))
+	if len(signatures)-sigPayloadLen != charsLen {
+		return false
+	}
+
+	for i, current := range signatures {
+		if i >= charsLen {
+			break
+		}
+
+		if cInt := ssg.ToInt32(current); cInt == 0 || cInt < 0x061 {
+			return false
+		}
+	}
+
+	return charsLen >= MinPasswordLength && charsLen <= MaxPasswordLength
+}
+
+func GetPassAsBytes(password *wotoCrypto.PasswordContainer256) []byte {
+	headers := ssg.Split(password.Header, _passHeaderStrs...)
+	signatures := ssg.Split(password.Signature, _passSignatureStrs...)
+
+	charsLen := int(ssg.ToInt32(headers[0x00]))
+	p := headers[0x02]
+	for i, current := range signatures {
+		if i >= charsLen {
+			return []byte(p)
+		}
+
+		p += string(rune(ssg.ToInt32(current)))
+	}
+
+	return []byte(p)
 }
 
 func IsCorrectUsernameFormat(username string) bool {

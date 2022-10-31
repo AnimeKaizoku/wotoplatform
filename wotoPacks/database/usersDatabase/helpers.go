@@ -20,8 +20,13 @@ package usersDatabase
 import (
 	"strings"
 	"sync"
+	"wp-server/wotoPacks/core/utils/logging"
 	"wp-server/wotoPacks/core/wotoConfig"
 	wv "wp-server/wotoPacks/core/wotoValues"
+	"wp-server/wotoPacks/core/wotoValues/wotoValidate"
+
+	"github.com/TheGolangHub/wotoCrypto/wotoCrypto"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func LoadUsersDatabase() error {
@@ -182,21 +187,41 @@ func SaveUserNoCache(user *wv.UserInfo) {
 // It doesn't validate username or password. User parameters need
 // to be validated before this function is called.
 func CreateNewUser(data *NewUserData) *wv.UserInfo {
+	if data.SaltedPassword == "" {
+		data.SaltedPassword = getSaltedPasswordAsStr(data.Password)
+	}
 	u := &wv.UserInfo{
-		UserId:     generateUserId(),
-		Username:   data.Username,
-		FirstName:  data.FirstName,
-		LastName:   data.LastName,
-		TelegramId: data.TelegramId,
-		Password:   data.Password,
-		Permission: data.Permission,
-		Email:      data.Email,
-		CreatedBy:  data.By,
-		Birthday:   data.Birthday,
-		IsVirtual:  data.Username == "",
+		UserId:       generateUserId(),
+		Username:     data.Username,
+		FirstName:    data.FirstName,
+		LastName:     data.LastName,
+		TelegramId:   data.TelegramId,
+		Password:     data.SaltedPassword,
+		PasswordHash: data.Password.Hash256,
+		Permission:   data.Permission,
+		Email:        data.Email,
+		CreatedBy:    data.By,
+		Birthday:     data.Birthday,
+		IsVirtual:    data.Username == "",
+
+		RegenerateSaltedPassword: regenerateSaltedPassword,
 	}
 	SaveUser(u)
 	return u
+}
+
+func getSaltedPasswordAsStr(password *wotoCrypto.PasswordContainer256) string {
+	return getSaltedPasswordFromBytes(wotoValidate.GetPassAsBytes(password))
+}
+
+func getSaltedPasswordFromBytes(password []byte) string {
+	b, err := bcrypt.GenerateFromPassword(password, wotoValidate.PasswordSaltCost)
+	if err != nil {
+		logging.Error(err)
+		return ""
+	}
+
+	return string(b)
 }
 
 func migrateOwners() {
@@ -211,22 +236,32 @@ func migrateOwners() {
 		currentUser = GetUserByUsername(current.Username)
 		if currentUser == nil {
 			CreateNewUser(&NewUserData{
-				Username:   current.Username,
-				Password:   current.Password,
-				Permission: wv.PermissionOwner,
+				Username:       current.Username,
+				SaltedPassword: getSaltedPasswordFromBytes([]byte(current.Password)),
+				Permission:     wv.PermissionOwner,
 			})
 			continue
 		}
 
-		if currentUser.IsOwner() && currentUser.IsPasswordCorrect(current.Password) {
+		if currentUser.IsOwner() && currentUser.IsRawPasswordCorrect([]byte(current.Password)) {
 			continue
 		}
 
 		currentUser.Permission = wv.PermissionOwner
-		currentUser.Password = current.Password
+		currentUser.Password = getSaltedPasswordFromBytes([]byte(current.Password))
 		// save the user in the db, don't let it cache to save more time.
 		SaveUserNoCache(currentUser)
 	}
+}
+
+// regenerateSaltedPassword function will regenerate the salted password
+// of a user.
+// a tricky solution to prevent from breaking changes.
+// WARNING: Beware of deadlocks, this function might try to lock internal db mute,
+// if it's already locked, it will reach a deadlock.
+func regenerateSaltedPassword(u *wv.UserInfo) {
+	u.Password = getSaltedPasswordFromBytes([]byte(u.Password))
+	SaveUserNoCache(u)
 }
 
 func generateUserId() wv.PublicUserId {

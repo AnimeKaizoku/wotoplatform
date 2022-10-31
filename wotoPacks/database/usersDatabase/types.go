@@ -3,6 +3,8 @@ package usersDatabase
 import (
 	"sync"
 	wv "wp-server/wotoPacks/core/wotoValues"
+
+	"github.com/TheGolangHub/wotoCrypto/wotoCrypto"
 )
 
 type UserFavoritesAndLiked struct {
@@ -16,15 +18,16 @@ type UserFavoriteAndLikedInfo struct {
 }
 
 type NewUserData struct {
-	Username   string
-	Password   string
-	Email      string
-	TelegramId int64
-	FirstName  string
-	LastName   string
-	Birthday   string
-	Permission wv.UserPermission
-	By         wv.PublicUserId
+	Username       string
+	Password       *wotoCrypto.PasswordContainer256
+	SaltedPassword string
+	Email          string
+	TelegramId     int64
+	FirstName      string
+	LastName       string
+	Birthday       string
+	Permission     wv.UserPermission
+	By             wv.PublicUserId
 }
 
 type NewLikedListElementData struct {

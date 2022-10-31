@@ -2,15 +2,17 @@ package wotoUsers
 
 import (
 	wv "wp-server/wotoPacks/core/wotoValues"
+
+	"github.com/TheGolangHub/wotoCrypto/wotoCrypto"
 )
 
 type RegisterUserData struct {
-	Username   string            `json:"username"`
-	Password   string            `json:"password"`
-	FirstName  string            `json:"first_name"`
-	LastName   string            `json:"last_name"`
-	Birthday   string            `json:"birthday"`
-	Permission wv.UserPermission `json:"permission"`
+	Username   string                           `json:"username"`
+	Password   *wotoCrypto.PasswordContainer256 `json:"password"`
+	FirstName  string                           `json:"first_name"`
+	LastName   string                           `json:"last_name"`
+	Birthday   string                           `json:"birthday"`
+	Permission wv.UserPermission                `json:"permission"`
 }
 
 type RegisterUserResult struct {
@@ -61,10 +63,10 @@ type RegisterVirtualUserResult struct {
 }
 
 type LoginUserData struct {
-	Username   string `json:"username"`
-	Password   string `json:"password"`
-	AuthKey    string `json:"auth_key"`
-	AccessHash string `json:"access_hash"`
+	Username   string                           `json:"username"`
+	Password   *wotoCrypto.PasswordContainer256 `json:"password"`
+	AuthKey    string                           `json:"auth_key"`
+	AccessHash string                           `json:"access_hash"`
 }
 
 type LoginUserResult struct {

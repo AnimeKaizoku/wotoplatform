@@ -22,4 +22,17 @@ var (
 		'*': "_",
 		'^': "_",
 	}
+	_passHeaderStrs = []string{
+		"*",
+		"!",
+	}
+	_passSignatureStrs = []string{
+		"<",
+		">@",
+		"^",
+		"^",
+		"@",
+		"~",
+		"]",
+	}
 )
