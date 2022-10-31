@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/AnimeKaizoku/ssg v1.1.20
-	github.com/TheGolangHub/wotoCrypto v1.0.4
+	github.com/TheGolangHub/wotoCrypto v1.0.5
 	go.uber.org/zap v1.23.0
 	gorm.io/driver/postgres v1.4.5
 	gorm.io/driver/sqlite v1.4.3
