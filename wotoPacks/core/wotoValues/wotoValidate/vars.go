@@ -25,14 +25,16 @@ var (
 	_passHeaderStrs = []string{
 		"*",
 		"!",
+		"/",
 	}
 	_passSignatureStrs = []string{
 		"<",
-		">@",
-		"^",
-		"^",
 		"@",
+		"^",
+		"-",
 		"~",
 		"]",
+		"=",
+		")",
 	}
 )
