@@ -29,7 +29,7 @@ func IsCorrectPasswordFormat(password *wotoCrypto.PasswordContainer256) bool {
 
 	charsLen := int(ssg.ToInt32(headers[0x00]))
 	sigPayloadLen := int(ssg.ToInt8(headers[0x01]))
-	if len(signatures)-sigPayloadLen != charsLen || (charsLen < MinPasswordLength && charsLen > MaxPasswordLength) {
+	if len(signatures)-sigPayloadLen != charsLen || (charsLen < MinPasswordLength || charsLen > MaxPasswordLength) {
 		return false
 	}
 
