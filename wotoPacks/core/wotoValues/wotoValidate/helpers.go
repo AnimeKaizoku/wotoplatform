@@ -1,12 +1,19 @@
 package wotoValidate
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"regexp"
 	"strings"
 
 	"github.com/AnimeKaizoku/ssg/ssg"
 	"github.com/TheGolangHub/wotoCrypto/wotoCrypto"
 )
+
+func GetPasswordHash(b []byte) string {
+	hash := sha256.Sum256(b)
+	return hex.EncodeToString(hash[:])
+}
 
 func IsCorrectPasswordFormat(password *wotoCrypto.PasswordContainer256) bool {
 	if password.Hash256 == "" || !password.HasSignature() {
@@ -22,21 +29,36 @@ func IsCorrectPasswordFormat(password *wotoCrypto.PasswordContainer256) bool {
 
 	charsLen := int(ssg.ToInt32(headers[0x00]))
 	sigPayloadLen := int(ssg.ToInt8(headers[0x01]))
-	if len(signatures)-sigPayloadLen != charsLen {
+	if len(signatures)-sigPayloadLen != charsLen || (charsLen < MinPasswordLength && charsLen > MaxPasswordLength) {
 		return false
 	}
 
+	hashCheckStr := ""
 	for i, current := range signatures {
-		if i >= charsLen {
+		if i < sigPayloadLen {
+			// TODO: handle payload data
+			continue
+		}
+
+		if i >= charsLen+sigPayloadLen {
 			break
 		}
 
-		if cInt := ssg.ToInt32(current); cInt == 0 || cInt < 0x061 {
+		cInt := ssg.ToInt32(current)
+		if cInt == 0 || cInt < 0x061 {
 			return false
 		}
+
+		hashCheckStr += string(rune(cInt))
 	}
 
-	return charsLen >= MinPasswordLength && charsLen <= MaxPasswordLength
+	if len(hashCheckStr) != charsLen {
+		return false
+	} else if GetPasswordHash([]byte(hashCheckStr)) != password.Hash256 {
+		return false
+	}
+
+	return true
 }
 
 func GetPassAsBytes(password *wotoCrypto.PasswordContainer256) []byte {

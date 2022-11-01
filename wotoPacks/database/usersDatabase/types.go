@@ -20,6 +20,7 @@ type UserFavoriteAndLikedInfo struct {
 type NewUserData struct {
 	Username       string
 	Password       *wotoCrypto.PasswordContainer256
+	PasswordHash   string
 	SaltedPassword string
 	Email          string
 	TelegramId     int64

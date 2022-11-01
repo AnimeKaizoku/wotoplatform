@@ -189,6 +189,7 @@ func SaveUserNoCache(user *wv.UserInfo) {
 func CreateNewUser(data *NewUserData) *wv.UserInfo {
 	if data.SaltedPassword == "" {
 		data.SaltedPassword = getSaltedPasswordAsStr(data.Password)
+		data.PasswordHash = data.Password.Hash256
 	}
 	u := &wv.UserInfo{
 		UserId:       generateUserId(),
@@ -197,7 +198,7 @@ func CreateNewUser(data *NewUserData) *wv.UserInfo {
 		LastName:     data.LastName,
 		TelegramId:   data.TelegramId,
 		Password:     data.SaltedPassword,
-		PasswordHash: data.Password.Hash256,
+		PasswordHash: data.PasswordHash,
 		Permission:   data.Permission,
 		Email:        data.Email,
 		CreatedBy:    data.By,
@@ -238,6 +239,7 @@ func migrateOwners() {
 			CreateNewUser(&NewUserData{
 				Username:       current.Username,
 				SaltedPassword: getSaltedPasswordFromBytes([]byte(current.Password)),
+				PasswordHash:   wotoValidate.GetPasswordHash([]byte(current.Password)),
 				Permission:     wv.PermissionOwner,
 			})
 			continue
@@ -249,6 +251,7 @@ func migrateOwners() {
 
 		currentUser.Permission = wv.PermissionOwner
 		currentUser.Password = getSaltedPasswordFromBytes([]byte(current.Password))
+		currentUser.PasswordHash = wotoValidate.GetPasswordHash([]byte(current.Password))
 		// save the user in the db, don't let it cache to save more time.
 		SaveUserNoCache(currentUser)
 	}

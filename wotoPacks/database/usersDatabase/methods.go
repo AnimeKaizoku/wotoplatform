@@ -4,9 +4,21 @@ import (
 	"sync"
 	"time"
 	wv "wp-server/wotoPacks/core/wotoValues"
+	"wp-server/wotoPacks/core/wotoValues/wotoValidate"
 
 	ws "github.com/AnimeKaizoku/ssg/ssg"
 )
+
+// GetPasswordHash returns the hash256 associated with this password
+// (will use the passed argument as the alternative password, if `NewUserData.Password` field is nil).
+// This method has no usage anymore, it is only here for more compatibility
+func (d *NewUserData) GetPasswordHash(rawPass string) string {
+	if d.Password != nil {
+		return d.Password.Hash256
+	}
+
+	return wotoValidate.GetPasswordHash([]byte(rawPass))
+}
 
 //---------------------------------------------------------
 
