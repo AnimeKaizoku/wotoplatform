@@ -41,6 +41,7 @@ func LoadUsersDatabase() error {
 	unlockDatabase()
 
 	for _, user := range allUsers {
+		user.RegenerateSaltedPassword = regenerateSaltedPassword
 		userIdGenerator.SafeSet(user.UserId)
 
 		usersMapById.Add(user.UserId, user)

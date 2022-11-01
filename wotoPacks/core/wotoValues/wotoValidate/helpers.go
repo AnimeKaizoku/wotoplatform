@@ -51,7 +51,7 @@ func IsCorrectPasswordFormat(password *wotoCrypto.PasswordContainer256) bool {
 		}
 
 		cInt := ssg.ToInt32(current)
-		if cInt == 0 || cInt < 0x061 {
+		if cInt == 0 || cInt < 0x020 {
 			return false
 		}
 
