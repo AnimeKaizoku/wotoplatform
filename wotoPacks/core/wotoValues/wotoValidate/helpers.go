@@ -33,6 +33,12 @@ func IsCorrectPasswordFormat(password *wotoCrypto.PasswordContainer256) bool {
 		return false
 	}
 
+	encodingVersion := headers[0x02]
+	if encodingVersion != "<pwd-container::v1.0.0.0::256>" {
+		// TODO: Add a range of accepted versions.
+		return false
+	}
+
 	hashCheckStr := ""
 	for i, current := range signatures {
 		if i < sigPayloadLen {
@@ -66,10 +72,21 @@ func GetPassAsBytes(password *wotoCrypto.PasswordContainer256) []byte {
 	signatures := ssg.Split(password.Signature, _passSignatureStrs...)
 
 	charsLen := int(ssg.ToInt32(headers[0x00]))
-	p := headers[0x02]
+	sigPayloadLen := int(ssg.ToInt32(headers[0x01]))
+	encodingVersion := headers[0x02]
+	if encodingVersion != "<pwd-container::v1.0.0.0::256>" {
+		// TODO: Add a range of accepted versions.
+		return nil
+	}
+
+	p := ""
 	for i, current := range signatures {
-		if i >= charsLen {
-			return []byte(p)
+		if i < sigPayloadLen {
+			continue // TODO: handle payload here...
+		}
+
+		if i >= charsLen+sigPayloadLen {
+			break
 		}
 
 		p += string(rune(ssg.ToInt32(current)))
