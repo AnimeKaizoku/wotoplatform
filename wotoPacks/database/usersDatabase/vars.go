@@ -9,6 +9,8 @@ import (
 // database models
 var (
 	ModelUserInfo         *wv.UserInfo         = &wv.UserInfo{}
+	userInfoExists        *wv.UserInfo         = &wv.UserInfo{}
+	userInfoNotFound      *wv.UserInfo         = &wv.UserInfo{}
 	ModelUserFavorite     *wv.FavoriteInfo     = &wv.FavoriteInfo{}
 	ModelLikedListElement *wv.LikedListElement = &wv.LikedListElement{}
 )
@@ -17,7 +19,6 @@ var (
 var (
 	usersMapById         = ssg.NewSafeMap[wv.PublicUserId, wv.UserInfo]()
 	usersMapByUsername   = ssg.NewSafeMap[string, wv.UserInfo]()
-	usersMapByTelegramId = ssg.NewSafeMap[int64, wv.UserInfo]()
 	usersMapByEmail      = ssg.NewSafeMap[string, wv.UserInfo]()
 	userIdGenerator      = ssg.NewNumIdGenerator[wv.PublicUserId]()
 	usersFavoriteManager = _getFavoriteManager()

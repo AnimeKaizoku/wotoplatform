@@ -20,44 +20,51 @@ package usersDatabase
 import (
 	"strings"
 	"sync"
+	"time"
 	"wp-server/wotoPacks/core/utils/logging"
 	"wp-server/wotoPacks/core/wotoConfig"
 	wv "wp-server/wotoPacks/core/wotoValues"
 	"wp-server/wotoPacks/core/wotoValues/wotoValidate"
 
+	"github.com/AnimeKaizoku/ssg/ssg"
 	"github.com/TheGolangHub/wotoCrypto/wotoCrypto"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 func LoadUsersDatabase() error {
-	var allUsers []*wv.UserInfo
 	var allFavorites []*wv.FavoriteInfo
 	var allLiked []*wv.LikedListElement
 
 	lockDatabase()
-	wv.SESSION.Find(&allUsers)
+
+	user := GetUserById(100010)
+	print(user)
+
+	user = GetUserByUsername("aliwoTo")
+	print(user)
+	user = GetUserByUsername("aliwoTo")
+	print(user)
+
+	var myI wv.PublicUserId
+	myTime := time.Now()
+	var a = wv.SESSION.Raw("SELECT MAX(user_id) FROM user_infos").Scan(&myI)
+	print(a.Error)
+	got := time.Since(myTime)
+	print(got)
+
+	myTime = time.Now()
+	a = wv.SESSION.Raw("SELECT * FROM user_infos ORDER BY user_id DESC LIMIT 0, 1").Scan(&myI)
+	print(a.Error)
+	got = time.Since(myTime)
+	print(got)
+
+	// wv.SESSION.Find(&allUsers)
 	wv.SESSION.Find(&allFavorites)
 	wv.SESSION.Find(&allLiked)
 	unlockDatabase()
 
-	for _, user := range allUsers {
-		user.RegenerateSaltedPassword = regenerateSaltedPassword
-		userIdGenerator.SafeSet(user.UserId)
-
-		usersMapById.Add(user.UserId, user)
-
-		if user.HasUsername() {
-			usersMapByUsername.Add(user.Username, user)
-		}
-
-		if user.HasTelegramId() {
-			usersMapByTelegramId.Add(user.TelegramId, user)
-		}
-
-		if user.HasEmail() {
-			usersMapByEmail.Add(strings.ToLower(user.Email), user)
-		}
-	}
+	userIdGenerator.SafeSet(getLastUserId())
 
 	usersFavoriteManager.LoadAllFavorites(allFavorites)
 	usersFavoriteManager.LoadAllLikedList(allLiked)
@@ -68,23 +75,83 @@ func LoadUsersDatabase() error {
 }
 
 func UsernameExists(username string) bool {
-	return usersMapByUsername.Exists(strings.ToLower(username))
+	user := usersMapByUsername.Get(username)
+	if user == userInfoExists {
+		return true
+	} else if user == userInfoNotFound {
+		return false
+	} else if user != nil && user.Username == username {
+		// user info exists, and is a valid user info.
+		return true
+	}
+
+	exists := false
+	wv.SESSION.Raw(
+		"SELECT true AS RESULT WHERE EXISTS (SELECT * FROM user_infos WHERE UPPER(username) = ?)",
+		strings.ToUpper(username),
+	).Scan(&exists)
+
+	if exists {
+		usersMapByUsername.Add(username, userInfoExists)
+	}
+
+	return exists
 }
 
 func GetUserById(id wv.PublicUserId) *wv.UserInfo {
-	return usersMapById.Get(id)
+	return getUserByField(usersMapById, id, "user_id")
+}
+
+func getUserByField[T comparable](theMap *ssg.SafeMap[T, wv.UserInfo], key T, columnName string) *wv.UserInfo {
+	myStr, isString := interface{}(key).(string)
+	if isString && !strings.HasPrefix(columnName, "UPPER(") {
+		columnName = "UPPER(" + columnName + ")"
+		key = interface{}(strings.ToUpper(myStr)).(T)
+	}
+
+	user := theMap.Get(key)
+	if user == userInfoNotFound {
+		return nil
+	} else if user != nil && user.UserId != 0 {
+		// this makes sure that the user is actually a valid user.
+		return user
+	}
+
+	user = new(wv.UserInfo)
+	err := wv.SESSION.Table("user_infos").Take(user, columnName+" = ?", key).Error
+	if err == gorm.ErrRecordNotFound {
+		theMap.Add(key, userInfoNotFound)
+		return nil
+	} else if err != nil {
+		logging.Debugf("GetUserById: returned error for %s %d: %v", columnName, key, err)
+		return nil
+	}
+
+	theMap.Add(key, user)
+
+	return user
+}
+
+func getLastUserId() wv.PublicUserId {
+	var theId wv.PublicUserId
+	wv.SESSION.Raw("SELECT MAX(user_id) FROM user_infos").Scan(&theId)
+	if theId == 0 {
+		return wv.BaseUserId
+	}
+
+	return theId
 }
 
 func GetUserByTelegramId(id int64) *wv.UserInfo {
-	return usersMapByTelegramId.Get(id)
+	return userInfoExists
 }
 
 func GetUserByEmail(email string) *wv.UserInfo {
-	return usersMapByEmail.Get(strings.ToLower(email))
+	return getUserByField(usersMapByEmail, email, "email")
 }
 
 func GetUserByUsername(username string) *wv.UserInfo {
-	return usersMapByUsername.Get(strings.ToLower(username))
+	return getUserByField(usersMapByUsername, username, "username")
 }
 
 func GetUserFavorite(id wv.PublicUserId, key string) *wv.FavoriteInfo {
@@ -164,10 +231,6 @@ func SaveUser(user *wv.UserInfo) {
 
 	if user.HasUsername() {
 		usersMapByUsername.Add(strings.ToLower(user.Username), user)
-	}
-
-	if user.HasTelegramId() {
-		usersMapByTelegramId.Add(user.TelegramId, user)
 	}
 
 	if user.HasEmail() {
