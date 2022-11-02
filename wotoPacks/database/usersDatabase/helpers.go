@@ -99,7 +99,7 @@ func getUserByField[T comparable](theMap *ssg.SafeMap[T, wv.UserInfo], key T, co
 		theMap.Add(key, userInfoNotFound)
 		return nil
 	} else if err != nil {
-		logging.Debugf("GetUserById: returned error for %s %d: %v", columnName, key, err)
+		logging.Debugf("GetUserById: returned error for %s %v: %v", columnName, key, err)
 		return nil
 	}
 
@@ -113,8 +113,8 @@ func getLastUserId() wv.PublicUserId {
 	var theId wv.PublicUserId
 	// or can do another raw query:
 	// SELECT * FROM user_infos ORDER BY user_id DESC LIMIT 0, 1
-	wv.SESSION.Raw("SELECT MAX(user_id) FROM user_infos").Scan(&theId)
-	if theId == 0 {
+	err := wv.SESSION.Raw("SELECT MAX(user_id) FROM user_infos").Scan(&theId).Error
+	if err != nil || theId == 0 {
 		return wv.BaseUserId
 	}
 
