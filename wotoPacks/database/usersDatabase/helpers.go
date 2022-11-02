@@ -20,7 +20,6 @@ package usersDatabase
 import (
 	"strings"
 	"sync"
-	"time"
 	"wp-server/wotoPacks/core/utils/logging"
 	"wp-server/wotoPacks/core/wotoConfig"
 	wv "wp-server/wotoPacks/core/wotoValues"
@@ -37,29 +36,6 @@ func LoadUsersDatabase() error {
 	var allLiked []*wv.LikedListElement
 
 	lockDatabase()
-
-	user := GetUserById(100010)
-	print(user)
-
-	user = GetUserByUsername("aliwoTo")
-	print(user)
-	user = GetUserByUsername("aliwoTo")
-	print(user)
-
-	var myI wv.PublicUserId
-	myTime := time.Now()
-	var a = wv.SESSION.Raw("SELECT MAX(user_id) FROM user_infos").Scan(&myI)
-	print(a.Error)
-	got := time.Since(myTime)
-	print(got)
-
-	myTime = time.Now()
-	a = wv.SESSION.Raw("SELECT * FROM user_infos ORDER BY user_id DESC LIMIT 0, 1").Scan(&myI)
-	print(a.Error)
-	got = time.Since(myTime)
-	print(got)
-
-	// wv.SESSION.Find(&allUsers)
 	wv.SESSION.Find(&allFavorites)
 	wv.SESSION.Find(&allLiked)
 	unlockDatabase()
@@ -132,8 +108,11 @@ func getUserByField[T comparable](theMap *ssg.SafeMap[T, wv.UserInfo], key T, co
 	return user
 }
 
+// getLastUserId returns the last user id saved inside of db.
 func getLastUserId() wv.PublicUserId {
 	var theId wv.PublicUserId
+	// or can do another raw query:
+	// SELECT * FROM user_infos ORDER BY user_id DESC LIMIT 0, 1
 	wv.SESSION.Raw("SELECT MAX(user_id) FROM user_infos").Scan(&theId)
 	if theId == 0 {
 		return wv.BaseUserId
