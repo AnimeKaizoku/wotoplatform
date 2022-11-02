@@ -121,6 +121,11 @@ func getLastUserId() wv.PublicUserId {
 	return theId
 }
 
+// GetUserByTelegramId returns the user which had connected a telegram account with the
+// given id to their wotoplatform account.
+// WARNING: this function has to be rewritten, it does nothing by now, should be
+// implemented later (TODO).
+// skipcq
 func GetUserByTelegramId(id int64) *wv.UserInfo {
 	return userInfoExists
 }
