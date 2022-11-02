@@ -1,14 +1,98 @@
 package wotoValidate
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"regexp"
 	"strings"
 
 	"github.com/AnimeKaizoku/ssg/ssg"
+	"github.com/TheGolangHub/wotoCrypto/wotoCrypto"
 )
 
-func IsCorrectPasswordFormat(password string) bool {
-	return len(password) >= MinPasswordLength && len(password) <= MaxPasswordLength
+func GetPasswordHash(b []byte) string {
+	hash := sha256.Sum256(b)
+	return hex.EncodeToString(hash[:])
+}
+
+func IsCorrectPasswordFormat(password *wotoCrypto.PasswordContainer256) bool {
+	if password.Hash256 == "" || !password.HasSignature() {
+		return false
+	}
+
+	headers := ssg.Split(password.Header, _passHeaderStrs...)
+	signatures := ssg.Split(password.Signature, _passSignatureStrs...)
+
+	if len(headers) != PassHeadersLen {
+		return false
+	}
+
+	charsLen := int(ssg.ToInt32(headers[0x00]))
+	sigPayloadLen := int(ssg.ToInt8(headers[0x01]))
+	if len(signatures)-sigPayloadLen != charsLen || (charsLen < MinPasswordLength || charsLen > MaxPasswordLength) {
+		return false
+	}
+
+	encodingVersion := headers[0x02]
+	if encodingVersion != "<pwd-container::v1.0.0.0::256>" {
+		// TODO: Add a range of accepted versions.
+		return false
+	}
+
+	hashCheckStr := ""
+	for i, current := range signatures {
+		if i < sigPayloadLen {
+			// TODO: handle payload data
+			continue
+		}
+
+		if i >= charsLen+sigPayloadLen {
+			break
+		}
+
+		cInt := ssg.ToInt32(current)
+		if cInt == 0 || cInt < 0x020 {
+			return false
+		}
+
+		hashCheckStr += string(rune(cInt))
+	}
+
+	if len(hashCheckStr) != charsLen {
+		return false
+	} else if GetPasswordHash([]byte(hashCheckStr)) != password.Hash256 {
+		return false
+	}
+
+	return true
+}
+
+func GetPassAsBytes(password *wotoCrypto.PasswordContainer256) []byte {
+	headers := ssg.Split(password.Header, _passHeaderStrs...)
+	signatures := ssg.Split(password.Signature, _passSignatureStrs...)
+
+	charsLen := int(ssg.ToInt32(headers[0x00]))
+	sigPayloadLen := int(ssg.ToInt32(headers[0x01]))
+	encodingVersion := headers[0x02]
+	if encodingVersion != "<pwd-container::v1.0.0.0::256>" {
+		// TODO: Add a range of accepted versions.
+		return nil
+	}
+
+	p := ""
+	for i, current := range signatures {
+		if i < sigPayloadLen {
+			continue // TODO: handle payload here...
+		}
+
+		if i >= charsLen+sigPayloadLen {
+			break
+		}
+
+		p += string(rune(ssg.ToInt32(current)))
+	}
+
+	return []byte(p)
 }
 
 func IsCorrectUsernameFormat(username string) bool {

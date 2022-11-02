@@ -31,6 +31,7 @@ type UserInfo struct {
 	AuthKey        string         `json:"auth_key"`
 	AccessHash     string         `json:"access_hash"`
 	Password       string         `json:"password"`
+	PasswordHash   string         `json:"password_hash"`
 	Permission     UserPermission `json:"permission"`
 	Bio            string         `json:"bio"`
 	SourceUrl      string         `json:"source_url"`
@@ -50,7 +51,8 @@ type UserInfo struct {
 	CreatedBy      PublicUserId   `json:"created_by"`
 	cachedTime     time.Time      `json:"-" gorm:"-" sql:"-"`
 
-	metaProvider ssg.MetaDataProvider `json:"-" gorm:"-" sql:"-"`
+	RegenerateSaltedPassword func(*UserInfo)      `json:"-" gorm:"-" sql:"-"`
+	metaProvider             ssg.MetaDataProvider `json:"-" gorm:"-" sql:"-"`
 }
 
 type GroupInfo struct {
@@ -86,7 +88,6 @@ type LikedListElement struct {
 	UpdatedAt    time.Time    `json:"-"`
 }
 
-//
 type MediaGenreInfo struct {
 	GenreId          GenreId      `json:"genre_id" gorm:"primaryKey"`
 	GenreTitle       string       `json:"genre_title"`

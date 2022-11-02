@@ -3,8 +3,12 @@ package wotoRaw
 import (
 	"strings"
 	"time"
+	"wp-server/wotoPacks/core/utils/logging"
+	"wp-server/wotoPacks/core/wotoValues/wotoValidate"
 
 	ws "github.com/AnimeKaizoku/ssg/ssg"
+	"github.com/TheGolangHub/wotoCrypto/wotoCrypto"
+	"golang.org/x/crypto/bcrypt"
 )
 
 //---------------------------------------------------------
@@ -29,9 +33,33 @@ func (u *UserInfo) IsCacheExpired(d time.Duration) bool {
 	return time.Since(u.cachedTime) > d
 }
 
-func (u *UserInfo) IsPasswordCorrect(password string) bool {
-	// TODO: encrypt the password
-	return u.Password == password
+func (u *UserInfo) IsPasswordCorrect(password *wotoCrypto.PasswordContainer256) bool {
+	return u.IsRawPasswordCorrect(wotoValidate.GetPassAsBytes(password))
+}
+
+func (u *UserInfo) HasInvalidPasswordHash() bool {
+	// TODO: Add more checks here.
+	return u.PasswordHash == ""
+}
+
+func (u *UserInfo) IsRawPasswordCorrect(password []byte) bool {
+	if u.HasInvalidPasswordHash() {
+		if u.RegenerateSaltedPassword != nil {
+			u.RegenerateSaltedPassword(u)
+			// no return here, because CompareHashAndPassword should run again
+			// at the end.
+		} else {
+			// DEPRECATED: if we have reached here, it means
+			// something had went wrong in database package, and
+			// RegenerateSaltedPassword field isn't set, DO CHECK.
+			// this is very unsafe to do... (this is for old versions of wotoplatform)
+			// see also: https://github.com/AnimeKaizoku/wotoplatform/pull/61
+			logging.Warn("DEPRECATED: IsRawPasswordCorrect: PasswordHash is invalid and RegenerateSaltedPassword is nil ")
+			return u.Password == string(password)
+		}
+	}
+
+	return bcrypt.CompareHashAndPassword([]byte(u.Password), password) == nil
 }
 
 func (u *UserInfo) GetPublicId() PublicUserId {
