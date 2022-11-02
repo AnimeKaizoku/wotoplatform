@@ -264,8 +264,8 @@ func migrateOwners() {
 // WARNING: Beware of deadlocks, this function might try to lock internal db mute,
 // if it's already locked, it will reach a deadlock.
 func regenerateSaltedPassword(u *wv.UserInfo) {
-	u.Password = getSaltedPasswordFromBytes([]byte(u.Password))
 	u.PasswordHash = wotoValidate.GetPasswordHash([]byte(u.Password))
+	u.Password = getSaltedPasswordFromBytes([]byte(u.Password))
 	SaveUserNoCache(u)
 }
 
