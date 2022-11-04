@@ -49,7 +49,6 @@ type UserInfo struct {
 	UpdatedAt      time.Time      `json:"updated_at"`
 	IsVirtual      bool           `json:"is_virtual"`
 	CreatedBy      PublicUserId   `json:"created_by"`
-	cachedTime     time.Time      `json:"-" gorm:"-" sql:"-"`
 
 	RegenerateSaltedPassword func(*UserInfo)      `json:"-" gorm:"-" sql:"-"`
 	metaProvider             ssg.MetaDataProvider `json:"-" gorm:"-" sql:"-"`

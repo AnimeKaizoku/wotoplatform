@@ -25,14 +25,6 @@ func (u *UserInfo) HasEmail() bool {
 	return u.Email != ""
 }
 
-func (u *UserInfo) SetCachedTime() {
-	u.cachedTime = time.Now()
-}
-
-func (u *UserInfo) IsCacheExpired(d time.Duration) bool {
-	return time.Since(u.cachedTime) > d
-}
-
 func (u *UserInfo) IsPasswordCorrect(password *wotoCrypto.PasswordContainer256) bool {
 	return u.IsRawPasswordCorrect(wotoValidate.GetPassAsBytes(password))
 }

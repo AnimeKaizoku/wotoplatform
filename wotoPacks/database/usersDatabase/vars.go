@@ -17,9 +17,9 @@ var (
 
 // cache values and mutexes.
 var (
-	usersMapById         = ssg.NewSafeMap[wv.PublicUserId, wv.UserInfo]()
-	usersMapByUsername   = ssg.NewSafeMap[string, wv.UserInfo]()
-	usersMapByEmail      = ssg.NewSafeMap[string, wv.UserInfo]()
+	usersMapById         = _getExpiringMap[wv.PublicUserId, wv.UserInfo]()
+	usersMapByUsername   = _getExpiringMap[string, wv.UserInfo]()
+	usersMapByEmail      = _getExpiringMap[string, wv.UserInfo]()
 	userIdGenerator      = ssg.NewNumIdGenerator[wv.PublicUserId]()
 	usersFavoriteManager = _getFavoriteManager()
 )

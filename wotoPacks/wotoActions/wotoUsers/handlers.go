@@ -169,7 +169,7 @@ func batchGetMe(req interfaces.ReqBase) error {
 
 func batchChangeUserBio(req interfaces.ReqBase) error {
 	if !req.IsAuthorized() {
-		return we.SendNotAuthorized(req, OriginChangeNames)
+		return we.SendNotAuthorized(req, OriginChangeUserBio)
 	}
 
 	var entryData = new(ChangeBioData)
@@ -182,20 +182,19 @@ func batchChangeUserBio(req interfaces.ReqBase) error {
 	if user.IsAdmin() && !entryData.UserId.IsZero() {
 		user = usersDatabase.GetUserById(entryData.UserId)
 		if user.IsInvalid() {
-			return we.SendUserNotFound(req, OriginChangeNames)
+			return we.SendUserNotFound(req, OriginChangeUserBio)
 		}
 	}
 
 	if entryData.HasNotModified(user) {
-		return we.SendNotModified(req, OriginChangeNames)
+		return we.SendNotModified(req, OriginChangeUserBio)
 	}
 
 	if entryData.IsBioTooLong() {
-		return we.SendBioTooLong(req, OriginChangeNames)
+		return we.SendBioTooLong(req, OriginChangeUserBio)
 	}
 
 	user.Bio = entryData.Bio
-	user.SetCachedTime()
 	// better not to cache the user again, since it already
 	// exists there and locking-unlocking will just waste our time.
 	usersDatabase.SaveUserNoCache(user)
@@ -236,7 +235,6 @@ func batchChangeNames(req interfaces.ReqBase) error {
 
 	user.FirstName = entryData.FirstName
 	user.LastName = entryData.LastName
-	user.SetCachedTime()
 	usersDatabase.SaveUserNoCache(user)
 
 	return req.SendResult(true)

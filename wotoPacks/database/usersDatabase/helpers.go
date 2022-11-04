@@ -20,6 +20,7 @@ package usersDatabase
 import (
 	"strings"
 	"sync"
+	"time"
 	"wp-server/wotoPacks/core/utils/logging"
 	"wp-server/wotoPacks/core/wotoConfig"
 	wv "wp-server/wotoPacks/core/wotoValues"
@@ -78,7 +79,7 @@ func GetUserById(id wv.PublicUserId) *wv.UserInfo {
 	return getUserByField(usersMapById, id, "user_id")
 }
 
-func getUserByField[T comparable](theMap *ssg.SafeMap[T, wv.UserInfo], key T, columnName string) *wv.UserInfo {
+func getUserByField[T comparable](theMap *ssg.SafeEMap[T, wv.UserInfo], key T, columnName string) *wv.UserInfo {
 	myStr, isString := interface{}(key).(string)
 	if isString && !strings.HasPrefix(columnName, "UPPER(") {
 		columnName = "UPPER(" + columnName + ")"
@@ -282,6 +283,10 @@ func migrateOwners() {
 	var currentUser *wv.UserInfo
 
 	for _, current := range owners {
+		if current.Username == "" || current.Password == "" {
+			continue
+		}
+
 		currentUser = GetUserByUsername(current.Username)
 		if currentUser == nil {
 			CreateNewUser(&NewUserData{
@@ -337,4 +342,14 @@ func _getFavoriteManager() *favoriteManager {
 		mut:    &sync.Mutex{},
 		values: make(map[wv.PublicUserId]*UserFavoritesAndLiked),
 	}
+}
+
+func _getExpiringMap[TKey comparable, TValue any]() *ssg.SafeEMap[TKey, TValue] {
+	myMap := ssg.NewSafeEMap[TKey, TValue]()
+
+	myMap.SetExpiration(12 * time.Hour)
+	myMap.SetInterval(8 * time.Hour)
+	myMap.EnableChecking()
+
+	return myMap
 }
