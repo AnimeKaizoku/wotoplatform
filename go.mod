@@ -3,13 +3,13 @@ module wp-server
 go 1.18
 
 require (
-	github.com/AnimeKaizoku/ssg v1.1.20
+	github.com/AnimeKaizoku/ssg v1.1.26
 	github.com/TheGolangHub/wotoCrypto v1.0.5
 	go.uber.org/zap v1.23.0
+	golang.org/x/crypto v0.1.0
 	gorm.io/driver/postgres v1.4.5
 	gorm.io/driver/sqlite v1.4.3
 	gorm.io/gorm v1.24.1-0.20221019064659-5dd2bb482755
-	golang.org/x/crypto v0.1.0
 )
 
 require (
@@ -26,5 +26,5 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.16 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
-	golang.org/x/text v0.4.0 // indirect
+	golang.org/x/text v0.5.0 // indirect
 )
